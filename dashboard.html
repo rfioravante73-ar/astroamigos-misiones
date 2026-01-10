@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Astroamigos Misiones - Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary-color: #1e40af;
+            --primary-dark: #1e3a8a;
+            --secondary-color: #3b82f6;
+            --light-color: #f8fafc;
+            --dark-color: #1e293b;
+            --sidebar-width: 260px;
+            --sidebar-collapsed-width: 70px;
+            --transition-speed: 0.3s;
+        }
+
+        body {
+            background-color: #f1f5f9;
+            display: flex;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: linear-gradient(180deg, var(--primary-dark), var(--dark-color));
+            color: white;
+            transition: all var(--transition-speed) ease;
+            z-index: 100;
+            height: 100vh;
+            position: fixed;
+            overflow-x: hidden;
+            box-shadow: 3px 0 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .sidebar.collapsed {
+            width: var(--sidebar-collapsed-width);
+            overflow: visible !important;
+        }
+
+        .logo-container {
+            padding: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        .logo img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+            object-fit: cover;
+        }
+
+        .toggle-btn {
+            background: rgba(255, 255, 255, 0.15);
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--transition-speed) ease;
+        }
+
+        .toggle-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .sidebar-menu {
+            padding: 20px 0;
+            list-style: none;
+        }
+
+        .menu-item {
+            padding: 0 15px;
+            margin-bottom: 5px;
+            position: relative;
+        }
+
+        .menu-link {
+            display: flex;
+            align-items: center;
+            padding: 14px 15px;
+            color: rgba(255, 255, 255, 0.85);
+            text-decoration: none;
+            border-radius: 0 30px 30px 0;
+            transition: all var(--transition-speed) ease;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        .menu-link:hover, .menu-link.active {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .menu-link i {
+            font-size: 1.2rem;
+            width: 25px;
+            margin-right: 15px;
+            text-align: center;
+        }
+
+        .menu-text {
+            transition: opacity var(--transition-speed) ease;
+        }
+
+        .sidebar.collapsed .menu-text {
+            opacity: 0;
+            width: 0;
+            overflow: hidden;
+        }
+
+        .sidebar.collapsed .menu-link {
+            justify-content: center;
+            padding: 14px;
+        }
+
+        .sidebar.collapsed .menu-link i {
+            margin-right: 0;
+            width: auto;
+        }
+
+        /* TOOLTIP FIXED - MUESTRA TÍTULOS CUANDO SIDEBAR ESTÁ COLAPSADO */
+        .menu-tooltip {
+            position: absolute;
+            left: 100%;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(0, 0, 0, 0.95);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 1001;
+            pointer-events: none;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            margin-left: 20px;
+            min-width: 140px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .menu-tooltip::after {
+            content: '';
+            position: absolute;
+            right: 100%;
+            top: 50%;
+            transform: translateY(-50%);
+            border-width: 8px;
+            border-style: solid;
+            border-color: transparent rgba(0, 0, 0, 0.95) transparent transparent;
+        }
+
+        /* CRÍTICO: Esto hace que los tooltips se muestren cuando el sidebar está colapsado */
+        .sidebar.collapsed .menu-item:hover .menu-tooltip {
+            opacity: 1;
+            visibility: visible;
+            margin-left: 25px;
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            transition: margin-left var(--transition-speed) ease;
+            padding: 20px;
+        }
+
+        .sidebar.collapsed + .main-content {
+            margin-left: var(--sidebar-collapsed-width);
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            margin-bottom: 25px;
+        }
+
+        .page-title {
+            font-size: 1.8rem;
+            color: var(--primary-dark);
+            font-weight: 700;
+        }
+
+        /* Botón de logout con tooltip */
+        .logout-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .logout-btn {
+            background: linear-gradient(to right, #ef4444, #f97316);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 6px rgba(239, 68, 68, 0.2);
+            position: relative;
+            z-index: 10;
+        }
+
+        .logout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(239, 68, 68, 0.3);
+        }
+
+        .logout-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Tooltip para el botón de logout */
+        .logout-tooltip {
+            position: absolute;
+            bottom: 120%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.95);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            pointer-events: none;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logout-tooltip::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 8px;
+            border-style: solid;
+            border-color: rgba(0, 0, 0, 0.95) transparent transparent transparent;
+        }
+
+        .logout-container:hover .logout-tooltip {
+            opacity: 1;
+            visibility: visible;
+            bottom: 110%;
+        }
+
+        /* Modal de confirmación de logout */
+        .logout-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .logout-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background-color: white;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 400px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transform: translateY(-20px);
+            transition: transform 0.3s ease;
+            border-top: 5px solid #ef4444;
+        }
+
+        .logout-modal.active .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-icon {
+            width: 50px;
+            height: 50px;
+            background-color: #fee2e2;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            color: #dc2626;
+            font-size: 1.5rem;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            color: #1f2937;
+            font-weight: 600;
+        }
+
+        .modal-message {
+            color: #4b5563;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        .modal-btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            font-size: 1rem;
+        }
+
+        .modal-btn.cancel {
+            background-color: #f3f4f6;
+            color: #4b5563;
+        }
+
+        .modal-btn.cancel:hover {
+            background-color: #e5e7eb;
+        }
+
+        .modal-btn.confirm {
+            background: linear-gradient(to right, #dc2626, #ef4444);
+            color: white;
+            box-shadow: 0 4px 6px rgba(220, 38, 38, 0.2);
+        }
+
+        .modal-btn.confirm:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(220, 38, 38, 0.3);
+        }
+
+        /* Content Sections */
+        .content-section {
+            display: none;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            padding: 30px;
+            min-height: calc(100vh - 140px);
+        }
+
+        .content-section.active {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .menu-overlay {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.5);
+                z-index: 99;
+            }
+            
+            .menu-overlay.active {
+                display: block;
+            }
+            
+            /* Ocultar tooltips en móviles */
+            .menu-tooltip {
+                display: none !important;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .page-title {
+                font-size: 1.5rem;
+            }
+            
+            .logout-tooltip {
+                font-size: 0.9rem;
+                padding: 8px 12px;
+            }
+        }
+
+        /* Empty state styling */
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            text-align: center;
+            color: #64748b;
+            padding: 20px;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            color: #cbd5e1;
+            margin-bottom: 20px;
+        }
+
+        .empty-state h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: #334155;
+        }
+
+        .empty-state p {
+            font-size: 1.1rem;
+            max-width: 600px;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar Navigation -->
+    <div class="sidebar" id="sidebar">
+        <div class="logo-container">
+            <div class="logo">
+                <span class="logo-text">Astroamigos</span>
+                <p>Misiones<p>
+            </div>
+            <button class="toggle-btn" id="toggleSidebar">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        
+        <ul class="sidebar-menu">
+            <li class="menu-item">
+                <a href="#" class="menu-link active" data-section="nosotros">
+                    <i class="fas fa-users"></i>
+                    <span class="menu-text">Nosotros</span>
+                </a>
+                <span class="menu-tooltip">Nosotros</span>
+            </li>
+            <li class="menu-item">
+                <a href="#" class="menu-link" data-section="eventos">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span class="menu-text">Eventos</span>
+                </a>
+                <span class="menu-tooltip">Eventos</span>
+            </li>
+            <li class="menu-item">
+                <a href="#" class="menu-link" data-section="curso">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span class="menu-text">Curso</span>
+                </a>
+                <span class="menu-tooltip">Curso</span>
+            </li>
+            <li class="menu-item">
+                <a href="#" class="menu-link" data-section="observacion">
+                    <i class="fas fa-star"></i>
+                    <span class="menu-text">Observación</span>
+                </a>
+                <span class="menu-tooltip">Observación</span>
+            </li>
+            <li class="menu-item">
+                <a href="#" class="menu-link" data-section="instrumentos">
+                    <i class="fas fa-binoculars"></i>
+                    <span class="menu-text">Instrumentos</span>
+                </a>
+                <span class="menu-tooltip">Instrumentos</span>
+            </li>
+            <li class="menu-item">
+                <a href="#" class="menu-link" data-section="consejos">
+                    <i class="fas fa-lightbulb"></i>
+                    <span class="menu-text">Consejos</span>
+                </a>
+                <span class="menu-tooltip">Consejos</span>
+            </li>
+            <li class="menu-item">
+                <a href="#" class="menu-link" data-section="contacto">
+                    <i class="fas fa-envelope"></i>
+                    <span class="menu-text">Contacto</span>
+                </a>
+                <span class="menu-tooltip">Contacto</span>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Mobile Menu Overlay -->
+    <div class="menu-overlay" id="menuOverlay"></div>
+
+    <!-- Modal de confirmación de logout -->
+    <div class="logout-modal" id="logoutModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <h3 class="modal-title">¿Cerrar sesión?</h3>
+            </div>
+            <p class="modal-message">Estás a punto de salir del sistema. ¿Estás seguro de que deseas cerrar sesión?</p>
+            <div class="modal-actions">
+                <button class="modal-btn cancel" id="cancelLogout">Cancelar</button>
+                <button class="modal-btn confirm" id="confirmLogout">Sí, salir</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="main-content">
+        <div class="header">
+            <h1 class="page-title" id="currentSectionTitle">Nosotros</h1>
+            <div class="logout-container">
+                <button class="logout-btn" id="logoutBtn">
+                    <i class="fas fa-sign-out-alt"></i> Salir
+                </button>
+                <span class="logout-tooltip">Cerrar sesión del sistema</span>
+            </div>
+        </div>
+        
+        <!-- Content Sections -->
+        <div class="content-section active" id="nosotros-section">
+            <div class="empty-state">
+                <i class="fas fa-user-friends"></i>
+                <h3>Sección Nosotros</h3>
+                <p>Esta sección está lista para mostrar información sobre el equipo de Astroamigos Misiones. Aquí puedes agregar contenido real sobre la organización, su misión, visión y valores.</p>
+            </div>
+        </div>
+        
+        <div class="content-section" id="eventos-section">
+            <div class="empty-state">
+                <i class="fas fa-calendar-star"></i>
+                <h3>Próximos Eventos</h3>
+                <p>Esta sección está preparada para mostrar los eventos astronómicos y actividades programadas. Podrás agregar fechas, lugares, descripciones y detalles de cada evento cuando tengas la información real.</p>
+            </div>
+        </div>
+        
+        <div class="content-section" id="curso-section">
+            <div class="empty-state">
+                <i class="fas fa-book-open"></i>
+                <h3>Cursos y Capacitaciones</h3>
+                <p>Aquí se mostrará la información sobre los cursos disponibles. Puedes personalizar esta sección con programas educativos, niveles, fechas de inscripción y otros detalles relevantes cuando estén disponibles.</p>
+            </div>
+        </div>
+        
+        <div class="content-section" id="observacion-section">
+            <div class="empty-state">
+                <i class="fas fa-star"></i>
+                <h3>Lugares de Observación</h3>
+                <p>Esta sección está diseñada para mostrar ubicaciones ideales para la observación astronómica. Podrás agregar mapas, coordenadas, condiciones ideales y recomendaciones específicas para cada lugar.</p>
+            </div>
+        </div>
+        
+        <div class="content-section" id="instrumentos-section">
+            <div class="empty-state">
+                <i class="fas fa-satellite"></i>
+                <h3>Instrumentos Astronómicos</h3>
+                <p>En esta sección se presentarán los instrumentos disponibles para los miembros. Podrás incluir telescopios, binoculares, cámaras especializadas y otros equipos con sus características y disponibilidad.</p>
+            </div>
+        </div>
+        
+        <div class="content-section" id="consejos-section">
+            <div class="empty-state">
+                <i class="fas fa-info-circle"></i>
+                <h3>Consejos Astronómicos</h3>
+                <p>Esta área está preparada para compartir consejos y recomendaciones para la observación astronómica. Puedes agregar información sobre cómo prepararse, qué llevar, y técnicas de observación cuando estés listo.</p>
+            </div>
+        </div>
+        
+        <div class="content-section" id="contacto-section">
+            <div class="empty-state">
+                <i class="fas fa-address-book"></i>
+                <h3>Contacto</h3>
+                <p>Esta sección está lista para mostrar la información de contacto. Podrás agregar direcciones, números telefónicos, correos electrónicos, formularios de contacto y enlaces a redes sociales cuando estén disponibles.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Verificar si el usuario está autenticado
+            if (!sessionStorage.getItem('authenticated')) {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            // Elementos del DOM
+            const sidebar = document.getElementById('sidebar');
+            const toggleBtn = document.getElementById('toggleSidebar');
+            const menuOverlay = document.getElementById('menuOverlay');
+            const logoutBtn = document.getElementById('logoutBtn');
+            const logoutModal = document.getElementById('logoutModal');
+            const cancelLogoutBtn = document.getElementById('cancelLogout');
+            const confirmLogoutBtn = document.getElementById('confirmLogout');
+            const menuLinks = document.querySelectorAll('.menu-link');
+            const contentSections = document.querySelectorAll('.content-section');
+            const currentSectionTitle = document.getElementById('currentSectionTitle');
+
+            // Función para cambiar de sección
+            function changeSection(sectionId) {
+                // Actualizar título de la sección activa
+                const sectionTitle = sectionId.charAt(0).toUpperCase() + sectionId.slice(1);
+                currentSectionTitle.textContent = sectionTitle;
+                
+                // Ocultar todas las secciones
+                contentSections.forEach(section => {
+                    section.classList.remove('active');
+                });
+                
+                // Mostrar la sección seleccionada
+                document.getElementById(`${sectionId}-section`).classList.add('active');
+                
+                // Actualizar enlaces del menú
+                menuLinks.forEach(link => {
+                    if (link.dataset.section === sectionId) {
+                        link.classList.add('active');
+                    } else {
+                        link.classList.remove('active');
+                    }
+                });
+                
+                // Cerrar sidebar en móviles después de seleccionar una opción
+                if (window.innerWidth <= 992) {
+                    sidebar.classList.remove('active');
+                    menuOverlay.classList.remove('active');
+                }
+            }
+
+            // Manejar clics en los enlaces del menú
+            menuLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const sectionId = this.dataset.section;
+                    changeSection(sectionId);
+                });
+            });
+
+            // Toggle sidebar (versión desktop)
+            toggleBtn.addEventListener('click', function() {
+                sidebar.classList.toggle('collapsed');
+            });
+
+            // Toggle sidebar (versión móvil)
+            menuOverlay.addEventListener('click', function() {
+                sidebar.classList.remove('active');
+                menuOverlay.classList.remove('active');
+            });
+
+            // Mostrar modal de confirmación al hacer clic en el botón de logout
+            logoutBtn.addEventListener('click', function() {
+                logoutModal.classList.add('active');
+            });
+
+            // Cancelar logout
+            cancelLogoutBtn.addEventListener('click', function() {
+                logoutModal.classList.remove('active');
+            });
+
+            // Confirmar logout
+            confirmLogoutBtn.addEventListener('click', function() {
+                // Limpiar sesión
+                sessionStorage.removeItem('authenticated');
+                
+                // Cerrar modal
+                logoutModal.classList.remove('active');
+                
+                // Redirigir al login con un efecto de transición
+                document.body.style.opacity = '0';
+                document.body.style.transition = 'opacity 0.5s ease';
+                
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 500);
+            });
+
+            // Cerrar modal haciendo clic fuera del contenido
+            logoutModal.addEventListener('click', function(e) {
+                if (e.target === logoutModal) {
+                    logoutModal.classList.remove('active');
+                }
+            });
+
+            // Manejar redimensionamiento de ventana
+            window.addEventListener('resize', function() {
+                if (window.innerWidth > 992) {
+                    sidebar.classList.remove('active');
+                    menuOverlay.classList.remove('active');
+                    sidebar.classList.remove('collapsed');
+                }
+            });
+
+            // Inicializar la sección activa (Nosotros)
+            changeSection('nosotros');
+        });
+    </script>
+</body>
+</html>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Astroamigos Misiones</title>
+    <title>AstroamigosMisiones</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -285,6 +285,7 @@
                     // Simular redirección exitosa
                     errorMessage.style.color = '#10b981';
                     errorMessage.textContent = '¡Inicio de sesión exitoso! Redirigiendo...';
+                     sessionStorage.setItem('authenticated', 'true')
                     
                     // Deshabilitar el formulario durante la animación
                     loginForm.querySelector('button').disabled = true;
@@ -292,7 +293,7 @@
                     
                     // Simular redirección después de 1.5 segundos
                     setTimeout(() => {
-                        window.location.href = 'https://astroamigos-misiones.example.com/dashboard';
+                        window.location.href = 'dashboard.html';
                     }, 1500);
                 } else {
                     // Mostrar mensaje de error
