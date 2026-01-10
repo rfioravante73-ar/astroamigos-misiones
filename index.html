@@ -260,10 +260,41 @@
         .modal-body ul { margin-bottom: 15px; padding-left: 20px; color: #4b5563; }
         .modal-body li { margin-bottom: 8px; }
 
+        /* Estilos para los iconos de redes sociales */
+        .social-icons {
+            text-align: center;
+            margin-top: 30px;
+            border-top: 1px solid #e5e7eb;
+            padding-top: 20px;
+        }
+
+        .social-icons h4 {
+            color: #1e3a8a;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        .social-icons a {
+            display: inline-block;
+            margin: 0 15px;
+            color: #1e3a8a;
+            font-size: 1.8rem;
+            transition: all 0.3s ease;
+        }
+
+        .social-icons a:hover {
+            color: #3b82f6;
+            transform: translateY(-3px);
+        }
+
         @media (max-width: 768px) {
             .container { flex-direction: column; }
             .left-container, .right-container { width: 100%; }
             .right-container { padding: 40px 30px; }
+            .social-icons a {
+                margin: 0 10px;
+                font-size: 1.5rem;
+            }
         }
     </style>
 </head>
@@ -339,6 +370,22 @@
 
                 <h3>5. Conducta</h3>
                 <p>Se prohíbe cualquier intento de vulnerar la seguridad del sistema o utilizar la plataforma para fines comerciales no autorizados.</p>
+                
+                <div class="social-icons">
+                    <h4>Síguenos en nuestras redes:</h4>
+                    <a href="https://www.youtube.com/@romulofioravante9329" target="_blank" title="YouTube">
+                        <i class="fab fa-youtube"></i>
+                    </a>
+                    <a href="https://www.facebook.com/astroamigosmisiones.astronomiaaficionada" target="_blank" title="Facebook">
+                        <i class="fab fa-facebook"></i>
+                    </a>
+                    <a href="https://astroamigosmisiones.blogspot.com/?zx=50cd3e70831e58ab" target="_blank" title="Blogspot">
+                        <i class="fab fa-blogger"></i>
+                    </a>
+                    <a href="https://astroamigosweb.wixsite.com/2025" target="_blank" title="Sitio Web">
+                        <i class="fas fa-globe"></i>
+                    </a>
+                </div>
                 
                 <p style="margin-top: 30px; font-size: 0.85rem; text-align: center; color: #9ca3af;">Última actualización: Enero 2026</p>
             </div>
