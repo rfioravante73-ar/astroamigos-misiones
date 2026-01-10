@@ -6,6 +6,7 @@
     <title>AstroamigosMisiones</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* --- ESTILOS ORIGINALES MANTENIDOS --- */
         * {
             margin: 0;
             padding: 0;
@@ -180,10 +181,6 @@
             box-shadow: 0 6px 15px rgba(30, 64, 175, 0.4);
         }
 
-        .btn-login:active {
-            transform: translateY(0);
-        }
-
         .error-message {
             color: #ef4444;
             text-align: center;
@@ -204,25 +201,68 @@
             color: #2563eb;
             text-decoration: none;
             font-weight: 600;
+            cursor: pointer;
         }
 
+        /* --- NUEVOS ESTILOS PARA EL MODAL --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            display: none; /* Oculto por defecto */
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: white;
+            width: 100%;
+            max-width: 650px;
+            max-height: 80vh;
+            border-radius: 16px;
+            padding: 30px;
+            position: relative;
+            overflow-y: auto;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            animation: modalFadeIn 0.3s ease-out;
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .close-modal {
+            position: sticky;
+            top: 0;
+            float: right;
+            font-size: 1.5rem;
+            color: #6b7280;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .close-modal:hover { color: #1e3a8a; }
+
+        .modal-body h3 { color: #1e3a8a; margin: 20px 0 10px; font-size: 1.3rem; }
+        .modal-body p { color: #4b5563; line-height: 1.6; margin-bottom: 15px; font-size: 0.95rem; }
+        .modal-body ul { margin-bottom: 15px; padding-left: 20px; color: #4b5563; }
+        .modal-body li { margin-bottom: 8px; }
+
         @media (max-width: 768px) {
-            .container {
-                flex-direction: column;
-            }
-            
-            .left-container, 
-            .right-container {
-                width: 100%;
-            }
-            
-            .right-container {
-                padding: 40px 30px;
-            }
+            .container { flex-direction: column; }
+            .left-container, .right-container { width: 100%; }
+            .right-container { padding: 40px 30px; }
         }
     </style>
 </head>
 <body>
+
     <div class="container">
         <div class="left-container">
             <div class="logo-container">
@@ -264,51 +304,98 @@
             
             <div class="copyright">
                 &copy; 2026 Astroamigos Misiones. Todos los derechos reservados.<br>
-                <a href="#">Política de privacidad</a> | <a href="#">Términos de uso</a>
+                <a id="openTerms">Política de privacidad</a> | <a id="openPolicy">Términos de uso</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-content">
+            <span class="close-modal" id="closeModal">&times;</span>
+            <div class="modal-body">
+                <h2 style="color: #1e3a8a; border-bottom: 2px solid #e5e7eb; padding-bottom: 10px;">Términos y Privacidad</h2>
+                
+                <h3>1. Aceptación</h3>
+                <p>Al acceder a Astroamigos Misiones, usted acepta cumplir con nuestros términos de uso y normas de la comunidad.</p>
+
+                <h3>2. Privacidad de Datos</h3>
+                <p>Solo recopilamos los datos necesarios para la autenticación (usuario y estado de sesión). No compartimos información con terceros.</p>
+
+                <h3>3. Seguridad</h3>
+                <ul>
+                    <li>El acceso es personal e intransferible.</li>
+                    <li>Usted es responsable de la confidencialidad de sus credenciales.</li>
+                    <li>Notifique cualquier actividad sospechosa a la administración.</li>
+                </ul>
+
+                <h3>4. Propiedad Intelectual</h3>
+                <p>Todo el contenido, incluyendo el logo del tucán y recursos educativos, es propiedad de Astroamigos Misiones.</p>
+
+                <h3>5. Conducta</h3>
+                <p>Se prohíbe cualquier intento de vulnerar la seguridad del sistema o utilizar la plataforma para fines comerciales no autorizados.</p>
+                
+                <p style="margin-top: 30px; font-size: 0.85rem; text-align: center; color: #9ca3af;">Última actualización: Enero 2026</p>
             </div>
         </div>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // --- LÓGICA DEL LOGIN (ORIGINAL) ---
             const loginForm = document.getElementById('loginForm');
             const errorMessage = document.getElementById('errorMessage');
             
             loginForm.addEventListener('submit', function(e) {
                 e.preventDefault();
-                
                 const username = document.getElementById('username').value.trim();
                 const password = document.getElementById('password').value.trim();
                 
-                // Verificar credenciales (en una app real, esto se haría en el backend)
                 if (username === 'astro' && password === 'a123') {
-                    // Simular redirección exitosa
                     errorMessage.style.color = '#10b981';
                     errorMessage.textContent = '¡Inicio de sesión exitoso! Redirigiendo...';
-                     sessionStorage.setItem('authenticated', 'true')
-                    
-                    // Deshabilitar el formulario durante la animación
+                    sessionStorage.setItem('authenticated', 'true');
                     loginForm.querySelector('button').disabled = true;
                     loginForm.querySelector('button').innerHTML = '<i class="fas fa-spinner fa-spin"></i> Accediendo...';
                     
-                    // Simular redirección después de 1.5 segundos
                     setTimeout(() => {
                         window.location.href = 'dashboard.html';
                     }, 1500);
                 } else {
-                    // Mostrar mensaje de error
                     errorMessage.textContent = 'Usuario o contraseña incorrectos. Intenta de nuevo.';
                     errorMessage.style.color = '#ef4444';
-                    
-                    // Efecto de vibración para el formulario
                     loginForm.style.animation = 'shake 0.5s';
-                    loginForm.addEventListener('animationend', () => {
-                        loginForm.style.animation = '';
-                    });
+                    setTimeout(() => { loginForm.style.animation = ''; }, 500);
                 }
             });
-            
-            // Animación de shake para el formulario
+
+            // --- LÓGICA DEL MODAL (NUEVA) ---
+            const modal = document.getElementById('modalOverlay');
+            const openTerms = document.getElementById('openTerms');
+            const openPolicy = document.getElementById('openPolicy');
+            const closeModal = document.getElementById('closeModal');
+
+            // Función para abrir el modal
+            const toggleModal = (e) => {
+                e.preventDefault();
+                modal.style.display = 'flex';
+            };
+
+            openTerms.addEventListener('click', toggleModal);
+            openPolicy.addEventListener('click', toggleModal);
+
+            // Cerrar al pulsar la X
+            closeModal.addEventListener('click', () => {
+                modal.style.display = 'none';
+            });
+
+            // Cerrar al pulsar fuera del contenido blanco
+            window.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+
+            // Animación de shake (CSS original)
             const style = document.createElement('style');
             style.innerHTML = `
                 @keyframes shake {
