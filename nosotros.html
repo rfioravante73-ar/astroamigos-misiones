@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Astroamigos Misiones - Inicio</title>
+    <style>
+        /* Configuración Global - Modo Claro & Minimalista */
+        :root {
+            --azul-destacado: #0056b3;
+            --texto-principal: #333333;
+            --fondo-gris-claro: #f8f9fa;
+            --blanco: #ffffff;
+            --borde: #e0e0e0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--texto-principal);
+            background-color: var(--fondo-gris-claro);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        /* Contenedor Principal SPA */
+        .spa-container {
+            max-width: 800px;
+            width: 100%;
+            background: var(--blanco);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        /* Tipografía y Estilos de Contenedores */
+        .info-box {
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: var(--azul-destacado);
+            font-weight: bold;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+        }
+
+        p {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            text-align: justify;
+        }
+
+        /* Estilo de la Imagen Responsiva */
+        .image-container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            margin: 30px 0;
+        }
+
+        .image-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        /* Adaptabilidad para Móviles */
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            .spa-container {
+                padding: 20px;
+            }
+            h1 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <main class="spa-container">
+        
+        <section class="info-box">
+            <h1>Inicio de nuestra actividad</h1>
+            <p>
+                El 4 de Agosto de 2011, Rómulo Fioravante, fundador y divulgador, comienza la actividad comunitaria para compartir la afición de la astronomía en algunos barrios de la Ciudad de Posadas (Misiones, Argentina). Ha participado en la vía pública de plazas y costanera colocando su telescopio astronómico para observar los cráteres de la Luna, planetas y estrellas.
+            </p>
+        </section>
+
+        <div class="image-container">
+            <img src="https://github.com/rfioravante73-ar/astroamigos-misiones/blob/main/A1.png?raw=true" alt="Actividad de astronomía en Misiones">
+        </div>
+
+        <section class="info-box">
+            <p>
+                Desde 2012 hasta 2019 ha desarrollado eventos gratuitos para la comunidad, cursos para principiantes, y eventos de observación en varias ciudades de la provincia de Misiones, contando con la colaboración de centros culturales, bibliotecas populares, y municipalidades. La divulgación de la astronomía es su principal actividad.
+            </p>
+        </section>
+
+    </main>
+
+</body>
+</html>
