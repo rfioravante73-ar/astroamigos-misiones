@@ -495,6 +495,30 @@
             max-width: 600px;
             line-height: 1.6;
         }
+
+        /* Estilos para el iframe */
+        #nosotros-iframe {
+            width: 100%;
+            height: calc(100vh - 180px);
+            border: none;
+            border-radius: 8px;
+        }
+
+        #nosotros-empty {
+            display: flex;
+        }
+
+        #nosotros-section.loaded #nosotros-empty {
+            display: none;
+        }
+
+        #nosotros-section.loaded #nosotros-iframe {
+            display: block;
+        }
+
+        #nosotros-section:not(.loaded) #nosotros-iframe {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -512,7 +536,7 @@
         
         <ul class="sidebar-menu">
             <li class="menu-item">
-                <a href="#" class="menu-link active" data-section="nosotros">
+                <a href="#" class="menu-link active" data-section="nosotros" data-url="https://rfioravante73-ar.github.io/astroamigos-misiones/nosotros">
                     <i class="fas fa-users"></i>
                     <span class="menu-text">Nosotros</span>
                 </a>
@@ -596,8 +620,9 @@
         </div>
         
         <!-- Content Sections -->
-        <div class="content-section active" id="nosotros-section">
-            <div class="empty-state">
+        <div class="content-section active loaded" id="nosotros-section">
+            <iframe id="nosotros-iframe" src="https://rfioravante73-ar.github.io/astroamigos-misiones/nosotros"></iframe>
+            <div class="empty-state" id="nosotros-empty">
                 <i class="fas fa-user-friends"></i>
                 <h3>Sección Nosotros</h3>
                 <p>Esta sección está lista para mostrar información sobre el equipo de Astroamigos Misiones. Aquí puedes agregar contenido real sobre la organización, su misión, visión y valores.</p>
@@ -674,7 +699,7 @@
             const currentSectionTitle = document.getElementById('currentSectionTitle');
 
             // Función para cambiar de sección
-            function changeSection(sectionId) {
+            function changeSection(sectionId, url = null) {
                 // Actualizar título de la sección activa
                 const sectionTitle = sectionId.charAt(0).toUpperCase() + sectionId.slice(1);
                 currentSectionTitle.textContent = sectionTitle;
@@ -682,10 +707,22 @@
                 // Ocultar todas las secciones
                 contentSections.forEach(section => {
                     section.classList.remove('active');
+                    section.classList.remove('loaded');
                 });
                 
                 // Mostrar la sección seleccionada
-                document.getElementById(`${sectionId}-section`).classList.add('active');
+                const activeSection = document.getElementById(`${sectionId}-section`);
+                activeSection.classList.add('active');
+                
+                // Si hay una URL, cargar el iframe
+                if (url && sectionId === 'nosotros') {
+                    const iframe = document.getElementById('nosotros-iframe');
+                    iframe.src = url;
+                    activeSection.classList.add('loaded');
+                } else if (sectionId === 'nosotros') {
+                    // Si ya tiene una URL cargada, mantenerla
+                    activeSection.classList.add('loaded');
+                }
                 
                 // Actualizar enlaces del menú
                 menuLinks.forEach(link => {
@@ -708,7 +745,8 @@
                 link.addEventListener('click', function(e) {
                     e.preventDefault();
                     const sectionId = this.dataset.section;
-                    changeSection(sectionId);
+                    const url = this.dataset.url || null;
+                    changeSection(sectionId, url);
                 });
             });
 
@@ -767,7 +805,7 @@
             });
 
             // Inicializar la sección activa (Nosotros)
-            changeSection('nosotros');
+            changeSection('nosotros', 'https://rfioravante73-ar.github.io/astroamigos-misiones/nosotros');
         });
     </script>
 </body>
