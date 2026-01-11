@@ -378,6 +378,28 @@
             overflow-y: auto;
         }
 
+        /* NUEVO: Estilo para el iframe que cargará el contenido */
+        .content-frame {
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 12px;
+            background: white;
+            box-shadow: var(--shadow);
+            display: block;
+        }
+
+        /* NUEVO: Contenedor para el iframe */
+        .frame-container {
+            display: none;
+            height: 100%;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .frame-container.active {
+            display: block;
+        }
+
         .view-section {
             display: none;
             animation: fadeIn 0.4s ease;
@@ -439,61 +461,61 @@
 
         <ul class="nav-menu">
             <li class="nav-item">
-                <a class="nav-link active" data-view="luna">
+                <a class="nav-link active" data-view="luna" data-url="https://rfioravante73-ar.github.io/astroamigos-misiones/luna">
                     <i class="fas fa-moon"></i>
                     <span class="text">Luna</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" data-view="sol">
+                <a class="nav-link" data-view="sol" data-url="https://rfioravante73-ar.github.io/astroamigos-misiones/sol">
                     <i class="fas fa-sun"></i>
                     <span class="text">Sol</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" data-view="clima">
+                <a class="nav-link" data-view="clima" data-url="https://rfioravante73-ar.github.io/astroamigos-misiones/clima">
                     <i class="fas fa-cloud-sun"></i>
                     <span class="text">Clima</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" data-view="mapa">
+                <a class="nav-link" data-view="mapa" data-url="https://rfioravante73-ar.github.io/astroamigos-misiones/mapa">
                     <i class="fas fa-eye"></i>
                     <span class="text">Mapa Celeste</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" data-view="apps">
+                <a class="nav-link" data-view="apps" data-url="https://rfioravante73-ar.github.io/astroamigos-misiones/aplicaciones">
                     <i class="fas fa-mobile-screen-button"></i>
                     <span class="text">Aplicaciones</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" data-view="instrumentos">
+                <a class="nav-link" data-view="instrumentos" data-url="https://rfioravante73-ar.github.io/astroamigos-misiones/instrumento">
                     <i class="fas fa-binoculars"></i>
                     <span class="text">Instrumentos</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" data-view="comprar">
+                <a class="nav-link" data-view="comprar" data-url="https://rfioravante73-ar.github.io/astroamigos-misiones/comercio">
                     <i class="fas fa-shopping-cart"></i>
                     <span class="text">Comprar</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" data-view="curso">
+                <a class="nav-link" data-view="curso" data-url="https://rfioravante73-ar.github.io/astroamigos-misiones/curso">
                     <i class="fas fa-graduation-cap"></i>
                     <span class="text">Curso</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" data-view="consejos">
+                <a class="nav-link" data-view="consejos" data-url="https://rfioravante73-ar.github.io/astroamigos-misiones/consejos">
                     <i class="fas fa-lightbulb"></i>
                     <span class="text">Consejos</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" data-view="contacto">
+                <a class="nav-link" data-view="contacto" data-url="https://rfioravante73-ar.github.io/astroamigos-misiones/contacto">
                     <i class="fas fa-envelope"></i>
                     <span class="text">Contacto</span>
                 </a>
@@ -526,6 +548,12 @@
         </header>
 
         <div class="content-area">
+            <!-- Contenedor para el iframe que cargará el contenido externo -->
+            <div id="content-frame-container" class="frame-container active">
+                <iframe id="main-content-frame" class="content-frame" src="https://rfioravante73-ar.github.io/astroamigos-misiones/luna"></iframe>
+            </div>
+            
+            <!-- Secciones originales (se mantienen pero se ocultarán) -->
             <section id="luna" class="view-section active">
                 <div class="card">
                     <i class="fas fa-moon"></i>
@@ -644,6 +672,10 @@
             const navLinks = document.querySelectorAll('.nav-link');
             const sections = document.querySelectorAll('.view-section');
             const pageTitle = document.getElementById('pageTitle');
+            
+            // NUEVO: Elementos para el iframe
+            const contentFrameContainer = document.getElementById('content-frame-container');
+            const mainContentFrame = document.getElementById('main-content-frame');
 
             const userBtn = document.getElementById('userBtn');
             const userDropdown = document.getElementById('userDropdown');
@@ -660,17 +692,28 @@
                 sidebar.classList.toggle('expanded');
             });
 
-            // 2. Navegación SPA
+            // 2. Navegación SPA - MODIFICADO PARA CARGAR URLS EN IFRAME
             navLinks.forEach(link => {
                 link.addEventListener('click', (e) => {
                     e.preventDefault();
                     navLinks.forEach(l => l.classList.remove('active'));
                     sections.forEach(s => s.classList.remove('active'));
-
+                    
+                    // Ocultar todas las secciones originales
+                    sections.forEach(s => s.style.display = 'none');
+                    
+                    // Mostrar el contenedor del iframe
+                    contentFrameContainer.classList.add('active');
+                    
                     link.classList.add('active');
                     const viewId = link.getAttribute('data-view');
-                    document.getElementById(viewId).classList.add('active');
+                    const url = link.getAttribute('data-url');
+                    
+                    // Actualizar el título
                     pageTitle.textContent = link.querySelector('.text').textContent;
+                    
+                    // Cargar la URL en el iframe
+                    mainContentFrame.src = url;
 
                     if (window.innerWidth <= 768) {
                         sidebar.classList.remove('expanded');
