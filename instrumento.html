@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Óptica Astronómica</title>
+    <style>
+        :root {
+            --primario: #1a365d;
+            --secundario: #2b6cb0;
+            --fondo: #f8fafc;
+            --blanco: #ffffff;
+            --acento: #00b4d8;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background-color: var(--fondo);
+            color: #2d3748;
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding: 40px;
+            background: linear-gradient(135deg, var(--primario) 0%, var(--secundario) 100%);
+            color: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(26, 54, 93, 0.2);
+        }
+
+        h1 { margin: 0; font-size: 2.2rem; }
+        .subtitle { opacity: 0.9; font-size: 1.1rem; }
+
+        /* Estilos de la Tabla */
+        .card {
+            background: var(--blanco);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            margin-bottom: 40px;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 800px;
+        }
+
+        th {
+            background-color: #edf2f7;
+            color: var(--primario);
+            padding: 15px;
+            text-align: left;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #edf2f7;
+            font-size: 0.95rem;
+        }
+
+        .highlight {
+            color: var(--secundario);
+            font-weight: bold;
+        }
+
+        /* Sección Conceptos Clave */
+        .concepts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .concept-card {
+            background: var(--blanco);
+            border-left: 5px solid var(--acento);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            transition: transform 0.2s;
+        }
+
+        .concept-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .concept-card h3 {
+            margin-top: 0;
+            color: var(--primario);
+            font-size: 1.1rem;
+        }
+
+        .icon {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            color: #718096;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="card">
+        <h2 style="color: var(--primario); margin-top: 0;">📊 Tabla Comparativa</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Equipo</th>
+                    <th>Diámetro (Apertura)</th>
+                    <th>Aumentos</th>
+                    <th>Potencia Visual</th>
+                    <th>Objetos Visibles</th>
+                </tr>
+            </thead>
+            <tbody id="tabla-datos">
+                </tbody>
+        </table>
+    </div>
+
+    <h2 style="color: var(--primario);">🔍 Conceptos Clave</h2>
+    <div class="concepts-grid" id="conceptos">
+        </div>
+</div>
+
+<script>
+    const datos = [
+        {
+            equipo: "Prismáticos (10x50)",
+            diametro: "50 mm",
+            aumentos: "Fijos (10x)",
+            potencia: "Campo Amplio (7°)",
+            objetos: "Vía Láctea, Cúmulos estelares, Cometas"
+        },
+        {
+            equipo: "Telescopio Refractor",
+            diametro: "70 mm - 90 mm",
+            aumentos: "Variables (30x - 150x)",
+            potencia: "Resolución Media",
+            objetos: "Luna (cráteres), Saturno (anillos), Júpiter"
+        },
+        {
+            equipo: "Telescopio Reflector",
+            diametro: "150 mm - 200 mm+",
+            aumentos: "Variables (50x - 300x)",
+            potencia: "Alta luminosidad",
+            objetos: "Galaxias, Nebulosas, Cúmulos globulares"
+        }
+    ];
+
+    const conceptos = [
+        {
+            titulo: "Diámetro (Apertura)",
+            desc: "Es el tamaño del lente o espejo. Determina cuánta luz capta el equipo. Es el factor más importante.",
+            icono: "🔭"
+        },
+        {
+            titulo: "Aumentos",
+            desc: "Indica cuánto más grande se ve el objeto. Se cambia mediante oculares. No confundir con nitidez.",
+            icono: "🔍"
+        },
+        {
+            titulo: "Campo Visual",
+            desc: "La porción de cielo que ves. Los prismáticos ven mucho cielo; los telescopios, un área pequeña.",
+            icono: "🌌"
+        },
+        {
+            titulo: "Límite de Resolución",
+            desc: "Capacidad de ver detalles finos. Depende directamente del diámetro del equipo.",
+            icono: "✨"
+        }
+    ];
+
+    function cargarApp() {
+        // Cargar Tabla
+        document.getElementById('tabla-datos').innerHTML = datos.map(item => `
+            <tr>
+                <td class="highlight">${item.equipo}</td>
+                <td>${item.diametro}</td>
+                <td>${item.aumentos}</td>
+                <td>${item.potencia}</td>
+                <td>${item.objetos}</td>
+            </tr>
+        `).join('');
+
+        // Cargar Conceptos
+        document.getElementById('conceptos').innerHTML = conceptos.map(c => `
+            <div class="concept-card">
+                <span class="icon">${c.icono}</span>
+                <h3>${c.titulo}</h3>
+                <p>${c.desc}</p>
+            </div>
+        `).join('');
+    }
+
+    window.onload = cargarApp;
+</script>
+
+</body>
+</html>

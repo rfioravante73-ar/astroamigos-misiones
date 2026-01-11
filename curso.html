@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Curso</title>
+    <style>
+        :root {
+            --azul-principal: #0056b3;
+            --azul-suave: #e7f1ff;
+            --azul-texto: #1a3a5f;
+            --blanco: #ffffff;
+            --gris-borde: #dee2e6;
+            --gris-fondo: #f8f9fa;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: var(--gris-fondo);
+            color: var(--azul-texto);
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: var(--blanco);
+            border-bottom: 3px solid var(--azul-principal);
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        h1 {
+            color: var(--azul-principal);
+            margin: 0;
+            font-size: 2.2rem;
+            font-weight: 800;
+        }
+
+        .subtitle {
+            color: #6c757d;
+            margin-top: 10px;
+            font-size: 1.1rem;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .intro-card {
+            background: var(--azul-suave);
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 5px solid var(--azul-principal);
+            margin-bottom: 30px;
+        }
+
+        .modulo-card {
+            background: var(--blanco);
+            border: 1px solid var(--gris-borde);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+            transition: box-shadow 0.3s ease;
+        }
+
+        .modulo-card:hover {
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .header-modulo {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--azul-suave);
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+        }
+
+        .num-modulo {
+            background: var(--azul-principal);
+            color: var(--blanco);
+            padding: 5px 12px;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        h3 {
+            margin: 0;
+            color: var(--azul-principal);
+            font-size: 1.3rem;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            padding: 8px 0;
+            padding-left: 25px;
+            position: relative;
+            border-bottom: 1px solid #f1f1f1;
+        }
+
+        li::before {
+            content: "🔭";
+            position: absolute;
+            left: 0;
+            font-size: 0.9rem;
+        }
+
+        li:last-child {
+            border-bottom: none;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 40px;
+            color: #adb5bd;
+            font-size: 0.9rem;
+        }
+
+        /* Botón de acción */
+        .btn-descarga {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 25px;
+            background-color: var(--azul-principal);
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+
+        .btn-descarga:hover {
+            background-color: #004494;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <p class="title">Curso de Astronomía Nivel Inicial</p>
+</header>
+
+<div class="container">
+    <div class="intro-card">
+        <strong>Objetivo del curso:</strong> Capacitar al alumno en la identificación del cielo nocturno y el manejo de instrumentos ópticos sin necesidad de conocimientos previos matemáticos o físicos complejos.
+    </div>
+
+    <div id="app-programa">
+        </div>
+
+    <div style="text-align: center;">
+        <a href="#" class="btn-descarga">Descargar Programa en PDF</a>
+    </div>
+</div>
+
+<footer class="footer">
+    Astroamigos Misiones desarrolla el curso 100% gratuito, sin costo alguno, para todas las edades
+</footer>
+
+<script>
+    const programa = [
+        {
+            titulo: "Iniciación y Bóveda Celeste",
+            temas: ["Movimiento aparente del cielo", "Reconocimiento de Constelaciones", "Uso de planisferios físicos y digitales"]
+        },
+        {
+            titulo: "Nuestro Vecindario Solar",
+            temas: ["La Luna: Fases y geografía básica", "Planetas visibles: Guía de observación", "Eclipses y tránsitos"]
+        },
+        {
+            titulo: "Instrumental Óptico",
+            temas: ["Prismáticos: Por qué son el primer paso", "Refractores vs Reflectores", "Monturas y alineación básica"]
+        },
+        {
+            titulo: "Objetos de Espacio Profundo",
+            temas: ["Nebulosas, Galaxias y Cúmulos", "Ciclo de vida de las estrellas", "Escala de Bortle (Oscuridad del cielo)"]
+        }
+    ];
+
+    const container = document.getElementById('app-programa');
+
+    function displayPrograma() {
+        container.innerHTML = programa.map((mod, index) => `
+            <div class="modulo-card">
+                <div class="header-modulo">
+                    <h3>${mod.titulo}</h3>
+                    <span class="num-modulo">Módulo ${index + 1}</span>
+                </div>
+                <ul>
+                    ${mod.temas.map(tema => `<li>${tema}</li>`).join('')}
+                </ul>
+            </div>
+        `).join('');
+    }
+
+    window.onload = displayPrograma;
+</script>
+
+</body>
+</html>

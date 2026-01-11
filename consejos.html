@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consejos de Astronomía</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        body { 
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+        }
+        .bg-astro-blue { background-color: #0f172a; }
+        .text-astro-blue { color: #1e40af; }
+        .card-hover:hover { transform: translateY(-5px); transition: all 0.3s ease; }
+        .active-nav {
+            color: #1e40af;
+            font-weight: 600;
+        }
+        .tab-active {
+            background-color: #1e40af;
+            color: white;
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .sticky-nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <!-- Navegación principal -->
+    <nav class="bg-white border-b border-slate-200 sticky-nav shadow-sm">
+        <div class="flex flex-wrap justify-center gap-4 sm:gap-8 text-sm font-medium text-slate-600">
+                <a href="#inicio" class="hover:text-blue-600 transition active-nav" data-section="inicio">Inicio</a>
+                <a href="#fundamentales" class="hover:text-blue-600 transition" data-section="fundamentales">Consejos</a>
+                <a href="#tabla-resumen" class="hover:text-blue-600 transition" data-section="tabla-resumen">Tabla Resumen</a>
+                <a href="#equipo" class="hover:text-blue-600 transition" data-section="equipo">Equipo</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sección de Inicio -->
+    <header id="inicio" class="section bg-gradient-to-br from-slate-900 to-blue-900 text-white py-20">
+        <div class="max-w-6xl mx-auto px-6 text-center fade-in">
+            <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6">Empieza tu viaje a las estrellas</h1>
+            <p class="text-xl text-blue-100 max-w-3xl mx-auto mb-10">Consejos prácticos para observar el cielo nocturno, la Luna, los planetas y el Sol de manera segura y efectiva.</p>
+            <div class="flex flex-wrap justify-center gap-4">
+                <a href="#fundamentales" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-300 shadow-lg">
+                    <i class="fa-solid fa-rocket mr-2"></i>Consejos Fundamentales
+                </a>
+                <a href="#tabla-resumen" class="bg-white/10 hover:bg-white/20 text-white font-semibold py-3 px-6 rounded-lg transition duration-300 border border-white/30">
+                    <i class="fa-solid fa-table-cells-large mr-2"></i>Ver Tabla Resumen
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sección de Consejos Fundamentales -->
+    <main id="fundamentales" class="section max-w-6xl mx-auto px-6 py-12">
+        <div class="mb-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+            <div>
+                <h2 class="text-3xl font-bold text-slate-900 mb-2">Consejos Fundamentales</h2>
+                <p class="text-slate-600">Aspectos básicos que todo astrónomo aficionado debe conocer.</p>
+            </div>
+            <span class="bg-blue-100 text-blue-700 text-sm font-bold px-4 py-2 rounded-full uppercase">Nivel: Iniciación</span>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-lg border border-slate-200 overflow-hidden fade-in">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-slate-50 border-b border-slate-200">
+                            <th class="px-6 py-4 text-sm font-semibold text-slate-600">Categoría</th>
+                            <th class="px-6 py-4 text-sm font-semibold text-slate-600">Consejo Clave</th>
+                            <th class="px-6 py-4 text-sm font-semibold text-slate-600">Beneficio</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100">
+                        <tr class="hover:bg-blue-50/30 transition">
+                            <td class="px-6 py-4 font-medium text-blue-600 text-sm uppercase tracking-wider">Preparación</td>
+                            <td class="px-6 py-4 font-semibold text-slate-800">Aprende el cielo a simple vista</td>
+                            <td class="px-6 py-4 text-slate-600">Crea un mapa mental antes de usar lentes.</td>
+                        </tr>
+                        <tr class="hover:bg-blue-50/30 transition">
+                            <td class="px-6 py-4 font-medium text-blue-600 text-sm uppercase tracking-wider">Equipo</td>
+                            <td class="px-6 py-4 font-semibold text-slate-800">Empieza con binoculares</td>
+                            <td class="px-6 py-4 text-slate-600">Más económicos y campo visual más amplio.</td>
+                        </tr>
+                        <tr class="hover:bg-blue-50/30 transition">
+                            <td class="px-6 py-4 font-medium text-blue-600 text-sm uppercase tracking-wider">Ubicación</td>
+                            <td class="px-6 py-4 font-semibold text-slate-800">Busca cielos oscuros</td>
+                            <td class="px-6 py-4 text-slate-600">Evita la contaminación lumínica urbana.</td>
+                        </tr>
+                        <tr class="hover:bg-blue-50/30 transition">
+                            <td class="px-6 py-4 font-medium text-blue-600 text-sm uppercase tracking-wider">Adaptación</td>
+                            <td class="px-6 py-4 font-semibold text-slate-800">Visión nocturna (20 min)</td>
+                            <td class="px-6 py-4 text-slate-600">Tus ojos necesitan tiempo para dilatarse.</td>
+                        </tr>
+                        <tr class="hover:bg-blue-50/30 transition">
+                            <td class="px-6 py-4 font-medium text-blue-600 text-sm uppercase tracking-wider">Iluminación</td>
+                            <td class="px-6 py-4 font-semibold text-slate-800">Usa luz roja</td>
+                            <td class="px-6 py-4 text-slate-600">No arruina tu adaptación a la oscuridad.</td>
+                        </tr>
+                        <tr class="hover:bg-blue-50/30 transition">
+                            <td class="px-6 py-4 font-medium text-blue-600 text-sm uppercase tracking-wider">Planificación</td>
+                            <td class="px-6 py-4 font-semibold text-slate-800">Luna Nueva es mejor</td>
+                            <td class="px-6 py-4 text-slate-600">Ideal para ver objetos tenues de cielo profundo.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- Sección de Tabla Resumen por Tipo de Observación -->
+    <section id="tabla-resumen" class="section bg-slate-100 py-16">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-slate-900 mb-4">Consejos por Tipo de Observación</h2>
+                <p class="text-slate-600 max-w-3xl mx-auto">Clasificamos los consejos según el objeto celeste que quieras observar para optimizar tu experiencia.</p>
+            </div>
+
+            <!-- Filtros por tipo de observación -->
+            <div class="flex flex-wrap justify-center gap-2 mb-10">
+                <button class="filter-btn bg-blue-600 text-white px-5 py-2 rounded-lg font-medium transition tab-active" data-filter="all">
+                    <i class="fa-solid fa-globe mr-2"></i>Todos
+                </button>
+                <button class="filter-btn bg-white text-slate-700 px-5 py-2 rounded-lg font-medium transition hover:bg-blue-50" data-filter="luna">
+                    <i class="fa-solid fa-moon mr-2"></i>Luna
+                </button>
+                <button class="filter-btn bg-white text-slate-700 px-5 py-2 rounded-lg font-medium transition hover:bg-blue-50" data-filter="planetas">
+                    <i class="fa-solid fa-planet-ringed mr-2"></i>Planetas
+                </button>
+                <button class="filter-btn bg-white text-slate-700 px-5 py-2 rounded-lg font-medium transition hover:bg-blue-50" data-filter="sol">
+                    <i class="fa-solid fa-sun mr-2"></i>Sol
+                </button>
+                <button class="filter-btn bg-white text-slate-700 px-5 py-2 rounded-lg font-medium transition hover:bg-blue-50" data-filter="estrellas">
+                    <i class="fa-solid fa-star mr-2"></i>Estrellas Nocturnas
+                </button>
+            </div>
+
+            <!-- Tabla de consejos -->
+            <div class="bg-white rounded-2xl shadow-lg border border-slate-200 overflow-hidden fade-in">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-50 border-b border-slate-200">
+                                <th class="px-6 py-4 text-sm font-semibold text-slate-600">Tipo de Observación</th>
+                                <th class="px-6 py-4 text-sm font-semibold text-slate-600">Consejo</th>
+                                <th class="px6 py-4 text-sm font-semibold text-slate-600">Detalle</th>
+                                <th class="px-6 py-4 text-sm font-semibold text-slate-600">Dificultad</th>
+                            </tr>
+                        </thead>
+                        <tbody id="consejos-table" class="divide-y divide-slate-100">
+                            <!-- Luna -->
+                            <tr class="observacion-row luna hover:bg-blue-50/30 transition">
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center">
+                                        <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mr-3">
+                                            <i class="fa-solid fa-moon text-blue-600"></i>
+                                        </div>
+                                        <span class="font-semibold text-slate-800">Luna</span>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 font-medium text-slate-800">Observa durante fases crecientes o menguantes</td>
+                                <td class="px-6 py-4 text-slate-600">Los terminadores (línea día/noche) muestran mejor el relieve lunar.</td>
+                                <td class="px-6 py-4">
+                                    <span class="bg-green-100 text-green-700 text-xs font-bold px-3 py-1 rounded-full">Fácil</span>
+                                </td>
+                            </tr>
+                            <tr class="observacion-row luna hover:bg-blue-50/30 transition">
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center">
+                                        <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mr-3">
+                                            <i class="fa-solid fa-moon text-blue-600"></i>
+                                        </div>
+                                        <span class="font-semibold text-slate-800">Luna</span>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 font-medium text-slate-800">Usa filtro lunar para reducir el brillo</td>
+                                <td class="px-6 py-4 text-slate-600">Permite observar más detalles sin deslumbramiento en noches de luna llena.</td>
+                                <td class="px-6 py-4">
+                                    <span class="bg-green-100 text-green-700 text-xs font-bold px-3 py-1 rounded-full">Fácil</span>
+                                </td>
+                            </tr>
+                            
+                            <!-- Planetas -->
+                            <tr class="observacion-row planetas hover:bg-blue-50/30 transition">
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center">
+                                        <div class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center mr-3">
+                                            <i class="fa-solid fa-planet-ringed text-purple-600"></i>
+                                        </div>
+                                        <span class="font-semibold text-slate-800">Planetas</span>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 font-medium text-slate-800">Verifica fechas de oposición planetaria</td>
+                                <td class="px-6 py-4 text-slate-600">Los planetas están más cercanos y brillantes durante la oposición.</td>
+                                <td class="px-6 py-4">
+                                    <span class="bg-yellow-100 text-yellow-700 text-xs font-bold px-3 py-1 rounded-full">Media</span>
+                                </td>
+                            </tr>
+                            <tr class="observacion-row planetas hover:bg-blue-50/30 transition">
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center">
+                                        <div class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center mr-3">
+                                            <i class="fa-solid fa-planet-ringed text-purple-600"></i>
+                                        </div>
+                                        <span class="font-semibold text-slate-800">Planetas</span>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 font-medium text-slate-800">Usa aumentos moderados para planetas brillantes</td>
+                                <td class="px-6 py-4 text-slate-600">Júpiter, Saturno y Marte muestran mejores detalles con 150-200x aumentos.</td>
+                                <td class="px-6 py-4">
+                                    <span class="bg-yellow-100 text-yellow-700 text-xs font-bold px-3 py-1 rounded-full">Media</span>
+                                </td>
+                            </tr>
+                            
+                            <!-- Sol -->
+                            <tr class="observacion-row sol hover:bg-blue-50/30 transition">
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center">
+                                        <div class="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center mr-3">
+                                            <i class="fa-solid fa-sun text-orange-600"></i>
+                                        </div>
+                                        <span class="font-semibold text-slate-800">Sol</span>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 font-medium text-slate-800">NUNCA mires al sol sin filtro especializado</td>
+                                <td class="px-6 py-4 text-slate-600">Usa filtros solares certificados (ISO 12312-2) para evitar daño ocular permanente.</td>
+                                <td class="px-6 py-4">
+                                    <span class="bg-red-100 text-red-700 text-xs font-bold px-3 py-1 rounded-full">Alta</span>
+                                </td>
+                            </tr>
+                            <tr class="observacion-row sol hover:bg-blue-50/30 transition">
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center">
+                                        <div class="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center mr-3">
+                                            <i class="fa-solid fa-sun text-orange-600"></i>
+                                        </div>
+                                        <span class="font-semibold text-slate-800">Sol</span>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 font-medium text-slate-800">Observa manchas solares al amanecer o atardecer</td>
+                                <td class="px-6 py-4 text-slate-600">La atmósfera estabilizada permite mejor visibilidad de detalles solares.</td>
+                                <td class="px-6 py-4">
+                                    <span class="bg-red-100 text-red-700 text-xs font-bold px-3 py-1 rounded-full">Alta</span>
+                                </td>
+                            </tr>
+                            
+                            <!-- Estrellas Nocturnas -->
+                            <tr class="observacion-row estrellas hover:bg-blue-50/30 transition">
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center">
+                                        <div class="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center mr-3">
+                                            <i class="fa-solid fa-star text-indigo-600"></i>
+                                        </div>
+                                        <span class="font-semibold text-slate-800">Estrellas Nocturnas</span>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 font-medium text-slate-800">Aprende a identificar constelaciones clave</td>
+                                <td class="px-6 py-4 text-slate-600">Osa Mayor, Orión y Escorpio son buenos puntos de partida para navegar el cielo.</td>
+                                <td class="px-6 py-4">
+                                    <span class="bg-green-100 text-green-700 text-xs font-bold px-3 py-1 rounded-full">Fácil</span>
+                                </td>
+                            </tr>
+                            <tr class="observacion-row estrellas hover:bg-blue-50/30 transition">
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center">
+                                        <div class="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center mr-3">
+                                            <i class="fa-solid fa-star text-indigo-600"></i>
+                                        </div>
+                                        <span class="font-semibold text-slate-800">Estrellas Nocturnas</span>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 font-medium text-slate-800">Evita noches de luna llena para observar estrellas débiles</td>
+                                <td class="px-6 py-4 text-slate-600">El brillo lunar reduce el contraste necesario para ver estrellas tenues y galaxias.</td>
+                                <td class="px-6 py-4">
+                                    <span class="bg-yellow-100 text-yellow-700 text-xs font-bold px-3 py-1 rounded-full">Media</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="mt-10 text-center text-slate-600">
+                <p><i class="fa-solid fa-lightbulb text-yellow-500 mr-2"></i>Consejo extra: Lleva un diario de observación para registrar tus descubrimientos y mejorar tu técnica.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección de Equipo -->
+    <section id="equipo" class="section bg-gradient-to-r from-blue-800 to-indigo-900 text-white py-16">
+        <div class="max-w-6xl mx-auto px-6 text-center">
+            <h2 class="text-3xl font-bold mb-4">¿Sabías que el frío es el factor #1 de abandono?</h2>
+            <p class="text-blue-100 mb-10 max-w-3xl mx-auto">La astronomía requiere paciencia y preparación. Estos consejos adicionales te ayudarán a disfrutar más de tus noches de observación.</p>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="p-6 bg-white/10 rounded-xl backdrop-blur-sm border border-white/20 card-hover">
+                    <i class="fa-solid fa-vest-patches text-3xl mb-4"></i>
+                    <h3 class="font-bold mb-2 text-lg">Abrigo por capas</h3>
+                    <p class="text-sm text-blue-100">Incluso en verano, la observación estática enfría el cuerpo rápidamente. Usa varias capas que puedas añadir o quitar.</p>
+                </div>
+                <div class="p-6 bg-white/10 rounded-xl backdrop-blur-sm border border-white/20 card-hover">
+                    <i class="fa-solid fa-mobile-screen-button text-3xl mb-4"></i>
+                    <h3 class="font-bold mb-2 text-lg">App sugerida</h3>
+                    <p class="text-sm text-blue-100">Descarga <strong class="text-white">Stellarium</strong> o <strong class="text-white">SkySafari</strong> para navegar por las constelaciones en tiempo real.</p>
+                </div>
+                <div class="p-6 bg-white/10 rounded-xl backdrop-blur-sm border border-white/20 card-hover">
+                    <i class="fa-solid fa-users text-3xl mb-4"></i>
+                    <h3 class="font-bold mb-2 text-lg">Busca un Club</h3>
+                    <p class="text-sm text-blue-100">Ver por el telescopio de otro es la mejor forma de aprender gratis. Los clubes organizan salidas grupales.</p>
+                </div>
+            </div>
+            
+            <div class="mt-12 p-6 bg-white/5 rounded-xl border border-white/10 max-w-2xl mx-auto">
+                <h3 class="font-bold mb-3 text-lg">Consejo de experto</h3>
+                <p class="text-blue-100">"Empieza con objetos brillantes y fáciles como la Luna o Júpiter. El éxito temprano motiva a continuar aprendiendo."</p>
+                
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    
+            <div class="mt-4 flex justify-center space-x-4">
+                <a href="#inicio" class="text-blue-500 hover:text-blue-700 transition">
+                    <i class="fa-solid fa-house"></i>
+                </a>
+                <a href="#fundamentales" class="text-blue-500 hover:text-blue-700 transition">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                </a>
+                <a href="#tabla-resumen" class="text-blue-500 hover:text-blue-700 transition">
+                    <i class="fa-solid fa-table-cells-large"></i>
+                </a>
+                <a href="#equipo" class="text-blue-500 hover:text-blue-700 transition">
+                    <i class="fa-solid fa-people-group"></i>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript para funcionalidad SPA y filtros -->
+    <script>
+        // Navegación SPA suave
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Actualizar navegación activa
+                document.querySelectorAll('nav a').forEach(navLink => {
+                    navLink.classList.remove('active-nav');
+                });
+                this.classList.add('active-nav');
+                
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                if(targetElement) {
+                    // Ocultar todas las secciones
+                    document.querySelectorAll('.section').forEach(section => {
+                        section.classList.remove('fade-in');
+                        section.style.display = 'none';
+                    });
+                    
+                    // Mostrar la sección objetivo
+                    targetElement.style.display = 'block';
+                    setTimeout(() => {
+                        targetElement.classList.add('fade-in');
+                    }, 10);
+                    
+                    // Scroll suave
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        // Filtrar tabla por tipo de observación
+        document.querySelectorAll('.filter-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                // Actualizar botón activo
+                document.querySelectorAll('.filter-btn').forEach(btn => {
+                    btn.classList.remove('tab-active');
+                    btn.classList.remove('bg-blue-600', 'text-white');
+                    btn.classList.add('bg-white', 'text-slate-700');
+                });
+                
+                this.classList.add('tab-active', 'bg-blue-600', 'text-white');
+                this.classList.remove('bg-white', 'text-slate-700');
+                
+                const filter = this.getAttribute('data-filter');
+                const rows = document.querySelectorAll('.observacion-row');
+                
+                rows.forEach(row => {
+                    if(filter === 'all' || row.classList.contains(filter)) {
+                        row.style.display = 'table-row';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            });
+        });
+        
+        // Inicializar página - mostrar primera sección
+        document.addEventListener('DOMContentLoaded', function() {
+            // Ocultar todas las secciones excepto la primera
+            document.querySelectorAll('.section').forEach((section, index) => {
+                if(index > 0) {
+                    section.style.display = 'none';
+                } else {
+                    section.classList.add('fade-in');
+                }
+            });
+            
+            // Establecer navegación activa inicial
+            document.querySelector('nav a[href="#inicio"]').classList.add('active-nav');
+        });
+    </script>
+</body>
+</html>

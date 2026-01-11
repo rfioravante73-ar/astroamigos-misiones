@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa Celeste</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/astronomy-engine@2.1.19/astronomy.browser.min.js"></script>
+    
+    <style>
+        /* Estilos base y modo claro */
+        :root {
+            --primary-color: #4a6fa5;
+            --surface-color: #ffffff;
+            --text-color: #333333;
+            --text-secondary: #666666;
+            --border-color: #e0e0e0;
+            --accent-color: #4a8eff;
+            --sky-bg: #87CEEB; /* Azul día por defecto */
+            --panel-bg: #f8f9fa;
+        }
+        
+        .dark-mode {
+            --primary-color: #5a86c9;
+            --surface-color: #1e1e1e;
+            --text-color: #f0f0f0;
+            --text-secondary: #b0b0b0;
+            --border-color: #333333;
+            --accent-color: #5a9cff;
+            --sky-bg: #0b1026;
+            --panel-bg: #121212;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, sans-serif; }
+        
+        body {
+            background-color: var(--panel-bg);
+            color: var(--text-color);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        
+        /* Layout Principal */
+        header {
+            background-color: var(--surface-color);
+            padding: 1rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .header-title h1 { font-size: 1.2rem; color: var(--primary-color); }
+        .header-title small { color: var(--text-secondary); font-size: 0.8rem; }
+
+        main {
+            display: flex;
+            flex: 1;
+            padding: 15px;
+            gap: 15px;
+            overflow: hidden;
+        }
+
+        /* Contenedor del Mapa */
+        .sky-view {
+            flex: 1;
+            background-color: var(--surface-color);
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .sky-canvas-wrapper {
+            flex: 1;
+            position: relative;
+            background: var(--sky-bg);
+            border-radius: 0 0 12px 12px;
+            overflow: hidden;
+            cursor: crosshair;
+        }
+
+        canvas { width: 100%; height: 100%; display: block; }
+
+        .sky-overlay {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            background: rgba(0,0,0,0.6);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            pointer-events: none;
+            backdrop-filter: blur(4px);
+        }
+
+        /* Panel Lateral */
+        .info-panel {
+            width: 320px;
+            background-color: var(--surface-color);
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .panel-header {
+            padding: 15px;
+            border-bottom: 1px solid var(--border-color);
+            font-weight: bold;
+            color: var(--primary-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .panel-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+        }
+
+        .data-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            border-bottom: 1px dashed var(--border-color);
+            padding-bottom: 4px;
+        }
+        
+        .data-label { color: var(--text-secondary); }
+        .data-value { font-weight: 500; }
+
+        /* Controles */
+        .controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        button, select {
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background: var(--surface-color);
+            color: var(--text-color);
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        button:hover { background-color: var(--border-color); }
+        .active-btn { background-color: var(--accent-color); color: white; border-color: var(--accent-color); }
+        .active-btn:hover { background-color: #3a7bd5; }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            main { flex-direction: column; }
+            .info-panel { width: 100%; height: 250px; }
+            header { flex-direction: column; gap: 10px; text-align: center; }
+        }
+    </style>
+</head>
+<body class="light-mode">
+
+    <header>
+        <div class="header-title">
+            <h3>Ciudad de Posadas, Argentina: Lat: 27.36° S | Lon: 55.90° O -Tiempo Real<h3>
+        </div>
+        <div class="controls">
+            <select id="time-select">
+                <option value="0">Ahora</option>
+                <option value="1">+1 Hora</option>
+                <option value="6">+6 Horas</option>
+                <option value="12">+12 Horas</option>
+            </select>
+            <button id="btn-toggle-const" class="active-btn" title="Constelaciones"><i class="fas fa-project-diagram"></i></button>
+            <button id="btn-toggle-stars" class="active-btn" title="Estrellas"><i class="fas fa-star"></i></button>
+            <button id="btn-toggle-planets" class="active-btn" title="Planetas"><i class="fas fa-globe"></i></button>
+            <button id="btn-theme" title="Modo Oscuro"><i class="fas fa-moon"></i></button>
+        </div>
+    </header>
+
+    <main>
+        <div class="sky-view">
+            <div style="padding: 10px; border-bottom: 1px solid var(--border-color); display:flex; justify-content:space-between;">
+                <strong><i class="fas fa-compass"></i> Vista Cenital</strong>
+                <span id="sky-status" style="font-size: 0.9rem; color: var(--accent-color);">Calculando...</span>
+            </div>
+            <div class="sky-canvas-wrapper" id="canvas-container">
+                <canvas id="sky-canvas"></canvas>
+                <div class="sky-overlay">
+                    <div id="cursor-info">Apunta al cielo</div>
+                    <div id="fov-info">Norte Arriba</div>
+                </div>
+            </div>
+        </div>
+
+        <aside class="info-panel">
+            <div class="panel-header">
+                <span>Datos Astronómicos</span>
+                <i class="fas fa-satellite-dish"></i>
+            </div>
+            <div class="panel-content">
+                <div style="margin-bottom: 15px;">
+                    <h4 style="margin-bottom:8px; color:var(--accent-color);">Sol y Luna</h4>
+                    <div class="data-row"><span class="data-label">Sol Altitud:</span> <span id="sun-alt" class="data-value">--</span></div>
+                    <div class="data-row"><span class="data-label">Fase Lunar:</span> <span id="moon-phase" class="data-value">--</span></div>
+                    <div class="data-row"><span class="data-label">Iluminación:</span> <span id="moon-illum" class="data-value">--</span></div>
+                </div>
+
+                <div style="margin-bottom: 15px;">
+                    <h4 style="margin-bottom:8px; color:var(--accent-color);">Planetas Visibles</h4>
+                    <div id="planets-list">
+                        </div>
+                </div>
+
+                <div>
+                    <h4 style="margin-bottom:8px; color:var(--accent-color);">Sistema</h4>
+                    <div class="data-row"><span class="data-label">Hora Local:</span> <span id="local-time" class="data-value">--</span></div>
+                    <div class="data-row"><span class="data-label">Hora Sideral:</span> <span id="sidereal-time" class="data-value">--</span></div>
+                </div>
+            </div>
+        </aside>
+    </main>
+
+    <script>
+        // CONFIGURACIÓN: Posadas, Misiones, Argentina
+        const LOCATION = {
+            lat: -27.3667,
+            lon: -55.8969,
+            elevation: 120 // metros aprox
+        };
+
+        // Estado de la aplicación
+        const state = {
+            date: new Date(),
+            timeOffset: 0,
+            showConstellations: true,
+            showStars: true,
+            showPlanets: true,
+            isDarkMode: false
+        };
+
+        // Referencias DOM
+        const canvas = document.getElementById('sky-canvas');
+        const ctx = canvas.getContext('2d');
+        const container = document.getElementById('canvas-container');
+        
+        // Catálogo de Estrellas Brillantes (J2000 RA/DEC)
+        // Convertiremos estas coordenadas estáticas a Alt/Az dinámicas usando Astronomy Engine
+        const starCatalog = [
+            { name: "Sirio", ra: 6.752, dec: -16.716, mag: -1.46, color: "#b0d0ff" },
+            { name: "Canopus", ra: 6.399, dec: -52.696, mag: -0.74, color: "#f0f0f0" },
+            { name: "Rigil Kent", ra: 14.661, dec: -60.838, mag: -0.27, color: "#fffeb0" }, // Alpha Centauri
+            { name: "Arturo", ra: 14.261, dec: 19.182, mag: -0.05, color: "#ffd0b0" },
+            { name: "Vega", ra: 18.616, dec: 38.784, mag: 0.03, color: "#b0d0ff" },
+            { name: "Rigel", ra: 5.242, dec: -8.202, mag: 0.13, color: "#b0d0ff" },
+            { name: "Procyon", ra: 7.655, dec: 5.225, mag: 0.34, color: "#fffeb0" },
+            { name: "Achernar", ra: 1.629, dec: -57.237, mag: 0.46, color: "#b0d0ff" },
+            { name: "Betelgeuse", ra: 5.919, dec: 7.407, mag: 0.50, color: "#ffb090" },
+            { name: "Hadar", ra: 14.064, dec: -60.373, mag: 0.61, color: "#b0d0ff" }, // Beta Centauri
+            { name: "Acrux", ra: 12.443, dec: -63.099, mag: 0.76, color: "#b0d0ff" }, // Cruz del Sur
+            { name: "Altair", ra: 19.846, dec: 8.868, mag: 0.77, color: "#f0f0f0" },
+            { name: "Antares", ra: 16.491, dec: -26.432, mag: 0.96, color: "#ff9070" },
+            { name: "Spica", ra: 13.420, dec: -11.161, mag: 0.97, color: "#b0d0ff" },
+            { name: "Pollux", ra: 7.755, dec: 28.026, mag: 1.14, color: "#fffeb0" },
+            { name: "Fomalhaut", ra: 22.961, dec: -29.622, mag: 1.16, color: "#f0f0f0" },
+            { name: "Mimosa", ra: 12.795, dec: -59.689, mag: 1.25, color: "#b0d0ff" }, // Beta Crucis
+            { name: "Regulus", ra: 10.139, dec: 11.967, mag: 1.36, color: "#b0d0ff" },
+            { name: "Castor", ra: 7.577, dec: 31.888, mag: 1.58, color: "#f0f0f0" },
+            { name: "Gacrux", ra: 12.519, dec: -57.113, mag: 1.63, color: "#ff9070" }  // Gamma Crucis
+        ];
+
+        // Definición simple de constelaciones (Índices basados en el catálogo anterior o nombres)
+        // Para simplificar, usaremos un mapeo por nombre
+        const constellations = [
+            { name: "Cruz del Sur", stars: ["Acrux", "Mimosa", "Gacrux"] }, 
+            { name: "Centauro", stars: ["Rigil Kent", "Hadar"] },
+            { name: "Orión", stars: ["Betelgeuse", "Rigel"] } 
+            // Nota: En una app completa, esto usaría IDs de estrellas más extensos
+        ];
+
+        // Inicialización
+        function init() {
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+            
+            // Event Listeners
+            document.getElementById('time-select').addEventListener('change', (e) => {
+                state.timeOffset = parseInt(e.target.value);
+                updateSystem();
+            });
+
+            document.getElementById('btn-toggle-const').addEventListener('click', (e) => {
+                state.showConstellations = !state.showConstellations;
+                e.currentTarget.classList.toggle('active-btn');
+                updateSystem();
+            });
+
+            document.getElementById('btn-toggle-stars').addEventListener('click', (e) => {
+                state.showStars = !state.showStars;
+                e.currentTarget.classList.toggle('active-btn');
+                updateSystem();
+            });
+
+            document.getElementById('btn-toggle-planets').addEventListener('click', (e) => {
+                state.showPlanets = !state.showPlanets;
+                e.currentTarget.classList.toggle('active-btn');
+                updateSystem();
+            });
+
+            document.getElementById('btn-theme').addEventListener('click', toggleTheme);
+
+            // Bucle de animación (para mantener el reloj al día)
+            setInterval(updateSystem, 1000); // Actualizar cada segundo
+            updateSystem(); // Primera llamada
+        }
+
+        function resizeCanvas() {
+            canvas.width = container.clientWidth;
+            canvas.height = container.clientHeight;
+            updateSystem();
+        }
+
+        function toggleTheme() {
+            state.isDarkMode = !state.isDarkMode;
+            document.body.classList.toggle('dark-mode');
+            document.body.classList.toggle('light-mode');
+        }
+
+        // ==========================================
+        // LÓGICA ASTRONÓMICA (Usando Astronomy Engine)
+        // ==========================================
+
+        function updateSystem() {
+            // 1. Calcular Fecha Efectiva
+            const now = new Date();
+            const effectiveDate = new Date(now.getTime() + state.timeOffset * 60 * 60 * 1000);
+            state.date = effectiveDate;
+
+            // 2. Crear Observador
+            const observer = new Astronomy.Observer(LOCATION.lat, LOCATION.lon, LOCATION.elevation);
+
+            // 3. Calcular Sol (para color del cielo)
+            const sunPos = Astronomy.Equator('Sun', effectiveDate, observer, true, true);
+            const sunHor = Astronomy.Horizon(effectiveDate, observer, sunPos.ra, sunPos.dec, 'normal');
+            
+            // Actualizar UI Texto
+            document.getElementById('local-time').innerText = effectiveDate.toLocaleTimeString('es-AR');
+            document.getElementById('sun-alt').innerText = sunHor.altitude.toFixed(1) + "°";
+            
+            // Hora Sideral Local
+            const lmst = Astronomy.SiderealTime(effectiveDate) + (LOCATION.lon / 15.0);
+            const lmstHours = lmst % 24;
+            const h = Math.floor(lmstHours);
+            const m = Math.floor((lmstHours - h) * 60);
+            document.getElementById('sidereal-time').innerText = `${h}h ${m}m`;
+
+            // 4. Dibujar Cielo
+            drawSky(effectiveDate, observer, sunHor);
+            
+            // 5. Calcular Planetas y Luna
+            updatePanelData(effectiveDate, observer);
+        }
+
+        function drawSky(date, observer, sunHor) {
+            const w = canvas.width;
+            const h = canvas.height;
+            const cx = w / 2;
+            const cy = h / 2;
+            const radius = Math.min(w, h) / 2 - 20; // Radio del horizonte
+
+            // Limpiar Canvas
+            ctx.clearRect(0, 0, w, h);
+
+            // --- FONDO DE CIELO DINÁMICO ---
+            // Color basado en la altitud del sol
+            let skyColor;
+            if (state.isDarkMode) {
+                skyColor = '#0a0a1a'; // Siempre oscuro en modo oscuro
+            } else {
+                if (sunHor.altitude > 10) skyColor = '#87CEEB'; // Día
+                else if (sunHor.altitude > -6) skyColor = '#596e91'; // Crepúsculo civil
+                else if (sunHor.altitude > -18) skyColor = '#2c3e50'; // Crepúsculo náutico
+                else skyColor = '#0a0a1a'; // Noche
+            }
+            
+            ctx.fillStyle = skyColor;
+            ctx.fillRect(0, 0, w, h);
+
+            // --- REJILLA Y HORIZONTE ---
+            ctx.beginPath();
+            ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+            ctx.strokeStyle = state.isDarkMode ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.2)';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            // Puntos Cardinales (Norte arriba en mapas celestes estándar, o Sur arriba?
+            // En mapas de hemisferio sur, a veces se pone Sur arriba. Mantendremos Norte Arriba por convención estándar de mapa)
+            drawText(ctx, "N", cx, cy - radius - 10, "14px Arial", state.isDarkMode ? "#fff" : "#333");
+            drawText(ctx, "S", cx, cy + radius + 20, "14px Arial", state.isDarkMode ? "#fff" : "#333");
+            drawText(ctx, "E", cx - radius - 15, cy, "14px Arial", state.isDarkMode ? "#fff" : "#333");
+            drawText(ctx, "O", cx + radius + 15, cy, "14px Arial", state.isDarkMode ? "#fff" : "#333");
+
+            // --- ESTRELLAS ---
+            if (state.showStars) {
+                starCatalog.forEach(star => {
+                    // Convertir J2000 RA/Dec a coordenadas de horizonte actuales
+                    // Nota: Para máxima precisión deberíamos precesar las coordenadas, pero para un mapa visual RA/Dec J2000 directo funciona aceptablemente con Astronomy.Horizon
+                    const hor = Astronomy.Horizon(date, observer, star.ra, star.dec, 'normal');
+                    
+                    if (hor.altitude > 0) {
+                        const pos = projectPolar(hor.azimuth, hor.altitude, cx, cy, radius);
+                        
+                        // Tamaño según magnitud
+                        const size = Math.max(1.5, 4 - star.mag); 
+                        
+                        ctx.beginPath();
+                        ctx.fillStyle = star.color;
+                        ctx.arc(pos.x, pos.y, size, 0, Math.PI * 2);
+                        ctx.fill();
+
+                        // Nombre (solo si es muy brillante)
+                        if (star.mag < 1.5) {
+                            ctx.fillStyle = state.isDarkMode ? "rgba(255,255,255,0.7)" : "rgba(0,0,0,0.7)";
+                            ctx.font = "10px Arial";
+                            ctx.fillText(star.name, pos.x + 5, pos.y);
+                        }
+                    }
+                });
+            }
+
+            // --- CONSTELACIONES (Líneas simples) ---
+            if (state.showConstellations && state.showStars) {
+                ctx.strokeStyle = "rgba(255, 255, 255, 0.3)";
+                ctx.lineWidth = 1;
+                constellations.forEach(constel => {
+                    // Buscar las estrellas
+                    let points = [];
+                    constel.stars.forEach(sName => {
+                        const star = starCatalog.find(s => s.name === sName);
+                        if(star) {
+                            const hor = Astronomy.Horizon(date, observer, star.ra, star.dec, 'normal');
+                            if(hor.altitude > 0) points.push(projectPolar(hor.azimuth, hor.altitude, cx, cy, radius));
+                        }
+                    });
+
+                    if(points.length > 1) {
+                        ctx.beginPath();
+                        ctx.moveTo(points[0].x, points[0].y);
+                        for(let i=1; i<points.length; i++) {
+                            ctx.lineTo(points[i].x, points[i].y);
+                        }
+                        ctx.stroke();
+                    }
+                });
+            }
+
+            // --- PLANETAS, SOL Y LUNA ---
+            const bodies = ['Sun', 'Moon', 'Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn'];
+            
+            bodies.forEach(bodyName => {
+                // No dibujar Sol/Luna si están desactivados planetas (opcional, pero suelen ir juntos)
+                if (!state.showPlanets && bodyName !== 'Sun' && bodyName !== 'Moon') return;
+
+                // Calcular posición Topocéntrica
+                const eq = Astronomy.Equator(bodyName, date, observer, true, true);
+                const hor = Astronomy.Horizon(date, observer, eq.ra, eq.dec, 'normal');
+
+                if (hor.altitude > 0) {
+                    const pos = projectPolar(hor.azimuth, hor.altitude, cx, cy, radius);
+                    let color = '#FFF';
+                    let label = bodyName;
+                    let size = 3;
+
+                    switch(bodyName) {
+                        case 'Sun': color = '#FFD700'; size = 8; label = 'Sol'; break;
+                        case 'Moon': color = '#F4F6F0'; size = 7; label = 'Luna'; break;
+                        case 'Mars': color = '#FF4500'; label = 'Marte'; break;
+                        case 'Venus': color = '#F5DEB3'; label = 'Venus'; break;
+                        case 'Jupiter': color = '#DEB887'; label = 'Júpiter'; break;
+                        case 'Saturn': color = '#F0E68C'; label = 'Saturno'; break;
+                        case 'Mercury': color = '#B0C4DE'; label = 'Mercurio'; break;
+                    }
+
+                    // Dibujar cuerpo
+                    ctx.beginPath();
+                    ctx.fillStyle = color;
+                    ctx.arc(pos.x, pos.y, size, 0, Math.PI * 2);
+                    ctx.fill();
+                    
+                    // Halo para el sol
+                    if (bodyName === 'Sun') {
+                        ctx.beginPath();
+                        ctx.strokeStyle = 'rgba(255, 215, 0, 0.3)';
+                        ctx.lineWidth = 2;
+                        ctx.arc(pos.x, pos.y, size + 4, 0, Math.PI * 2);
+                        ctx.stroke();
+                    }
+
+                    // Etiqueta
+                    ctx.fillStyle = state.isDarkMode ? "#FFF" : "#000";
+                    ctx.font = "bold 11px Arial";
+                    ctx.fillText(label, pos.x + 8, pos.y + 3);
+                }
+            });
+
+            // Actualizar status texto
+            document.getElementById('sky-status').innerText = state.showConstellations ? "Mostrando Constelaciones" : "Vista simple";
+        }
+
+        // Proyección Estereográfica: Cenit al centro
+        // Azimut: 0 es Sur en Astronomy Engine? No, 0 es Norte en 'normal' mode (el que usamos)
+        // Pero en canvas matematico 0 grados es derecha (Este).
+        function projectPolar(azimuth, altitude, cx, cy, radius) {
+            // Convertir Azimut (grados desde Norte horario) a radianes de Canvas
+            // Canvas 0 = 3 en reloj. Norte (0 azimut) = -PI/2 en canvas.
+            // Corrección: Azimut 0 (N) -> -90 deg (Arriba en Y)
+            // Azimut 90 (E) -> 0 deg (Derecha en X) ... espera, E está a la izquierda en mapa celeste mirando al cielo?
+            // Si miramos al cielo (cabeza atrás), Norte arriba, Este queda a la IZQUIERDA.
+            // Fórmula estándar mapa celeste: x = -sin(az), y = -cos(az) para N arriba, E izquierda.
+            
+            const z = (90 - altitude) / 90; // 0 en cenit, 1 en horizonte
+            const r = radius * z;
+            
+            const azRad = azimuth * Math.PI / 180;
+            
+            // Invertimos X para que el Este quede a la izquierda (vista hacia arriba)
+            const x = cx - r * Math.sin(azRad); 
+            const y = cy - r * Math.cos(azRad);
+            
+            return { x, y };
+        }
+
+        function drawText(ctx, text, x, y, font, color) {
+            ctx.fillStyle = color;
+            ctx.font = font;
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillText(text, x, y);
+        }
+
+        function updatePanelData(date, observer) {
+            const list = document.getElementById('planets-list');
+            list.innerHTML = '';
+            
+            // Luna Info
+            const moonPhase = Astronomy.MoonPhase(date); // Grados 0-360
+            let phaseName = "";
+            if(moonPhase < 10 || moonPhase > 350) phaseName = "Nueva";
+            else if (moonPhase < 80) phaseName = "Creciente";
+            else if (moonPhase < 100) phaseName = "Cuarto Crec.";
+            else if (moonPhase < 170) phaseName = "Gibosa Crec.";
+            else if (moonPhase < 190) phaseName = "Luna Llena";
+            else if (moonPhase < 260) phaseName = "Gibosa Meng.";
+            else if (moonPhase < 280) phaseName = "Cuarto Meng.";
+            else phaseName = "Menguante";
+            
+            document.getElementById('moon-phase').innerText = phaseName;
+            
+            // Iluminación aprox
+            const illum = Astronomy.Illumination('Moon', date);
+            document.getElementById('moon-illum').innerText = (illum.phase_fraction * 100).toFixed(0) + "%";
+
+            // Planetas
+            const planets = ['Venus', 'Mars', 'Jupiter', 'Saturn'];
+            let visibleCount = 0;
+
+            planets.forEach(p => {
+                const eq = Astronomy.Equator(p, date, observer, true, true);
+                const hor = Astronomy.Horizon(date, observer, eq.ra, eq.dec, 'normal');
+                
+                if(hor.altitude > 0) {
+                    visibleCount++;
+                    const div = document.createElement('div');
+                    div.className = 'data-row';
+                    let nombreEsp = p === 'Jupiter' ? 'Júpiter' : (p === 'Saturn' ? 'Saturno' : p);
+                    
+                    div.innerHTML = `
+                        <span class="data-label"><i class="fas fa-circle" style="font-size:8px;"></i> ${nombreEsp}</span>
+                        <span class="data-value">Alt: ${hor.altitude.toFixed(0)}° - ${getCardinal(hor.azimuth)}</span>
+                    `;
+                    list.appendChild(div);
+                }
+            });
+
+            if(visibleCount === 0) {
+                list.innerHTML = '<div style="font-size:0.8rem; color:var(--text-secondary);">Ningún planeta visible actualmente.</div>';
+            }
+        }
+
+        function getCardinal(az) {
+            if (az >= 337.5 || az < 22.5) return "N";
+            if (az >= 22.5 && az < 67.5) return "NE";
+            if (az >= 67.5 && az < 112.5) return "E";
+            if (az >= 112.5 && az < 157.5) return "SE";
+            if (az >= 157.5 && az < 202.5) return "S";
+            if (az >= 202.5 && az < 247.5) return "SO";
+            if (az >= 247.5 && az < 292.5) return "O";
+            if (az >= 292.5 && az < 337.5) return "NO";
+            return "";
+        }
+
+        // Iniciar App
+        window.addEventListener('load', init);
+
+    </script>
+</body>
+</html>
