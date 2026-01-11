@@ -277,7 +277,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>Formulario de registro a la Aplicación Astroamigos Misiones</h1>
+            <h2>Formulario de Registro Astroamigos Misiones</h2>
             <p>Complete sus datos para solicitar acceso a nuestra app de astronomía</p>
         </div>
         
@@ -303,15 +303,21 @@
                         <input type="text" id="dni" name="dni" placeholder="Ingrese su número de DNI" required>
                         <div class="validation-message" id="dni-validation"></div>
                     </div>
-                    
+
+                    <div class="form-group">
+                        <label for="emailSolicitante">Email de Contacto <span class="required">*</span></label>
+                        <input type="email" id="emailSolicitante" name="emailSolicitante" placeholder="ejemplo@correo.com" required>
+                        <div class="validation-message" id="emailSolicitante-validation"></div>
+                    </div>
+                </div>
+                
+                <div class="form-row">
                     <div class="form-group">
                         <label for="ciudad">Ciudad <span class="required">*</span></label>
                         <input type="text" id="ciudad" name="ciudad" placeholder="Ingrese su ciudad" required>
                         <div class="validation-message" id="ciudad-validation"></div>
                     </div>
-                </div>
                 
-                <div class="form-row">
                     <div class="form-group">
                         <label for="provincia">Provincia <span class="required">*</span></label>
                         <select id="provincia" name="provincia" required>
@@ -345,11 +351,12 @@
                 </div>
                 
                 <div class="email-preview">
-                    <h3><i class="fas fa-envelope"></i> Vista previa del mensaje que se enviará</h3>
+                    <h3><i class="fas fa-envelope"></i> Vista previa del mensaje</h3>
                     <p><strong>Destinatario:</strong> setiposadas@gmail.com</p>
                     <div class="email-content">
-                        <p id="emailPreview">Hola Astroamigos Misiones, deseo acceder a la app online, envio mis datos personales para recibir el usuario y clave de acceso, Muchas gracias.</p>
+                        <p id="emailPreview">Hola Astroamigos Misiones, deseo acceder a la app online...</p>
                     </div>
+                    <small style="color: #666; display: block; margin-top: 10px;">* Al enviar, se abrirá su aplicación de correo predeterminada.</small>
                 </div>
                 
                 <div class="buttons">
@@ -368,7 +375,7 @@
     
     <div class="footer">
         <p>Astroamigos Misiones - Aplicación de astronomía para entusiastas del cielo nocturno</p>
-        <p>Este formulario enviará un correo automático con sus datos para procesar su registro</p>
+        <p>Este formulario generará un correo automático en su dispositivo</p>
     </div>
 
     <script>
@@ -380,40 +387,26 @@
             const messageDiv = document.getElementById('message');
             const emailPreview = document.getElementById('emailPreview');
             
-            // Lista de provincias argentinas
-            const provincias = [
-                "Buenos Aires", "Catamarca", "Chaco", "Chubut", "Córdoba",
-                "Corrientes", "Entre Ríos", "Formosa", "Jujuy", "La Pampa",
-                "La Rioja", "Mendoza", "Misiones", "Neuquén", "Río Negro",
-                "Salta", "San Juan", "San Luis", "Santa Cruz", "Santa Fe",
-                "Santiago del Estero", "Tierra del Fuego", "Tucumán"
-            ];
-            
-            // Inicializar el select de provincias
-            const provinciaSelect = document.getElementById('provincia');
-            provinciaSelect.innerHTML = '<option value="">Seleccione una provincia</option>';
-            provincias.forEach(provincia => {
-                const option = document.createElement('option');
-                option.value = provincia;
-                option.textContent = provincia;
-                provinciaSelect.appendChild(option);
-            });
+            // Lista de provincias argentinas (el select ya tiene opciones hardcodeadas en HTML, 
+            // pero mantenemos esto por si se quisiera generar dinámicamente en el futuro o validar)
             
             // Actualizar vista previa del email cuando cambian los datos
             function updateEmailPreview() {
                 const nombre = document.getElementById('nombre').value || '[Nombre]';
                 const apellido = document.getElementById('apellido').value || '[Apellido]';
                 const dni = document.getElementById('dni').value || '[DNI]';
+                const emailSolicitante = document.getElementById('emailSolicitante').value || '[Su Email]';
                 const ciudad = document.getElementById('ciudad').value || '[Ciudad]';
                 const provincia = document.getElementById('provincia').value || '[Provincia]';
                 
                 emailPreview.innerHTML = `
                     <strong>Hola Astroamigos Misiones,</strong><br><br>
-                    Deseo acceder a la app online, envio mis datos personales para recibir el usuario y clave de acceso.<br><br>
+                    Deseo acceder a la app online, envío mis datos personales para recibir el usuario y clave de acceso.<br><br>
                     <strong>Mis datos personales:</strong><br>
                     Nombre: ${nombre}<br>
                     Apellido: ${apellido}<br>
                     DNI: ${dni}<br>
+                    Email de Contacto: ${emailSolicitante}<br>
                     Ciudad: ${ciudad}<br>
                     Provincia: ${provincia}<br><br>
                     Muchas gracias.
@@ -452,6 +445,11 @@
                     const nameRegex = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/;
                     isValid = nameRegex.test(value);
                     message = isValid ? 'Campo válido' : 'Solo se permiten letras y espacios';
+                } else if (fieldId === 'emailSolicitante') {
+                    // Validar Email
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    isValid = emailRegex.test(value);
+                    message = isValid ? 'Email válido' : 'Ingrese un email válido (ej: nombre@correo.com)';
                 }
                 
                 // Aplicar clases según validación
@@ -474,6 +472,7 @@
                     { id: 'nombre', validation: 'nombre-validation' },
                     { id: 'apellido', validation: 'apellido-validation' },
                     { id: 'dni', validation: 'dni-validation' },
+                    { id: 'emailSolicitante', validation: 'emailSolicitante-validation' },
                     { id: 'ciudad', validation: 'ciudad-validation' },
                     { id: 'provincia', validation: 'provincia-validation' }
                 ];
@@ -489,7 +488,7 @@
                 return isValid;
             }
             
-            // Enviar formulario (simulación)
+            // Enviar formulario (Generar Mailto)
             function submitForm() {
                 // Validar formulario
                 if (!validateForm()) {
@@ -497,48 +496,51 @@
                     return;
                 }
                 
-                // Mostrar indicador de envío
-                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
-                submitBtn.disabled = true;
+                // Mostrar indicador de carga breve
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Procesando...';
                 
-                // Simular envío al servidor (en un caso real, aquí se haría una petición AJAX)
+                // Recopilar datos
+                const nombre = document.getElementById('nombre').value;
+                const apellido = document.getElementById('apellido').value;
+                const dni = document.getElementById('dni').value;
+                const emailSolicitante = document.getElementById('emailSolicitante').value;
+                const ciudad = document.getElementById('ciudad').value;
+                const provincia = document.getElementById('provincia').value;
+
+                // Construir el cuerpo del correo
+                // Usamos %0D%0A para saltos de línea compatibles con URL
+                const asunto = `Solicitud de Registro APP - ${nombre} ${apellido}`;
+                const cuerpoMensaje = `Hola Astroamigos Misiones,
+
+Deseo acceder a la app online, envío mis datos personales para recibir el usuario y clave de acceso.
+
+DATOS PERSONALES:
+--------------------------------
+Nombre: ${nombre}
+Apellido: ${apellido}
+DNI: ${dni}
+Email de Contacto: ${emailSolicitante}
+Ciudad: ${ciudad}
+Provincia: ${provincia}
+--------------------------------
+
+Muchas gracias.`;
+
+                // Crear enlace mailto seguro
+                const mailtoLink = `mailto:setiposadas@gmail.com?subject=${encodeURIComponent(asunto)}&body=${encodeURIComponent(cuerpoMensaje)}`;
+
                 setTimeout(() => {
-                    // Datos del formulario
-                    const formData = {
-                        nombre: document.getElementById('nombre').value,
-                        apellido: document.getElementById('apellido').value,
-                        dni: document.getElementById('dni').value,
-                        ciudad: document.getElementById('ciudad').value,
-                        provincia: document.getElementById('provincia').value,
-                        email: 'setiposadas@gmail.com',
-                        mensaje: emailPreview.textContent
-                    };
+                    // Abrir cliente de correo
+                    window.location.href = mailtoLink;
                     
-                    // En un caso real, aquí se enviarían los datos al servidor
-                    // fetch('/api/registro', { method: 'POST', body: JSON.stringify(formData) })
-                    //   .then(response => response.json())
-                    //   .then(data => {
-                    //       // Manejar respuesta
-                    //   });
-                    
-                    // Mostrar mensaje de éxito
-                    showMessage('¡Registro enviado exitosamente! Se ha enviado un correo a setiposadas@gmail.com con sus datos.', 'success');
+                    showMessage('Se ha abierto su aplicación de correo. Por favor presione "Enviar" en su programa de email.', 'success');
                     
                     // Restaurar botón
                     submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Enviar Registro';
-                    submitBtn.disabled = false;
                     
-                    // Limpiar formulario después de 3 segundos
-                    setTimeout(() => {
-                        resetForm();
-                    }, 3000);
-                    
-                    // En consola simulamos los datos enviados
-                    console.log('Datos enviados:', formData);
-                    console.log('Correo enviado a: setiposadas@gmail.com');
-                    console.log('Mensaje:', formData.mensaje);
-                    
-                }, 1500);
+                    // Opcional: Limpiar después de unos segundos
+                    // setTimeout(resetForm, 5000);
+                }, 800);
             }
             
             // Mostrar mensaje al usuario
@@ -547,10 +549,10 @@
                 messageDiv.className = `message ${type}`;
                 messageDiv.style.display = 'block';
                 
-                // Ocultar mensaje después de 5 segundos
+                // Ocultar mensaje después de 8 segundos
                 setTimeout(() => {
                     messageDiv.style.display = 'none';
-                }, 5000);
+                }, 8000);
             }
             
             // Limpiar formulario
@@ -582,7 +584,7 @@
             resetBtn.addEventListener('click', resetForm);
             
             // Actualizar vista previa del email al cambiar cualquier campo
-            const inputs = document.querySelectorAll('#nombre, #apellido, #dni, #ciudad, #provincia');
+            const inputs = document.querySelectorAll('#nombre, #apellido, #dni, #emailSolicitante, #ciudad, #provincia');
             inputs.forEach(input => {
                 input.addEventListener('input', updateEmailPreview);
                 input.addEventListener('blur', function() {
@@ -597,7 +599,7 @@
             
             // Mostrar mensaje de bienvenida
             setTimeout(() => {
-                showMessage('Bienvenido al formulario de registro de Astroamigos Misiones. Complete sus datos para solicitar acceso.', 'success');
+                showMessage('Bienvenido. Complete sus datos y al finalizar se abrirá su correo para enviar la solicitud.', 'success');
             }, 1000);
         });
     </script>
