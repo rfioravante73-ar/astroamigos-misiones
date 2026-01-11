@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            /* Paleta Astroamigos modernizada (Basada en Blues/Navy) */
+            /* Paleta Astroamigos modernizada */
             --background: oklch(0.98 0.01 240);
             --foreground: oklch(0.25 0.05 240);
             --primary: oklch(0.35 0.08 245); /* Navy Blue */
@@ -222,6 +222,66 @@
             font-weight: 500;
         }
 
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: white;
+            max-width: 600px;
+            width: 100%;
+            padding: 35px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            position: relative;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            color: var(--primary);
+            margin-bottom: 20px;
+            font-weight: 700;
+            font-size: 1.5rem;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 10px;
+        }
+
+        .modal-body {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: oklch(0.4 0.02 240);
+        }
+
+        .modal-body h4 {
+            color: var(--secondary);
+            margin: 15px 0 8px 0;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: var(--foreground);
+        }
+
+        /* Resto de estilos originales */
         .social-section {
             margin-top: 30px;
             text-align: center;
@@ -269,7 +329,6 @@
             cursor: pointer;
         }
 
-        /* Animaciones */
         @keyframes float {
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-15px); }
@@ -346,8 +405,16 @@
 
             <div class="footer-links">
                 &copy; 2026 Astroamigos Misiones<br>
-                <a id="openTerms">Privacidad</a> | <a id="openPolicy">Términos de uso</a>
+                <a id="btnPrivacidad">Privacidad</a> | <a id="btnTerminos">Términos de uso</a>
             </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-content">
+            <button class="close-modal" id="closeModal"><i class="fas fa-times"></i></button>
+            <div id="modalContent">
+                </div>
         </div>
     </div>
 
@@ -355,7 +422,11 @@
         document.addEventListener('DOMContentLoaded', function() {
             const loginForm = document.getElementById('loginForm');
             const errorMessage = document.getElementById('errorMessage');
-            
+            const modalOverlay = document.getElementById('modalOverlay');
+            const modalContent = document.getElementById('modalContent');
+            const closeModal = document.getElementById('closeModal');
+
+            // Lógica de Login
             loginForm.addEventListener('submit', function(e) {
                 e.preventDefault();
                 const user = document.getElementById('username').value.trim();
@@ -374,6 +445,48 @@
                     errorMessage.textContent = 'Credenciales incorrectas.';
                 }
             });
+
+            // Lógica de Modales (SPA)
+            const textos = {
+                terminos: `
+                    <h2 class="modal-header">Términos de Uso</h2>
+                    <div class="modal-body">
+                        <p>Al acceder a <strong>Astroamigos Misiones</strong>, aceptas:</p>
+                        <h4>Uso del Portal</h4>
+                        <p>Este acceso es para miembros y entusiastas. Queda prohibido el uso ilícito o que dañe la integridad de la plataforma.</p>
+                        <h4>Seguridad</h4>
+                        <p>Eres responsable de la confidencialidad de tus credenciales.</p>
+                        <h4>Propiedad Intelectual</h4>
+                        <p>Logos (incluyendo el Tucán), textos y material educativo son propiedad de Astroamigos Misiones o terceros autorizados.</p>
+                    </div>
+                `,
+                privacidad: `
+                    <h2 class="modal-header">Política de Privacidad</h2>
+                    <div class="modal-body">
+                        <p>Valoramos tu privacidad en Astroamigos Misiones:</p>
+                        <h4>Recopilación de Datos</h4>
+                        <p>Solo recolectamos datos para el inicio de sesión y mejorar tu experiencia.</p>
+                        <h4>Uso de Cookies</h4>
+                        <p>Usamos almacenamiento de sesión temporal para verificar tu identidad mientras navegas.</p>
+                        <h4>Terceros</h4>
+                        <p>No compartimos tus datos. Los enlaces a YouTube, Facebook y Blogger se rigen por sus propias políticas.</p>
+                    </div>
+                `
+            };
+
+            function abrirModal(tipo) {
+                modalContent.innerHTML = textos[tipo];
+                modalOverlay.style.display = 'flex';
+            }
+
+            document.getElementById('btnTerminos').onclick = () => abrirModal('terminos');
+            document.getElementById('btnPrivacidad').onclick = () => abrirModal('privacidad');
+            
+            closeModal.onclick = () => modalOverlay.style.display = 'none';
+            
+            window.onclick = (event) => {
+                if (event.target == modalOverlay) modalOverlay.style.display = 'none';
+            };
         });
     </script>
 </body>
