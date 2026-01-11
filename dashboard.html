@@ -4,13 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Astroamigos Misiones - Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
         }
 
         :root {
@@ -19,29 +22,40 @@
             --secondary-color: #3b82f6;
             --light-color: #f8fafc;
             --dark-color: #1e293b;
-            --sidebar-width: 260px;
-            --sidebar-collapsed-width: 70px;
-            --transition-speed: 0.3s;
+            --sidebar-width: 280px;
+            --sidebar-collapsed-width: 80px;
+            --transition-speed: 0.35s;
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.12);
+            --shadow-xl: 0 15px 50px rgba(0, 0, 0, 0.15);
         }
 
         body {
-            background-color: #f1f5f9;
+            background-color: #f8fafc;
             display: flex;
             min-height: 100vh;
             overflow-x: hidden;
+            color: #334155;
+            line-height: 1.6;
+            font-weight: 400;
         }
 
         /* Sidebar Styles */
         .sidebar {
             width: var(--sidebar-width);
-            background: linear-gradient(180deg, var(--primary-dark), var(--dark-color));
+            background: linear-gradient(180deg, var(--primary-dark) 0%, #0f172a 100%);
             color: white;
-            transition: all var(--transition-speed) ease;
+            transition: all var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1);
             z-index: 100;
             height: 100vh;
             position: fixed;
             overflow-x: hidden;
-            box-shadow: 3px 0 15px rgba(0, 0, 0, 0.15);
+            box-shadow: var(--shadow-lg);
+            border-right: 1px solid rgba(255, 255, 255, 0.08);
         }
 
         .sidebar.collapsed {
@@ -50,84 +64,116 @@
         }
 
         .logo-container {
-            padding: 20px;
+            padding: 24px 20px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             display: flex;
             align-items: center;
             justify-content: space-between;
+            background: rgba(0, 0, 0, 0.2);
         }
 
         .logo {
             font-size: 1.5rem;
-            font-weight: 700;
+            font-weight: 800;
             white-space: nowrap;
             overflow: hidden;
+            letter-spacing: -0.5px;
+            display: flex;
+            flex-direction: column;
         }
 
-        .logo img {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            margin-right: 10px;
-            object-fit: cover;
+        .logo .logo-text {
+            font-size: 1.8rem;
+            background: linear-gradient(to right, #ffffff, #e0f2fe);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 800;
+            line-height: 1.2;
+        }
+
+        .logo p {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 500;
+            margin-top: 4px;
+            letter-spacing: 0.5px;
         }
 
         .toggle-btn {
-            background: rgba(255, 255, 255, 0.15);
-            border: none;
-            width: 30px;
-            height: 30px;
-            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-sm);
             color: white;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
             transition: all var(--transition-speed) ease;
+            backdrop-filter: blur(10px);
         }
 
         .toggle-btn:hover {
-            background: rgba(255, 255, 255, 0.25);
+            background: rgba(255, 255, 255, 0.2);
+            transform: rotate(90deg);
+            border-color: rgba(255, 255, 255, 0.3);
         }
 
         .sidebar-menu {
-            padding: 20px 0;
+            padding: 24px 0;
             list-style: none;
         }
 
         .menu-item {
-            padding: 0 15px;
-            margin-bottom: 5px;
+            padding: 0 16px;
+            margin-bottom: 8px;
             position: relative;
         }
 
         .menu-link {
             display: flex;
             align-items: center;
-            padding: 14px 15px;
+            padding: 16px 20px;
             color: rgba(255, 255, 255, 0.85);
             text-decoration: none;
-            border-radius: 0 30px 30px 0;
+            border-radius: var(--radius-md);
             transition: all var(--transition-speed) ease;
             white-space: nowrap;
             overflow: hidden;
+            font-weight: 500;
+            position: relative;
+            border-left: 3px solid transparent;
         }
 
         .menu-link:hover, .menu-link.active {
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.12);
             color: white;
-            transform: translateX(5px);
+            border-left-color: #60a5fa;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .menu-link.active {
+            background: linear-gradient(90deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0.05));
+            font-weight: 600;
         }
 
         .menu-link i {
-            font-size: 1.2rem;
-            width: 25px;
-            margin-right: 15px;
+            font-size: 1.3rem;
+            width: 28px;
+            margin-right: 16px;
             text-align: center;
+            transition: transform var(--transition-speed) ease;
+        }
+
+        .menu-link:hover i {
+            transform: scale(1.1);
         }
 
         .menu-text {
-            transition: opacity var(--transition-speed) ease;
+            transition: all var(--transition-speed) ease;
+            font-size: 1rem;
         }
 
         .sidebar.collapsed .menu-text {
@@ -138,7 +184,11 @@
 
         .sidebar.collapsed .menu-link {
             justify-content: center;
-            padding: 14px;
+            padding: 16px;
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            margin: 0 auto;
         }
 
         .sidebar.collapsed .menu-link i {
@@ -146,29 +196,30 @@
             width: auto;
         }
 
-        /* TOOLTIP FIXED - MUESTRA TÍTULOS CUANDO SIDEBAR ESTÁ COLAPSADO */
+        /* TOOLTIP MEJORADO */
         .menu-tooltip {
             position: absolute;
             left: 100%;
             top: 50%;
-            transform: translateY(-50%);
-            background-color: rgba(0, 0, 0, 0.95);
+            transform: translateY(-50%) translateX(-10px);
+            background-color: rgba(15, 23, 42, 0.98);
             color: white;
-            padding: 10px 15px;
-            border-radius: 8px;
+            padding: 12px 18px;
+            border-radius: var(--radius-md);
             font-size: 0.95rem;
-            font-weight: 500;
+            font-weight: 600;
             white-space: nowrap;
             opacity: 0;
             visibility: hidden;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
             z-index: 1001;
             pointer-events: none;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            box-shadow: var(--shadow-lg);
             margin-left: 20px;
-            min-width: 140px;
-            text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            min-width: 160px;
+            text-align: left;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
         }
 
         .menu-tooltip::after {
@@ -179,97 +230,109 @@
             transform: translateY(-50%);
             border-width: 8px;
             border-style: solid;
-            border-color: transparent rgba(0, 0, 0, 0.95) transparent transparent;
+            border-color: transparent rgba(15, 23, 42, 0.98) transparent transparent;
         }
 
-        /* CRÍTICO: Esto hace que los tooltips se muestren cuando el sidebar está colapsado */
+        /* Tooltips se muestran cuando el sidebar está colapsado */
         .sidebar.collapsed .menu-item:hover .menu-tooltip {
             opacity: 1;
             visibility: visible;
-            margin-left: 25px;
+            transform: translateY(-50%) translateX(0);
         }
 
-        /* Main Content Styles */
+        /* Main Content Styles - MEJORADO */
         .main-content {
             flex: 1;
             margin-left: var(--sidebar-width);
-            transition: margin-left var(--transition-speed) ease;
-            padding: 20px;
+            transition: all var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 24px;
+            width: calc(100% - var(--sidebar-width));
+            min-height: 100vh;
         }
 
         .sidebar.collapsed + .main-content {
             margin-left: var(--sidebar-collapsed-width);
+            width: calc(100% - var(--sidebar-collapsed-width));
         }
 
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px 20px;
+            padding: 20px 28px;
             background-color: white;
-            border-radius: 12px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-            margin-bottom: 25px;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            margin-bottom: 30px;
+            border: 1px solid #f1f5f9;
         }
 
         .page-title {
-            font-size: 1.8rem;
-            color: var(--primary-dark);
-            font-weight: 700;
+            font-size: 2rem;
+            color: #0f172a;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            background: linear-gradient(to right, #1e40af, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
-        /* Botón de logout con tooltip */
+        /* Botón de logout mejorado */
         .logout-container {
             position: relative;
             display: inline-block;
         }
 
         .logout-btn {
-            background: linear-gradient(to right, #ef4444, #f97316);
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
             color: white;
             border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
+            padding: 12px 24px;
+            border-radius: var(--radius-md);
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
             display: flex;
             align-items: center;
-            gap: 8px;
-            box-shadow: 0 4px 6px rgba(239, 68, 68, 0.2);
+            gap: 10px;
+            box-shadow: 0 6px 15px rgba(239, 68, 68, 0.25);
             position: relative;
             z-index: 10;
+            font-size: 1rem;
+            letter-spacing: 0.3px;
         }
 
         .logout-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 8px rgba(239, 68, 68, 0.3);
+            transform: translateY(-3px) scale(1.03);
+            box-shadow: 0 10px 25px rgba(239, 68, 68, 0.35);
         }
 
         .logout-btn:active {
-            transform: translateY(0);
+            transform: translateY(0) scale(0.98);
         }
 
-        /* Tooltip para el botón de logout */
+        /* Tooltip para el botón de logout mejorado */
         .logout-tooltip {
             position: absolute;
             bottom: 120%;
             left: 50%;
-            transform: translateX(-50%);
-            background-color: rgba(0, 0, 0, 0.95);
+            transform: translateX(-50%) translateY(5px);
+            background-color: rgba(15, 23, 42, 0.98);
             color: white;
-            padding: 10px 15px;
-            border-radius: 8px;
+            padding: 12px 18px;
+            border-radius: var(--radius-md);
             font-size: 0.95rem;
-            font-weight: 500;
+            font-weight: 600;
             white-space: nowrap;
             opacity: 0;
             visibility: hidden;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
             z-index: 1000;
             pointer-events: none;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: var(--shadow-lg);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
         }
 
         .logout-tooltip::after {
@@ -280,23 +343,24 @@
             transform: translateX(-50%);
             border-width: 8px;
             border-style: solid;
-            border-color: rgba(0, 0, 0, 0.95) transparent transparent transparent;
+            border-color: rgba(15, 23, 42, 0.98) transparent transparent transparent;
         }
 
         .logout-container:hover .logout-tooltip {
             opacity: 1;
             visibility: visible;
+            transform: translateX(-50%) translateY(0);
             bottom: 110%;
         }
 
-        /* Modal de confirmación de logout */
+        /* Modal de confirmación de logout - MEJORADO */
         .logout-modal {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
+            background-color: rgba(0, 0, 0, 0.7);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -304,6 +368,7 @@
             opacity: 0;
             visibility: hidden;
             transition: all 0.3s ease;
+            backdrop-filter: blur(8px);
         }
 
         .logout-modal.active {
@@ -312,106 +377,134 @@
         }
 
         .modal-content {
-            background-color: white;
-            border-radius: 12px;
+            background: linear-gradient(145deg, #ffffff, #f8fafc);
+            border-radius: var(--radius-lg);
             width: 90%;
-            max-width: 400px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            transform: translateY(-20px);
-            transition: transform 0.3s ease;
-            border-top: 5px solid #ef4444;
+            max-width: 480px;
+            padding: 40px;
+            box-shadow: var(--shadow-xl);
+            transform: translateY(30px) scale(0.95);
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border: 1px solid #e2e8f0;
+            position: relative;
+            overflow: hidden;
         }
 
         .logout-modal.active .modal-content {
-            transform: translateY(0);
+            transform: translateY(0) scale(1);
+        }
+
+        .modal-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: linear-gradient(to right, #dc2626, #ef4444);
         }
 
         .modal-header {
             display: flex;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
         }
 
         .modal-icon {
-            width: 50px;
-            height: 50px;
-            background-color: #fee2e2;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #fee2e2, #fecaca);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-right: 15px;
+            margin-right: 20px;
             color: #dc2626;
-            font-size: 1.5rem;
+            font-size: 1.8rem;
+            box-shadow: 0 8px 20px rgba(239, 68, 68, 0.2);
         }
 
         .modal-title {
-            font-size: 1.5rem;
-            color: #1f2937;
-            font-weight: 600;
+            font-size: 1.8rem;
+            color: #0f172a;
+            font-weight: 700;
+            letter-spacing: -0.3px;
         }
 
         .modal-message {
-            color: #4b5563;
-            margin-bottom: 25px;
-            line-height: 1.5;
+            color: #475569;
+            margin-bottom: 32px;
+            line-height: 1.7;
+            font-size: 1.1rem;
+            font-weight: 400;
         }
 
         .modal-actions {
             display: flex;
             justify-content: flex-end;
-            gap: 12px;
+            gap: 16px;
         }
 
         .modal-btn {
-            padding: 10px 20px;
-            border-radius: 8px;
+            padding: 14px 28px;
+            border-radius: var(--radius-md);
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
             border: none;
             font-size: 1rem;
+            letter-spacing: 0.3px;
+            font-weight: 600;
         }
 
         .modal-btn.cancel {
-            background-color: #f3f4f6;
-            color: #4b5563;
+            background-color: #f1f5f9;
+            color: #475569;
+            border: 1px solid #e2e8f0;
         }
 
         .modal-btn.cancel:hover {
-            background-color: #e5e7eb;
+            background-color: #e2e8f0;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
         }
 
         .modal-btn.confirm {
-            background: linear-gradient(to right, #dc2626, #ef4444);
+            background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
             color: white;
-            box-shadow: 0 4px 6px rgba(220, 38, 38, 0.2);
+            box-shadow: 0 8px 20px rgba(220, 38, 38, 0.25);
         }
 
         .modal-btn.confirm:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 8px rgba(220, 38, 38, 0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(220, 38, 38, 0.35);
         }
 
         /* Content Sections */
         .content-section {
             display: none;
             background-color: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            padding: 30px;
-            min-height: calc(100vh - 140px);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            padding: 36px;
+            min-height: calc(100vh - 180px);
+            border: 1px solid #f1f5f9;
         }
 
         .content-section.active {
             display: block;
-            animation: fadeIn 0.4s ease;
+            animation: fadeInUp 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes fadeInUp {
+            from { 
+                opacity: 0; 
+                transform: translateY(20px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
         }
 
         /* Responsive Design */
@@ -426,6 +519,7 @@
             
             .main-content {
                 margin-left: 0;
+                width: 100%;
             }
             
             .menu-overlay {
@@ -435,8 +529,9 @@
                 left: 0;
                 width: 100%;
                 height: 100%;
-                background-color: rgba(0, 0, 0, 0.5);
+                background-color: rgba(0, 0, 0, 0.7);
                 z-index: 99;
+                backdrop-filter: blur(5px);
             }
             
             .menu-overlay.active {
@@ -447,26 +542,47 @@
             .menu-tooltip {
                 display: none !important;
             }
+            
+            .sidebar.collapsed .menu-link {
+                border-radius: var(--radius-md);
+            }
         }
 
         @media (max-width: 768px) {
             .header {
                 flex-direction: column;
                 align-items: flex-start;
-                gap: 15px;
+                gap: 20px;
+                padding: 20px;
             }
             
             .page-title {
-                font-size: 1.5rem;
+                font-size: 1.7rem;
             }
             
             .logout-tooltip {
                 font-size: 0.9rem;
-                padding: 8px 12px;
+                padding: 10px 14px;
+            }
+            
+            .modal-content {
+                padding: 30px 24px;
+            }
+            
+            .modal-actions {
+                flex-direction: column;
+            }
+            
+            .modal-btn {
+                width: 100%;
+            }
+            
+            .content-section {
+                padding: 24px;
             }
         }
 
-        /* Empty state styling */
+        /* Empty state styling mejorado */
         .empty-state {
             display: flex;
             flex-direction: column;
@@ -475,33 +591,39 @@
             height: 100%;
             text-align: center;
             color: #64748b;
-            padding: 20px;
+            padding: 40px 20px;
         }
 
         .empty-state i {
-            font-size: 4rem;
+            font-size: 5rem;
             color: #cbd5e1;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
+            opacity: 0.8;
         }
 
         .empty-state h3 {
-            font-size: 1.5rem;
-            margin-bottom: 10px;
-            color: #334155;
+            font-size: 1.8rem;
+            margin-bottom: 16px;
+            color: #0f172a;
+            font-weight: 700;
+            letter-spacing: -0.3px;
         }
 
         .empty-state p {
-            font-size: 1.1rem;
+            font-size: 1.15rem;
             max-width: 600px;
-            line-height: 1.6;
+            line-height: 1.7;
+            color: #475569;
+            font-weight: 400;
         }
 
         /* Estilos para el iframe */
         #nosotros-iframe {
             width: 100%;
-            height: calc(100vh - 180px);
+            height: calc(100vh - 200px);
             border: none;
-            border-radius: 8px;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
         }
 
         #nosotros-empty {
@@ -527,7 +649,7 @@
         <div class="logo-container">
             <div class="logo">
                 <span class="logo-text">Astroamigos</span>
-                <p>Misiones<p>
+                <p>Posadas Misiones Argentina</p>
             </div>
             <button class="toggle-btn" id="toggleSidebar">
                 <i class="fas fa-bars"></i>
@@ -599,7 +721,7 @@
                 </div>
                 <h3 class="modal-title">¿Cerrar sesión?</h3>
             </div>
-            <p class="modal-message">Estás a punto de salir del sistema. ¿Estás seguro de que deseas cerrar sesión?</p>
+            <p class="modal-message">Estás a punto de salir del sistema de Astroamigos Misiones. ¿Estás seguro de que deseas cerrar sesión? Tu sesión actual se terminará y deberás iniciar sesión nuevamente para acceder.</p>
             <div class="modal-actions">
                 <button class="modal-btn cancel" id="cancelLogout">Cancelar</button>
                 <button class="modal-btn confirm" id="confirmLogout">Sí, salir</button>
