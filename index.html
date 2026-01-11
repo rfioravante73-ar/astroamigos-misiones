@@ -8,6 +8,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Firebase SDK v9 (modular pero con compat) -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <style>
         :root {
             /* Paleta Astroamigos modernizada */
@@ -374,7 +377,8 @@
                     <label>Usuario</label>
                     <div class="input-with-icon">
                         <i class="fas fa-user"></i>
-                        <input type="text" id="username" placeholder="Tu usuario" required>
+                        <!-- Mantenemos "username" pero será tratado como email -->
+                        <input type="text" id="username" placeholder="Tu usuario (email)" required>
                     </div>
                 </div>
 
@@ -419,6 +423,20 @@
     </div>
 
     <script>
+        // Configuración de Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyCgL2d34Ftey5X86rNjPPpzDTBwH4oesnU",
+            authDomain: "astroamigosmisiones.firebaseapp.com",
+            projectId: "astroamigosmisiones",
+            storageBucket: "astroamigosmisiones.firebasestorage.app",
+            messagingSenderId: "62352162582",
+            appId: "1:62352162582:web:1d30921cb54be36b5e1a37"
+        };
+
+        // Inicializar Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+
         document.addEventListener('DOMContentLoaded', function() {
             const loginForm = document.getElementById('loginForm');
             const errorMessage = document.getElementById('errorMessage');
@@ -426,27 +444,61 @@
             const modalContent = document.getElementById('modalContent');
             const closeModal = document.getElementById('closeModal');
 
-            // Lógica de Login
+            // Lógica de Login con Firebase
             loginForm.addEventListener('submit', function(e) {
                 e.preventDefault();
                 const user = document.getElementById('username').value.trim();
                 const pass = document.getElementById('password').value.trim();
                 
-                if (user === 'astro' && pass === 'a123') {
-                    errorMessage.style.color = '#10b981';
-                    errorMessage.textContent = '¡Éxito! Redirigiendo...';
-                    sessionStorage.setItem('authenticated', 'true');
-                    
-                    setTimeout(() => {
-                        window.location.href = 'dashboard.html';
-                    }, 1500);
-                } else {
-                    errorMessage.style.color = '#ef4444';
-                    errorMessage.textContent = 'Credenciales incorrectas.';
-                }
+                // Mostrar mensaje de carga
+                errorMessage.textContent = 'Verificando credenciales...';
+                errorMessage.style.color = '#666';
+                
+                // Autenticación con Firebase
+                auth.signInWithEmailAndPassword(user, pass)
+                    .then((userCredential) => {
+                        // Usuario autenticado
+                        const user = userCredential.user;
+                        errorMessage.style.color = '#10b981';
+                        errorMessage.textContent = '¡Éxito! Redirigiendo...';
+                        sessionStorage.setItem('authenticated', 'true');
+                        
+                        setTimeout(() => {
+                            window.location.href = 'dashboard.html';
+                        }, 1500);
+                    })
+                    .catch((error) => {
+                        // Manejo de errores
+                        errorMessage.style.color = '#ef4444';
+                        
+                        switch(error.code) {
+                            case 'auth/invalid-email':
+                                errorMessage.textContent = 'Formato de email inválido.';
+                                break;
+                            case 'auth/user-disabled':
+                                errorMessage.textContent = 'Usuario deshabilitado.';
+                                break;
+                            case 'auth/user-not-found':
+                                errorMessage.textContent = 'Usuario no encontrado.';
+                                break;
+                            case 'auth/wrong-password':
+                                errorMessage.textContent = 'Contraseña incorrecta.';
+                                break;
+                            case 'auth/too-many-requests':
+                                errorMessage.textContent = 'Demasiados intentos. Intenta más tarde.';
+                                break;
+                            case 'auth/network-request-failed':
+                                errorMessage.textContent = 'Error de conexión. Verifica tu internet.';
+                                break;
+                            default:
+                                errorMessage.textContent = 'Credenciales incorrectas.';
+                        }
+                        
+                        console.error('Error Firebase:', error.code, error.message);
+                    });
             });
 
-            // Lógica de Modales (SPA)
+            // Lógica de Modales (SPA) - EXACTAMENTE IGUAL
             const textos = {
                 terminos: `
                     <h2 class="modal-header">Términos de Uso</h2>
