@@ -276,7 +276,7 @@
             background-color: #fff1f0;
         }
 
-        /* --- MODAL ALERTA --- */
+        /* --- MODALES --- */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -295,27 +295,42 @@
             background: white;
             padding: 24px;
             border-radius: 12px;
-            max-width: 320px;
+            max-width: 400px;
             text-align: center;
             box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-            border-top: 5px solid var(--danger);
         }
 
-        .modal-card i {
-            font-size: 3rem;
-            color: var(--danger);
-            margin-bottom: 15px;
+        .modal-card.alert {
+            border-top: 5px solid var(--danger);
+            max-width: 320px;
         }
+
+        .modal-card.info {
+            border-top: 5px solid var(--primary);
+            text-align: left;
+        }
+
+        .modal-card i.main-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            display: block;
+            text-align: center;
+        }
+
+        .modal-card.alert i.main-icon { color: var(--danger); }
+        .modal-card.info i.main-icon { color: var(--primary); }
 
         .modal-card h3 {
             margin-bottom: 10px;
             color: var(--text-main);
+            text-align: center;
         }
 
         .modal-card p {
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             color: var(--text-muted);
             margin-bottom: 20px;
+            line-height: 1.5;
         }
 
         .modal-btns {
@@ -334,6 +349,11 @@
 
         .btn-confirm {
             background: var(--danger);
+            color: white;
+        }
+
+        .btn-primary {
+            background: var(--primary);
             color: white;
         }
 
@@ -482,7 +502,7 @@
                 </button>
                 
                 <div class="dropdown-menu" id="userDropdown">
-                    <a class="dropdown-item">
+                    <a class="dropdown-item" id="aboutBtn">
                         <i class="fas fa-info-circle"></i> Sobre Astroamigos Misiones
                     </a>
                     <a class="dropdown-item">
@@ -580,13 +600,29 @@
     </main>
 
     <div class="modal-overlay" id="logoutModal">
-        <div class="modal-card">
-            <i class="fas fa-exclamation-triangle"></i>
+        <div class="modal-card alert">
+            <i class="fas fa-exclamation-triangle main-icon"></i>
             <h3>¿Cerrar sesión?</h3>
             <p>Se perderán los cambios no guardados en tu sesión actual.</p>
             <div class="modal-btns">
                 <button class="btn btn-cancel" id="cancelBtn">Cancelar</button>
-                <button class="btn btn-confirm" onclick="window.location.reload()">Cerrar ahora</button>
+                <button class="btn btn-confirm" onclick="window.location.href='index.html'">Cerrar ahora</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="aboutModal">
+        <div class="modal-card info">
+            <i class="fas fa-info-circle main-icon"></i>
+            <h3>Sobre Astroamigos Misiones</h3>
+            <p>
+                Astroamigos Misiones es un grupo comunitario de aficionados a la astronomía, cuyo fundador es el divulgador Rómulo Fioravante. 
+                Creado el 4 de Agosto de 2011 en la Ciudad de Posadas (Misiones, Argentina). 
+                <br><br>
+                Ha realizado múltiples actividades en toda la provincia de Misiones, colocando telescopios astronómicos en la vereda, plazas, paseos públicos, salones municipales y centros culturales de Misiones. Ha participado en eventos de nivel internacional. Desarrolla cursos de capacitación gratuitos para toda la comunidad. La actividad principal es la divulgación gratuita de la astronomía aficionada.
+            </p>
+            <div class="modal-btns">
+                <button class="btn btn-primary" id="closeAboutBtn">Entendido</button>
             </div>
         </div>
     </div>
@@ -604,6 +640,10 @@
             const logoutBtn = document.getElementById('logoutBtn');
             const logoutModal = document.getElementById('logoutModal');
             const cancelBtn = document.getElementById('cancelBtn');
+
+            const aboutBtn = document.getElementById('aboutBtn');
+            const aboutModal = document.getElementById('aboutModal');
+            const closeAboutBtn = document.getElementById('closeAboutBtn');
 
             // 1. Sidebar Toggle
             sidebarToggle.addEventListener('click', () => {
@@ -645,9 +685,23 @@
                 logoutModal.classList.remove('active');
             });
 
-            // Cerrar dropdown al hacer click fuera
-            document.addEventListener('click', () => {
+            // 5. Modal Informativo
+            aboutBtn.addEventListener('click', (e) => {
+                e.preventDefault();
                 userDropdown.classList.remove('active');
+                aboutModal.classList.add('active');
+            });
+
+            closeAboutBtn.addEventListener('click', () => {
+                aboutModal.classList.remove('active');
+            });
+
+            // Cerrar dropdown o modales al hacer click fuera del contenido
+            document.addEventListener('click', (e) => {
+                userDropdown.classList.remove('active');
+                if (e.target.classList.contains('modal-overlay')) {
+                    e.target.classList.remove('active');
+                }
             });
         });
     </script>
