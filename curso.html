@@ -134,10 +134,58 @@
             border-radius: 5px;
             font-weight: bold;
             transition: background 0.2s;
+            cursor: pointer;
+            border: none;
+            font-family: inherit;
+            font-size: 1rem;
         }
 
         .btn-descarga:hover {
             background-color: #004494;
+        }
+
+        /* Modal para carga de PDF */
+        .modal-pdf {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: var(--blanco);
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+
+        .modal-content h3 {
+            color: var(--azul-principal);
+            margin-bottom: 15px;
+        }
+
+        .spinner {
+            border: 4px solid var(--azul-suave);
+            border-top: 4px solid var(--azul-principal);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
@@ -156,7 +204,7 @@
         </div>
 
     <div style="text-align: center;">
-        <a href="#" class="btn-descarga">Descargar Programa en PDF</a>
+        <button id="btn-descarga-pdf" class="btn-descarga">Descargar Programa en PDF</button>
     </div>
 </div>
 
@@ -164,7 +212,18 @@
     Astroamigos Misiones desarrolla el curso 100% gratuito, sin costo alguno, para todas las edades
 </footer>
 
+<!-- Modal para mostrar durante la generación del PDF -->
+<div id="modal-pdf" class="modal-pdf">
+    <div class="modal-content">
+        <h3>Generando PDF</h3>
+        <p>Por favor, espera mientras se genera tu documento...</p>
+        <div class="spinner"></div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
+    // Programa de estudios
     const programa = [
         {
             titulo: "Iniciación y Bóveda Celeste",
@@ -185,7 +244,10 @@
     ];
 
     const container = document.getElementById('app-programa');
+    const btnDescarga = document.getElementById('btn-descarga-pdf');
+    const modalPdf = document.getElementById('modal-pdf');
 
+    // Mostrar el programa en la página
     function displayPrograma() {
         container.innerHTML = programa.map((mod, index) => `
             <div class="modulo-card">
@@ -200,6 +262,197 @@
         `).join('');
     }
 
+    // Función para generar el PDF con formato tabular
+    function generarPDF() {
+        // Mostrar modal de carga
+        modalPdf.style.display = 'flex';
+        
+        // Usar setTimeout para dar tiempo a que se muestre el modal
+        setTimeout(() => {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF('p', 'mm', 'a4');
+            
+            // Configuración de márgenes y dimensiones
+            const margen = 15;
+            const anchoPagina = doc.internal.pageSize.width;
+            const altoPagina = doc.internal.pageSize.height;
+            const anchoUtil = anchoPagina - (2 * margen);
+            
+            // Variables de posición
+            let y = margen;
+            
+            // Título principal
+            doc.setFontSize(18);
+            doc.setFont("helvetica", "bold");
+            doc.setTextColor(0, 86, 179); // Azul principal
+            const titulo = "Programa de estudio del Curso de Astronomía Nivel Inicial";
+            const tituloLines = doc.splitTextToSize(titulo, anchoUtil);
+            doc.text(tituloLines, margen, y);
+            y += tituloLines.length * 7 + 5;
+            
+            // Subtítulo
+            doc.setFontSize(11);
+            doc.setFont("helvetica", "italic");
+            doc.setTextColor(108, 117, 125); // Gris
+            doc.text("Astroamigos Misiones - Curso 100% gratuito", margen, y);
+            y += 8;
+            
+            // Línea separadora
+            doc.setDrawColor(0, 86, 179);
+            doc.setLineWidth(0.5);
+            doc.line(margen, y, anchoPagina - margen, y);
+            y += 10;
+            
+            // Objetivo del curso
+            doc.setFontSize(12);
+            doc.setFont("helvetica", "bold");
+            doc.setTextColor(0, 0, 0);
+            doc.text("Objetivo del curso:", margen, y);
+            y += 6;
+            
+            doc.setFontSize(10);
+            doc.setFont("helvetica", "normal");
+            const objetivo = "Capacitar al alumno en la identificación del cielo nocturno y el manejo de instrumentos ópticos sin necesidad de conocimientos previos matemáticos o físicos complejos.";
+            const objetivoLines = doc.splitTextToSize(objetivo, anchoUtil);
+            doc.text(objetivoLines, margen, y);
+            y += objetivoLines.length * 5 + 15;
+            
+            // Crear tabla de contenidos
+            // Encabezado de tabla
+            doc.setFillColor(231, 241, 255); // Azul suave
+            doc.rect(margen, y, anchoUtil, 8, 'F');
+            doc.setFontSize(11);
+            doc.setFont("helvetica", "bold");
+            doc.setTextColor(0, 86, 179);
+            
+            // Columnas: Módulo y Contenido
+            doc.text("Módulo", margen + 5, y + 5);
+            doc.text("Contenido", margen + 40, y + 5);
+            y += 10;
+            
+            // Contenido de la tabla
+            doc.setFontSize(10);
+            doc.setFont("helvetica", "normal");
+            doc.setTextColor(26, 58, 95); // Azul texto
+            
+            // Definir altura de fila y posición inicial
+            const alturaFila = 8;
+            const col1Ancho = 30; // Ancho columna Módulo
+            const col2Ancho = anchoUtil - col1Ancho - 10; // Ancho columna Contenido
+            
+            // Para cada módulo
+            programa.forEach((mod, index) => {
+                // Verificar si necesitamos nueva página
+                if (y + 25 > altoPagina - margen) {
+                    doc.addPage();
+                    y = margen;
+                }
+                
+                // Fila para el título del módulo
+                doc.setFillColor(245, 245, 245); // Gris claro
+                doc.rect(margen, y, anchoUtil, alturaFila, 'F');
+                
+                // Número de módulo
+                doc.setFont("helvetica", "bold");
+                doc.text(`Módulo ${index + 1}`, margen + 5, y + 5);
+                
+                // Título del módulo
+                doc.setFont("helvetica", "bold");
+                const tituloModulo = doc.splitTextToSize(mod.titulo, col2Ancho - 5);
+                doc.text(tituloModulo, margen + col1Ancho + 5, y + 5);
+                
+                y += alturaFila;
+                
+                // Temas del módulo (filas adicionales)
+                mod.temas.forEach((tema, i) => {
+                    // Verificar si necesitamos nueva página para este tema
+                    if (y + alturaFila > altoPagina - margen) {
+                        doc.addPage();
+                        y = margen;
+                        // Repetir encabezado en nueva página
+                        doc.setFillColor(231, 241, 255);
+                        doc.rect(margen, y, anchoUtil, 8, 'F');
+                        doc.setFontSize(11);
+                        doc.setFont("helvetica", "bold");
+                        doc.setTextColor(0, 86, 179);
+                        doc.text("Módulo", margen + 5, y + 5);
+                        doc.text("Contenido", margen + 40, y + 5);
+                        y += 10;
+                    }
+                    
+                    // Fila para cada tema
+                    if (i % 2 === 0) {
+                        doc.setFillColor(255, 255, 255); // Blanco para filas pares
+                    } else {
+                        doc.setFillColor(250, 250, 250); // Gris muy claro para filas impares
+                    }
+                    doc.rect(margen, y, anchoUtil, alturaFila, 'F');
+                    
+                    // Bullet point (simple, sin emojis)
+                    doc.setFont("helvetica", "normal");
+                    doc.text("•", margen + col1Ancho + 2, y + 5);
+                    
+                    // Texto del tema
+                    const temaLines = doc.splitTextToSize(tema, col2Ancho - 10);
+                    doc.text(temaLines, margen + col1Ancho + 5, y + 5);
+                    
+                    // Ajustar altura si el tema ocupa múltiples líneas
+                    y += Math.max(alturaFila, temaLines.length * 4.5);
+                });
+                
+                // Espacio entre módulos
+                y += 5;
+                
+                // Línea separadora entre módulos (si no estamos al final)
+                if (index < programa.length - 1 && y + 5 < altoPagina - margen) {
+                    doc.setDrawColor(200, 200, 200);
+                    doc.setLineWidth(0.2);
+                    doc.line(margen, y, anchoPagina - margen, y);
+                    y += 5;
+                }
+            });
+            
+            // Pie de página
+            const totalPaginas = doc.internal.getNumberOfPages();
+            for (let i = 1; i <= totalPaginas; i++) {
+                doc.setPage(i);
+                
+                // Número de página
+                doc.setFontSize(9);
+                doc.setFont("helvetica", "italic");
+                doc.setTextColor(108, 117, 125);
+                doc.text(
+                    `Página ${i} de ${totalPaginas}`,
+                    anchoPagina - margen,
+                    altoPagina - 10,
+                    null,
+                    null,
+                    "right"
+                );
+                
+                // Información del curso
+                doc.text(
+                    "Astroamigos Misiones - Curso gratuito de Astronomía",
+                    margen,
+                    altoPagina - 10
+                );
+                
+                // Línea superior en pie de página
+                doc.setDrawColor(0, 86, 179);
+                doc.setLineWidth(0.3);
+                doc.line(margen, altoPagina - 15, anchoPagina - margen, altoPagina - 15);
+            }
+            
+            // Ocultar modal y descargar PDF
+            modalPdf.style.display = 'none';
+            doc.save('Programa_Curso_Astronomia_Inicial.pdf');
+        }, 500);
+    }
+
+    // Evento para el botón de descarga
+    btnDescarga.addEventListener('click', generarPDF);
+    
+    // Inicializar la visualización del programa
     window.onload = displayPrograma;
 </script>
 
