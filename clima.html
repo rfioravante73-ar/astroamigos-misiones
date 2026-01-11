@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clima en Posadas, Argentina</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f0f8ff;
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+            background-image: linear-gradient(to bottom, #e6f2ff, #ffffff);
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #4a90e2;
+        }
+
+        h1 {
+            color: #1a5fb4;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #4a90e2;
+            font-size: 1.2rem;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            font-size: 1.2rem;
+            color: #4a90e2;
+        }
+
+        .loading i {
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+
+        .current-weather {
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(26, 95, 180, 0.1);
+            padding: 25px;
+            margin-bottom: 30px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .location {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .city-name {
+            font-size: 2rem;
+            color: #1a5fb4;
+            margin-bottom: 5px;
+        }
+
+        .date-time {
+            color: #666;
+            font-size: 1rem;
+            margin-bottom: 15px;
+        }
+
+        .weather-icon {
+            font-size: 4rem;
+            color: #4a90e2;
+            text-align: center;
+            margin: 10px 0;
+        }
+
+        .temperature {
+            font-size: 3.5rem;
+            font-weight: bold;
+            color: #1a5fb4;
+            margin: 10px 0;
+        }
+
+        .weather-details {
+            flex: 1;
+            min-width: 250px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .detail-card {
+            background-color: #f5f9ff;
+            border-radius: 10px;
+            padding: 15px;
+            border-left: 4px solid #4a90e2;
+        }
+
+        .detail-card h3 {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .detail-card p {
+            font-size: 1.5rem;
+            color: #1a5fb4;
+            font-weight: bold;
+        }
+
+        .uv-index {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        .uv-low { background-color: #c8e6c9; color: #2e7d32; }
+        .uv-moderate { background-color: #fff9c4; color: #f57f17; }
+        .uv-high { background-color: #ffcc80; color: #ef6c00; }
+        .uv-very-high { background-color: #ffab91; color: #d84315; }
+        .uv-extreme { background-color: #ff8a80; color: #c62828; }
+
+        .forecast {
+            margin-top: 30px;
+        }
+
+        .forecast h2 {
+            color: #1a5fb4;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .forecast-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+        }
+
+        .forecast-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(26, 95, 180, 0.1);
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .forecast-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .forecast-day {
+            font-weight: bold;
+            color: #1a5fb4;
+            margin-bottom: 10px;
+        }
+
+        .forecast-icon {
+            font-size: 2.5rem;
+            color: #4a90e2;
+            margin: 10px 0;
+        }
+
+        .forecast-temp {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 10px;
+        }
+
+        .temp-high {
+            color: #1a5fb4;
+            font-weight: bold;
+        }
+
+        .temp-low {
+            color: #7ba9e6;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #666;
+            font-size: 0.9rem;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .api-info {
+            background-color: #e6f2ff;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+            font-size: 0.85rem;
+            color: #555;
+        }
+
+        .error-message {
+            background-color: #ffebee;
+            color: #c62828;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .update-button {
+            background-color: #1a5fb4;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .update-button:hover {
+            background-color: #0d4a9c;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .status-online {
+            background-color: #4caf50;
+        }
+
+        .status-offline {
+            background-color: #f44336;
+        }
+
+        @media (max-width: 768px) {
+            .current-weather {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .weather-details {
+                margin-top: 20px;
+                width: 100%;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-sun"></i> Clima en Posadas</h1>
+            <p class="subtitle">Información meteorológica actual y pronóstico para los próximos días</p>
+        </header>
+
+        <main id="app">
+            <!-- Contenido cargado dinámicamente por JavaScript -->
+            <div class="loading" id="loading">
+                <i class="fas fa-spinner fa-spin"></i>
+                <p>Cargando datos del clima...</p>
+            </div>
+        </main>
+
+        <div class="api-info">
+            <p><i class="fas fa-info-circle"></i> Datos proporcionados por WeatherAPI.com. Actualizados automáticamente cada 30 minutos.</p>
+            <p><i class="fas fa-sync-alt"></i> Última actualización: <span id="last-update">--:--</span></p>
+            <p id="api-status"><span class="status-indicator status-online"></span> API: Conectada</p>
+        </div>
+
+        <div style="text-align: center;">
+            <button class="update-button" id="update-button">
+                <i class="fas fa-redo"></i> Actualizar ahora
+            </button>
+        </div>
+
+        <footer class="footer">
+            <p>Aplicación SPA del Clima &copy; 2023 | Diseño minimalista azul y blanco</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // API key de WeatherAPI.com proporcionada
+            const apiKey = '47c8b10cd1dc485bbd4143857261101';
+            
+            // Ciudad para la consulta
+            const city = 'Posadas, Argentina';
+            
+            // Elementos del DOM
+            const app = document.getElementById('app');
+            const loading = document.getElementById('loading');
+            const updateButton = document.getElementById('update-button');
+            const lastUpdateElement = document.getElementById('last-update');
+            const apiStatusElement = document.getElementById('api-status');
+            
+            // Variable para almacenar la última hora de actualización
+            let lastUpdateTime = null;
+            let isAPIOnline = false;
+            
+            // Función para formatear la hora actual
+            function getCurrentTime() {
+                const now = new Date();
+                return now.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' });
+            }
+            
+            // Función para actualizar el tiempo de última actualización
+            function updateLastUpdateTime() {
+                lastUpdateTime = getCurrentTime();
+                lastUpdateElement.textContent = lastUpdateTime;
+            }
+            
+            // Función para actualizar el estado de la API
+            function updateAPIStatus(isOnline) {
+                isAPIOnline = isOnline;
+                const statusIndicator = apiStatusElement.querySelector('.status-indicator');
+                if (isOnline) {
+                    statusIndicator.className = 'status-indicator status-online';
+                    apiStatusElement.innerHTML = '<span class="status-indicator status-online"></span> API: Conectada';
+                } else {
+                    statusIndicator.className = 'status-indicator status-offline';
+                    apiStatusElement.innerHTML = '<span class="status-indicator status-offline"></span> API: Desconectada (usando datos de respaldo)';
+                }
+            }
+            
+            // Función para obtener datos del clima
+            async function getWeatherData() {
+                try {
+                    // Mostrar estado de carga
+                    loading.style.display = 'block';
+                    app.innerHTML = '';
+                    
+                    // URL de la API con la clave proporcionada
+                    const apiUrl = `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=Posadas&days=5&lang=es&aqi=yes`;
+                    
+                    console.log('Solicitando datos de:', apiUrl);
+                    
+                    const response = await fetch(apiUrl);
+                    
+                    if (!response.ok) {
+                        throw new Error(`Error HTTP: ${response.status} - ${response.statusText}`);
+                    }
+                    
+                    const data = await response.json();
+                    
+                    // Verificar si la respuesta contiene datos válidos
+                    if (!data || !data.location || !data.current) {
+                        throw new Error('Datos de API inválidos');
+                    }
+                    
+                    // Ocultar estado de carga
+                    loading.style.display = 'none';
+                    
+                    // Actualizar hora de última actualización
+                    updateLastUpdateTime();
+                    
+                    // Actualizar estado de la API
+                    updateAPIStatus(true);
+                    
+                    // Procesar y mostrar datos
+                    processAndDisplayWeatherData(data);
+                    
+                    return true;
+                    
+                } catch (error) {
+                    console.error('Error al obtener datos de la API:', error);
+                    
+                    // Intentar con datos de respaldo
+                    try {
+                        loading.style.display = 'none';
+                        updateLastUpdateTime();
+                        updateAPIStatus(false);
+                        loadFallbackData();
+                        return false;
+                    } catch (fallbackError) {
+                        console.error('Error en datos de respaldo:', fallbackError);
+                        showError('No se pudieron cargar los datos del clima. Por favor, intenta de nuevo más tarde.');
+                        updateAPIStatus(false);
+                        return false;
+                    }
+                }
+            }
+            
+            // Función para procesar y mostrar datos del clima
+            function processAndDisplayWeatherData(data) {
+                // Extraer datos actuales
+                const current = data.current;
+                const location = data.location;
+                const forecast = data.forecast.forecastday;
+                
+                // Determinar categoría del índice UV
+                const uvIndex = current.uv || 5;
+                const uvCategory = getUVCategory(uvIndex);
+                
+                // Obtener sensación térmica (si no está disponible, calcular aproximación)
+                let feelsLike = current.feelslike_c;
+                if (!feelsLike && current.temp_c && current.humidity && current.wind_kph) {
+                    // Aproximación simple de sensación térmica
+                    feelsLike = calculateFeelsLike(current.temp_c, current.humidity, current.wind_kph);
+                }
+                
+                // Generar HTML para el clima actual
+                let currentWeatherHTML = `
+                    <div class="current-weather">
+                        <div class="location">
+                            <h2 class="city-name">${location.name}, ${location.country}</h2>
+                            <p class="date-time">${formatDate(current.last_updated)} - ${getCurrentTime()}</p>
+                            <div class="weather-icon">
+                                <i class="${getWeatherIcon(current.condition.code, current.is_day)}"></i>
+                            </div>
+                            <p class="temperature">${Math.round(current.temp_c)}°C</p>
+                            <p>${current.condition.text}</p>
+                        </div>
+                        
+                        <div class="weather-details">
+                            <div class="detail-card">
+                                <h3><i class="fas fa-temperature-high"></i> Sensación Térmica</h3>
+                                <p>${Math.round(feelsLike)}°C</p>
+                            </div>
+                            
+                            <div class="detail-card">
+                                <h3><i class="fas fa-sun"></i> Índice UV</h3>
+                                <p>${uvIndex.toFixed(1)} <span class="uv-index ${uvCategory.class}">${uvCategory.text}</span></p>
+                            </div>
+                            
+                            <div class="detail-card">
+                                <h3><i class="fas fa-tint"></i> Humedad</h3>
+                                <p>${current.humidity}%</p>
+                            </div>
+                            
+                            <div class="detail-card">
+                                <h3><i class="fas fa-wind"></i> Viento</h3>
+                                <p>${Math.round(current.wind_kph)} km/h</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                // Generar HTML para el pronóstico
+                let forecastHTML = `
+                    <div class="forecast">
+                        <h2>Pronóstico para los próximos 5 días</h2>
+                        <div class="forecast-cards">
+                `;
+                
+                // Agregar cada día del pronóstico
+                forecast.forEach(day => {
+                    const date = new Date(day.date);
+                    const dayName = getDayName(date);
+                    
+                    forecastHTML += `
+                        <div class="forecast-card">
+                            <div class="forecast-day">${dayName}</div>
+                            <div class="forecast-icon">
+                                <i class="${getWeatherIcon(day.day.condition.code, 1)}"></i>
+                            </div>
+                            <p>${day.day.condition.text}</p>
+                            <div class="forecast-temp">
+                                <span class="temp-high">${Math.round(day.day.maxtemp_c)}°</span>
+                                <span class="temp-low">${Math.round(day.day.mintemp_c)}°</span>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                forecastHTML += `
+                        </div>
+                    </div>
+                `;
+                
+                // Mostrar todo en la app
+                app.innerHTML = currentWeatherHTML + forecastHTML;
+            }
+            
+            // Función para calcular sensación térmica aproximada (índice de calor)
+            function calculateFeelsLike(temp, humidity, windSpeed) {
+                // Fórmula simplificada para el índice de calor
+                if (temp >= 27 && humidity >= 40) {
+                    // Fórmula de Steadman para calor
+                    const c1 = -8.78469475556;
+                    const c2 = 1.61139411;
+                    const c3 = 2.33854883889;
+                    const c4 = -0.14611605;
+                    const c5 = -0.012308094;
+                    const c6 = -0.0164248277778;
+                    const c7 = 0.002211732;
+                    const c8 = 0.00072546;
+                    const c9 = -0.000003582;
+                    
+                    const T = temp;
+                    const R = humidity;
+                    
+                    const heatIndex = c1 + (c2 * T) + (c3 * R) + (c4 * T * R) + 
+                                     (c5 * T * T) + (c6 * R * R) + 
+                                     (c7 * T * T * R) + (c8 * T * R * R) + 
+                                     (c9 * T * T * R * R);
+                    
+                    return Math.max(temp, heatIndex);
+                } else if (temp <= 10 && windSpeed > 5) {
+                    // Sensación térmica por viento (simplificada)
+                    const windChill = 13.12 + (0.6215 * temp) - (11.37 * Math.pow(windSpeed, 0.16)) + (0.3965 * temp * Math.pow(windSpeed, 0.16));
+                    return Math.min(temp, windChill);
+                }
+                
+                return temp;
+            }
+            
+            // Función para cargar datos de respaldo (simulados) si la API falla
+            function loadFallbackData() {
+                // Datos simulados realistas para Posadas, Argentina
+                const now = new Date();
+                const mockData = {
+                    location: {
+                        name: "Posadas",
+                        country: "Argentina",
+                        localtime: now.toISOString()
+                    },
+                    current: {
+                        temp_c: 28,
+                        feelslike_c: 30,
+                        condition: {
+                            text: "Parcialmente nublado",
+                            code: 1003
+                        },
+                        humidity: 65,
+                        wind_kph: 12,
+                        uv: 7.2,
+                        is_day: now.getHours() > 6 && now.getHours() < 20 ? 1 : 0,
+                        last_updated: now.toISOString()
+                    },
+                    forecast: {
+                        forecastday: [
+                            {
+                                date: getDateString(0),
+                                day: {
+                                    maxtemp_c: 29,
+                                    mintemp_c: 18,
+                                    condition: {
+                                        text: "Soleado",
+                                        code: 1000
+                                    }
+                                }
+                            },
+                            {
+                                date: getDateString(1),
+                                day: {
+                                    maxtemp_c: 27,
+                                    mintemp_c: 17,
+                                    condition: {
+                                        text: "Parcialmente nublado",
+                                        code: 1003
+                                    }
+                                }
+                            },
+                            {
+                                date: getDateString(2),
+                                day: {
+                                    maxtemp_c: 26,
+                                    mintemp_c: 16,
+                                    condition: {
+                                        text: "Nublado",
+                                        code: 1006
+                                    }
+                                }
+                            },
+                            {
+                                date: getDateString(3),
+                                day: {
+                                    maxtemp_c: 25,
+                                    mintemp_c: 15,
+                                    condition: {
+                                        text: "Lluvia ligera",
+                                        code: 1183
+                                    }
+                                }
+                            },
+                            {
+                                date: getDateString(4),
+                                day: {
+                                    maxtemp_c: 24,
+                                    mintemp_c: 14,
+                                    condition: {
+                                        text: "Tormentas aisladas",
+                                        code: 1273
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                };
+                
+                // Procesar y mostrar datos simulados
+                processAndDisplayWeatherData(mockData);
+                
+                // Mostrar mensaje informativo
+                const infoDiv = document.createElement('div');
+                infoDiv.className = 'api-info';
+                infoDiv.innerHTML = `
+                    <p><i class="fas fa-exclamation-triangle"></i> Usando datos de demostración. Verifica que tu clave API sea válida y esté activa.</p>
+                `;
+                app.parentNode.insertBefore(infoDiv, app.nextSibling);
+            }
+            
+            // Función para obtener string de fecha para n días en el futuro
+            function getDateString(daysFromNow) {
+                const date = new Date();
+                date.setDate(date.getDate() + daysFromNow);
+                return date.toISOString().split('T')[0];
+            }
+            
+            // Función para mostrar mensaje de error
+            function showError(message) {
+                loading.style.display = 'none';
+                app.innerHTML = `
+                    <div class="error-message">
+                        <h3><i class="fas fa-exclamation-triangle"></i> Error al cargar los datos</h3>
+                        <p>${message}</p>
+                        <p>Clave API utilizada: ${apiKey.substring(0, 8)}...</p>
+                        <button onclick="location.reload()" style="margin-top: 15px; padding: 10px 20px; background-color: #1a5fb4; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                            Reintentar
+                        </button>
+                    </div>
+                `;
+            }
+            
+            // Función para formatear la fecha
+            function formatDate(dateString) {
+                const date = new Date(dateString);
+                const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+                return date.toLocaleDateString('es-AR', options);
+            }
+            
+            // Función para obtener el nombre del día de la semana
+            function getDayName(date) {
+                const today = new Date();
+                const targetDate = new Date(date);
+                
+                if (targetDate.toDateString() === today.toDateString()) {
+                    return "Hoy";
+                }
+                
+                const tomorrow = new Date();
+                tomorrow.setDate(today.getDate() + 1);
+                if (targetDate.toDateString() === tomorrow.toDateString()) {
+                    return "Mañana";
+                }
+                
+                const options = { weekday: 'long' };
+                let dayName = targetDate.toLocaleDateString('es-AR', options);
+                // Capitalizar primera letra
+                return dayName.charAt(0).toUpperCase() + dayName.slice(1);
+            }
+            
+            // Función para obtener el ícono del clima según el código de WeatherAPI
+            function getWeatherIcon(code, isDay = 1) {
+                // Mapeo de códigos de WeatherAPI a iconos de FontAwesome
+                const iconMap = {
+                    1000: isDay ? 'fas fa-sun' : 'fas fa-moon', // Soleado / Despejado
+                    1003: isDay ? 'fas fa-cloud-sun' : 'fas fa-cloud-moon', // Parcialmente nublado
+                    1006: 'fas fa-cloud', // Nublado
+                    1009: 'fas fa-cloud', // Muy nublado
+                    1030: 'fas fa-smog', // Neblina
+                    1063: isDay ? 'fas fa-cloud-sun-rain' : 'fas fa-cloud-moon-rain', // Lluvia dispersa
+                    1066: 'fas fa-snowflake', // Nieve dispersa
+                    1069: 'fas fa-cloud-meatball', // Aguanieve dispersa
+                    1072: 'fas fa-cloud-rain', // Llovizna helada
+                    1087: 'fas fa-bolt', // Tormenta
+                    1114: 'fas fa-wind', // Ventisca
+                    1117: 'fas fa-wind', // Ventisca fuerte
+                    1135: 'fas fa-smog', // Niebla
+                    1147: 'fas fa-smog', // Niebla helada
+                    1150: 'fas fa-cloud-rain', // Llovizna ligera
+                    1153: 'fas fa-cloud-rain', // Llovizna
+                    1168: 'fas fa-cloud-rain', // Llovizna helada
+                    1171: 'fas fa-cloud-rain', // Llovizna helada fuerte
+                    1180: isDay ? 'fas fa-cloud-sun-rain' : 'fas fa-cloud-moon-rain', // Lluvia ligera dispersa
+                    1183: 'fas fa-cloud-rain', // Lluvia ligera
+                    1186: 'fas fa-cloud-rain', // Lluvia moderada
+                    1189: 'fas fa-cloud-rain', // Lluvia
+                    1192: 'fas fa-cloud-showers-heavy', // Lluvia fuerte
+                    1195: 'fas fa-cloud-showers-heavy', // Lluvia muy fuerte
+                    1198: 'fas fa-cloud-rain', // Lluvia helada ligera
+                    1201: 'fas fa-cloud-rain', // Lluvia helada fuerte
+                    1204: 'fas fa-cloud-meatball', // Aguanieve
+                    1207: 'fas fa-cloud-meatball', // Aguanieve fuerte
+                    1210: 'fas fa-snowflake', // Nieve ligera
+                    1213: 'fas fa-snowflake', // Nieve
+                    1216: 'fas fa-snowflake', // Nieve moderada
+                    1219: 'fas fa-snowflake', // Nieve fuerte
+                    1222: 'fas fa-snowflake', // Nieve muy fuerte
+                    1225: 'fas fa-snowflake', // Nevada
+                    1237: 'fas fa-cloud-meatball', // Granizo
+                    1240: isDay ? 'fas fa-cloud-sun-rain' : 'fas fa-cloud-moon-rain', // Lluvia dispersa
+                    1243: 'fas fa-cloud-showers-heavy', // Lluvia fuerte dispersa
+                    1246: 'fas fa-cloud-showers-heavy', // Chubascos
+                    1249: 'fas fa-cloud-meatball', // Aguanieve dispersa
+                    1252: 'fas fa-cloud-meatball', // Aguanieve fuerte dispersa
+                    1255: 'fas fa-snowflake', // Nieve dispersa
+                    1258: 'fas fa-snowflake', // Nieve fuerte dispersa
+                    1261: 'fas fa-cloud-meatball', // Granizo ligero
+                    1264: 'fas fa-cloud-meatball', // Granizo fuerte
+                    1273: isDay ? 'fas fa-bolt' : 'fas fa-bolt', // Tormenta con lluvia ligera
+                    1276: 'fas fa-poo-storm', // Tormenta con lluvia
+                    1279: 'fas fa-snowflake', // Tormenta con nieve ligera
+                    1282: 'fas fa-snowflake', // Tormenta con nieve
+                };
+                
+                return iconMap[code] || (isDay ? 'fas fa-sun' : 'fas fa-moon');
+            }
+            
+            // Función para determinar la categoría del índice UV
+            function getUVCategory(uvIndex) {
+                if (uvIndex <= 2) return { class: 'uv-low', text: 'Bajo' };
+                if (uvIndex <= 5) return { class: 'uv-moderate', text: 'Moderado' };
+                if (uvIndex <= 7) return { class: 'uv-high', text: 'Alto' };
+                if (uvIndex <= 10) return { class: 'uv-very-high', text: 'Muy Alto' };
+                return { class: 'uv-extreme', text: 'Extremo' };
+            }
+            
+            // Configurar el botón de actualización
+            updateButton.addEventListener('click', function() {
+                getWeatherData();
+                
+                // Deshabilitar temporalmente el botón para evitar múltiples clics
+                updateButton.disabled = true;
+                updateButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Actualizando...';
+                
+                setTimeout(() => {
+                    updateButton.disabled = false;
+                    updateButton.innerHTML = '<i class="fas fa-redo"></i> Actualizar ahora';
+                }, 2000);
+            });
+            
+            // Iniciar la carga de datos al cargar la página
+            getWeatherData();
+            
+            // Actualizar automáticamente cada 30 minutos
+            setInterval(getWeatherData, 30 * 60 * 1000);
+        });
+    </script>
+</body>
+</html>
