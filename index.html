@@ -3,125 +3,150 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AstroamigosMisiones</title>
-    
+    <title>Astroamigos Misiones | Acceso</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* --- ESTILOS ORIGINALES MANTENIDOS --- */
+        :root {
+            /* Paleta Astroamigos modernizada (Basada en Blues/Navy) */
+            --background: oklch(0.98 0.01 240);
+            --foreground: oklch(0.25 0.05 240);
+            --primary: oklch(0.35 0.08 245); /* Navy Blue */
+            --primary-light: oklch(0.45 0.12 245);
+            --secondary: oklch(0.20 0.06 250); /* Darker Navy */
+            --accent: oklch(0.65 0.15 240); /* Azure */
+            --border: oklch(0.90 0.02 240);
+            --input-bg: oklch(1 0 0);
+            --radius: 1.5rem;
+            --shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            /* REFACTORIZACIÓN DE TIPOGRAFÍA: Inter implementada */
             font-family: 'Inter', sans-serif;
         }
 
         body {
-            background-color: #f8f9fa;
+            background: var(--background);
+            min-height: 100vh;
+            color: var(--foreground);
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
             padding: 20px;
         }
 
-        .container {
-            display: flex;
+        .login-container {
             width: 100%;
-            max-width: 1000px;
+            max-width: 1200px;
+            display: flex;
             background: white;
-            border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
             overflow: hidden;
+            min-height: 700px;
         }
 
-        .left-container {
-            flex: 1;
-            background: linear-gradient(135deg, #1a3a5f 0%, #2c5282 100%);
+        /* Panel Izquierdo - Visual */
+        .image-panel {
+            flex: 1.2;
+            background: linear-gradient(rgba(26, 58, 95, 0.8), rgba(26, 58, 95, 0.9)), 
+                        url('https://images.unsplash.com/photo-1464802686167-b939a6910659?auto=format&fit=crop&q=80');
+            background-size: cover;
+            background-position: center;
             display: flex;
-            flex-direction: column;
+            justify-content: center;
             align-items: center;
-            justify-content: center;
-            padding: 40px 20px;
-            color: white;
+            padding: 40px;
             position: relative;
-            overflow: hidden;
         }
 
-        .left-container::before {
-            content: "";
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
-            transform: rotate(30deg);
-        }
-
-        .logo-container {
-            position: relative;
-            z-index: 2;
+        .panel-text-content {
+            color: white; 
             text-align: center;
-            max-width: 90%;
+            z-index: 2; 
         }
 
-        .logo-container img {
-            width: 100%;
-            max-width: 280px;
-            height: auto;
-            border-radius: 12px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-            transition: transform 0.3s ease;
-        }
-
-        .logo-container img:hover {
-            transform: scale(1.03);
-        }
-
-        .app-title {
-            margin-top: 25px;
-            font-size: 2.2rem;
+        .panel-text-content h1 {
+            font-size: 2.8rem;
             font-weight: 700;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
-            letter-spacing: -0.5px;
-            position: relative;
-            z-index: 2;
+            line-height: 1.1;
+            text-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
         }
 
-        .app-subtitle {
-            margin-top: 8px;
-            font-size: 1.1rem;
-            opacity: 0.9;
-            position: relative;
-            z-index: 2;
-        }
-
-        .right-container {
+        /* Panel Central - Branding Animado */
+        .center-panel {
             flex: 1;
-            padding: 50px 40px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
             display: flex;
             flex-direction: column;
             justify-content: center;
+            align-items: center;
+            padding: 40px;
+            position: relative;
+            border-left: 1px solid rgba(255,255,255,0.1);
+            border-right: 1px solid rgba(255,255,255,0.1);
         }
 
-        .login-header {
+        .animated-icon {
+            width: 160px;
+            height: 160px;
             margin-bottom: 30px;
+            position: relative;
+            border-radius: 50%;
+            background: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+            animation: float 6s ease-in-out infinite;
         }
 
-        .login-header h2 {
-            font-size: 2.1rem;
-            color: #1e3a8a;
-            margin-bottom: 8px;
+        .animated-icon img {
+            width: 110px;
+            height: 110px;
+            object-fit: contain;
+            border-radius: 10px;
         }
 
-        .login-header p {
-            color: #4b5563;
-            font-size: 1.05rem;
+        .brand-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .brand-subtitle {
+            font-size: 1rem;
+            opacity: 0.8;
+            text-align: center;
+            max-width: 250px;
+        }
+
+        /* Panel Derecho - Formulario */
+        .right-panel {
+            flex: 1.2;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 50px 45px;
+            background: white;
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .form-header h2 {
+            font-size: 1.8rem;
+            color: var(--primary);
+            font-weight: 700;
         }
 
         .form-group {
@@ -132,393 +157,223 @@
             display: block;
             margin-bottom: 8px;
             font-weight: 600;
-            color: #374151;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
+            color: var(--foreground);
         }
 
-        .input-container {
+        .input-with-icon {
             position: relative;
         }
 
-        .input-container i {
+        .input-with-icon i {
             position: absolute;
-            left: 15px;
+            left: 16px;
             top: 50%;
             transform: translateY(-50%);
-            color: #6b7280;
-            font-size: 1.1rem;
+            color: var(--accent);
         }
 
-        .form-control {
+        .input-with-icon input {
             width: 100%;
-            padding: 14px 16px 14px 45px;
-            border: 2px solid #d1d5db;
-            border-radius: 12px;
+            padding: 14px 15px 14px 48px;
+            border: 2px solid var(--border);
+            border-radius: 1rem;
             font-size: 1rem;
-            transition: border-color 0.3s;
-            background-color: #f9fafb;
+            transition: all 0.3s ease;
         }
 
-        .form-control:focus {
+        .input-with-icon input:focus {
             outline: none;
-            border-color: #3b82f6;
-            background-color: white;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+            border-color: var(--accent);
+            box-shadow: 0 0 0 4px oklch(0.65 0.15 240 / 0.1);
         }
 
-        .btn-login {
+        .btn {
             width: 100%;
-            padding: 14px;
-            background: linear-gradient(to right, #1e40af, #1d4ed8);
-            color: white;
+            padding: 15px;
             border: none;
-            border-radius: 12px;
-            font-size: 1.1rem;
+            border-radius: 1rem;
+            font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
-            margin-top: 10px;
-            box-shadow: 0 4px 12px rgba(30, 64, 175, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
 
-        .btn-login:hover {
-            background: linear-gradient(to right, #1d4ed8, #1e40af);
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 12px oklch(0.35 0.08 245 / 0.2);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-light);
             transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(30, 64, 175, 0.4);
         }
 
         .error-message {
-            color: #ef4444;
-            text-align: center;
-            margin-top: 8px;
+            margin-top: 15px;
             font-size: 0.9rem;
-            min-height: 22px;
+            text-align: center;
+            min-height: 20px;
             font-weight: 500;
         }
 
-        .social-login {
+        .social-section {
+            margin-top: 30px;
             text-align: center;
-            margin: 25px 0;
-            padding: 20px 0;
-            border-top: 1px solid #e5e7eb;
-            border-bottom: 1px solid #e5e7eb;
-        }
-
-        .social-login p {
-            color: #4b5563;
-            margin-bottom: 15px;
-            font-size: 0.95rem;
+            border-top: 1px solid var(--border);
+            padding-top: 25px;
         }
 
         .social-icons {
             display: flex;
             justify-content: center;
-            gap: 20px;
+            gap: 15px;
+            margin-top: 15px;
         }
 
         .social-icons a {
-            display: inline-flex;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--background);
+            color: var(--primary);
+            display: flex;
             align-items: center;
             justify-content: center;
-            width: 42px;
-            height: 42px;
-            border-radius: 50%;
-            background-color: #f3f4f6;
-            color: #374151;
-            font-size: 1.2rem;
-            transition: all 0.3s ease;
             text-decoration: none;
+            transition: all 0.3s ease;
         }
 
         .social-icons a:hover {
-            background-color: #3b82f6;
+            background: var(--primary);
             color: white;
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3);
+            transform: scale(1.1);
         }
 
-        .copyright {
-            text-align: center;
+        .footer-links {
             margin-top: 25px;
-            color: #6b7280;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
+            color: oklch(0.5 0.01 240);
+            text-align: center;
         }
 
-        .copyright a {
-            color: #2563eb;
+        .footer-links a {
+            color: var(--accent);
             text-decoration: none;
             font-weight: 600;
             cursor: pointer;
         }
 
-        /* --- NUEVOS ESTILOS PARA EL MODAL --- */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.6);
-            display: none; /* Oculto por defecto */
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            padding: 20px;
+        /* Animaciones */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
         }
 
-        .modal-content {
-            background: white;
-            width: 100%;
-            max-width: 650px;
-            max-height: 80vh;
-            border-radius: 16px;
-            padding: 30px;
-            position: relative;
-            overflow-y: auto;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-            animation: modalFadeIn 0.3s ease-out;
+        @media (max-width: 992px) {
+            .image-panel { display: none; }
+            .login-container { max-width: 800px; }
         }
 
-        @keyframes modalFadeIn {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .close-modal {
-            position: sticky;
-            top: 0;
-            float: right;
-            font-size: 1.5rem;
-            color: #6b7280;
-            cursor: pointer;
-            transition: color 0.2s;
-        }
-
-        .close-modal:hover { color: #1e3a8a; }
-
-        .modal-body h3 { color: #1e3a8a; margin: 20px 0 10px; font-size: 1.3rem; }
-        .modal-body p { color: #4b5563; line-height: 1.6; margin-bottom: 15px; font-size: 0.95rem; }
-        .modal-body ul { margin-bottom: 15px; padding-left: 20px; color: #4b5563; }
-        .modal-body li { margin-bottom: 8px; }
-
-        /* Estilos para los iconos de redes sociales en el modal */
-        .modal-social-icons {
-            text-align: center;
-            margin-top: 30px;
-            border-top: 1px solid #e5e7eb;
-            padding-top: 20px;
-        }
-
-        .modal-social-icons h4 {
-            color: #1e3a8a;
-            margin-bottom: 15px;
-            font-size: 1.1rem;
-        }
-
-        .modal-social-icons a {
-            display: inline-block;
-            margin: 0 15px;
-            color: #1e3a8a;
-            font-size: 1.8rem;
-            transition: all 0.3s ease;
-        }
-
-        .modal-social-icons a:hover {
-            color: #3b82f6;
-            transform: translateY(-3px);
-        }
-
-        @media (max-width: 768px) {
-            .container { flex-direction: column; }
-            .left-container, .right-container { width: 100%; }
-            .right-container { padding: 40px 30px; }
-            .social-icons { gap: 15px; }
-            .social-icons a { width: 38px; height: 38px; font-size: 1.1rem; }
-            .modal-social-icons a {
-                margin: 0 10px;
-                font-size: 1.5rem;
-            }
+        @media (max-width: 600px) {
+            .login-container { flex-direction: column; }
+            .center-panel { padding: 30px; }
+            .right-panel { padding: 30px 20px; }
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <div class="left-container">
-            <div class="logo-container">
-                <img src="https://raw.githubusercontent.com/rfioravante73-ar/astroamigos-misiones/refs/heads/main/tucan.avif" alt="Tucán de Astroamigos">
-                <h1 class="app-title">Astroamigos Misiones</h1>
-                <p class="app-subtitle">Explorando el universo juntos</p>
+    <div class="login-container">
+        <div class="image-panel">
+            <div class="panel-text-content">
+                <h1>Explorando el Universo Juntos</h1>
             </div>
         </div>
-        
-        <div class="right-container">
-            <div class="login-header">
-                <h2>Bienvenido de nuevo</h2>
-                <p>Inicia sesión para acceder a tu cuenta</p>
+
+        <div class="center-panel">
+            <div class="animated-icon">
+                <img src="https://raw.githubusercontent.com/rfioravante73-ar/astroamigos-misiones/refs/heads/main/tucan.avif" alt="Logo">
             </div>
-            
+            <h1 class="brand-title">Astroamigos Misiones</h1>
+            <p class="brand-subtitle">Portal de Astronomía Aficionada en Misiones, Argentina</p>
+        </div>
+
+        <div class="right-panel">
+            <div class="form-header">
+                <h2>Bienvenido</h2>
+                <p>Ingresa tus credenciales de acceso</p>
+            </div>
+
             <form id="loginForm">
                 <div class="form-group">
-                    <label for="username"><i class="fas fa-user"></i> Usuario</label>
-                    <div class="input-container">
+                    <label>Usuario</label>
+                    <div class="input-with-icon">
                         <i class="fas fa-user"></i>
-                        <input type="text" id="username" class="form-control" placeholder="Ingresa tu usuario" required>
+                        <input type="text" id="username" placeholder="Tu usuario" required>
                     </div>
                 </div>
-                
+
                 <div class="form-group">
-                    <label for="password"><i class="fas fa-lock"></i> Contraseña</label>
-                    <div class="input-container">
+                    <label>Contraseña</label>
+                    <div class="input-with-icon">
                         <i class="fas fa-lock"></i>
-                        <input type="password" id="password" class="form-control" placeholder="Ingresa tu contraseña" required>
+                        <input type="password" id="password" placeholder="••••••••" required>
                     </div>
                 </div>
-                
+
                 <div class="error-message" id="errorMessage"></div>
-                
-                <button type="submit" class="btn-login">
+
+                <button type="submit" class="btn btn-primary">
                     <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
                 </button>
             </form>
-            
-            <div class="social-login">
-                <p>Síguenos en nuestras redes:</p>
+
+            <div class="social-section">
+                <p style="font-size: 0.9rem; color: #666;">Nuestras Redes</p>
                 <div class="social-icons">
-                    <a href="https://www.youtube.com/@romulofioravante9329" target="_blank" title="YouTube">
-                        <i class="fab fa-youtube"></i>
-                    </a>
-                    <a href="https://www.facebook.com/astroamigosmisiones.astronomiaaficionada" target="_blank" title="Facebook">
-                        <i class="fab fa-facebook"></i>
-                    </a>
-                    <a href="https://astroamigosmisiones.blogspot.com/?zx=50cd3e70831e58ab" target="_blank" title="Blogspot">
-                        <i class="fab fa-blogger"></i>
-                    </a>
-                    <a href="https://astroamigosweb.wixsite.com/2025" target="_blank" title="Sitio Web">
-                        <i class="fas fa-globe"></i>
-                    </a>
+                    <a href="https://www.youtube.com/@romulofioravante9329" target="_blank"><i class="fab fa-youtube"></i></a>
+                    <a href="https://www.facebook.com/astroamigosmisiones.astronomiaaficionada" target="_blank"><i class="fab fa-facebook"></i></a>
+                    <a href="https://astroamigosmisiones.blogspot.com/" target="_blank"><i class="fab fa-blogger"></i></a>
+                    <a href="https://astroamigosweb.wixsite.com/2025" target="_blank"><i class="fas fa-globe"></i></a>
                 </div>
             </div>
-            
-            <div class="copyright">
-                &copy; 2026 Astroamigos Misiones. Todos los derechos reservados.<br>
-                <a id="openTerms">Política de privacidad</a> | <a id="openPolicy">Términos de uso</a>
-            </div>
-        </div>
-    </div>
 
-    <div class="modal-overlay" id="modalOverlay">
-        <div class="modal-content">
-            <span class="close-modal" id="closeModal">&times;</span>
-            <div class="modal-body">
-                <h2 style="color: #1e3a8a; border-bottom: 2px solid #e5e7eb; padding-bottom: 10px;">Términos y Privacidad</h2>
-                
-                <h3>1. Aceptación</h3>
-                <p>Al acceder a Astroamigos Misiones, usted acepta cumplir con nuestros términos de uso y normas de la comunidad.</p>
-
-                <h3>2. Privacidad de Datos</h3>
-                <p>Solo recopilamos los datos necesarios para la autenticación (usuario y estado de sesión). No compartimos información con terceros.</p>
-
-                <h3>3. Seguridad</h3>
-                <ul>
-                    <li>El acceso es personal e intransferible.</li>
-                    <li>Usted es responsable de la confidencialidad de sus credenciales.</li>
-                    <li>Notifique cualquier actividad sospechosa a la administración.</li>
-                </ul>
-
-                <h3>4. Propiedad Intelectual</h3>
-                <p>Todo el contenido, incluyendo el logo del tucán y recursos educativos, es propiedad de Astroamigos Misiones.</p>
-
-                <h3>5. Conducta</h3>
-                <p>Se prohíbe cualquier intento de vulnerar la seguridad del sistema o utilizar la plataforma para fines comerciales no autorizados.</p>
-                
-                <div class="modal-social-icons">
-                    <h4>Síguenos en nuestras redes:</h4>
-                    <a href="https://www.youtube.com/@romulofioravante9329" target="_blank" title="YouTube">
-                        <i class="fab fa-youtube"></i>
-                    </a>
-                    <a href="https://www.facebook.com/astroamigosmisiones.astronomiaaficionada" target="_blank" title="Facebook">
-                        <i class="fab fa-facebook"></i>
-                    </a>
-                    <a href="https://astroamigosmisiones.blogspot.com/?zx=50cd3e70831e58ab" target="_blank" title="Blogspot">
-                        <i class="fab fa-blogger"></i>
-                    </a>
-                    <a href="https://astroamigosweb.wixsite.com/2025" target="_blank" title="Sitio Web">
-                        <i class="fas fa-globe"></i>
-                    </a>
-                </div>
-                
-                <p style="margin-top: 30px; font-size: 0.85rem; text-align: center; color: #9ca3af;">Última actualización: Enero 2026</p>
+            <div class="footer-links">
+                &copy; 2026 Astroamigos Misiones<br>
+                <a id="openTerms">Privacidad</a> | <a id="openPolicy">Términos de uso</a>
             </div>
         </div>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // --- LÓGICA DEL LOGIN (ORIGINAL) ---
             const loginForm = document.getElementById('loginForm');
             const errorMessage = document.getElementById('errorMessage');
             
             loginForm.addEventListener('submit', function(e) {
                 e.preventDefault();
-                const username = document.getElementById('username').value.trim();
-                const password = document.getElementById('password').value.trim();
+                const user = document.getElementById('username').value.trim();
+                const pass = document.getElementById('password').value.trim();
                 
-                if (username === 'astro' && password === 'a123') {
+                if (user === 'astro' && pass === 'a123') {
                     errorMessage.style.color = '#10b981';
-                    errorMessage.textContent = '¡Inicio de sesión exitoso! Redirigiendo...';
+                    errorMessage.textContent = '¡Éxito! Redirigiendo...';
                     sessionStorage.setItem('authenticated', 'true');
-                    loginForm.querySelector('button').disabled = true;
-                    loginForm.querySelector('button').innerHTML = '<i class="fas fa-spinner fa-spin"></i> Accediendo...';
                     
                     setTimeout(() => {
                         window.location.href = 'dashboard.html';
                     }, 1500);
                 } else {
-                    errorMessage.textContent = 'Usuario o contraseña incorrectos. Intenta de nuevo.';
                     errorMessage.style.color = '#ef4444';
-                    loginForm.style.animation = 'shake 0.5s';
-                    setTimeout(() => { loginForm.style.animation = ''; }, 500);
+                    errorMessage.textContent = 'Credenciales incorrectas.';
                 }
             });
-
-            // --- LÓGICA DEL MODAL (NUEVA) ---
-            const modal = document.getElementById('modalOverlay');
-            const openTerms = document.getElementById('openTerms');
-            const openPolicy = document.getElementById('openPolicy');
-            const closeModal = document.getElementById('closeModal');
-
-            // Función para abrir el modal
-            const toggleModal = (e) => {
-                e.preventDefault();
-                modal.style.display = 'flex';
-            };
-
-            openTerms.addEventListener('click', toggleModal);
-            openPolicy.addEventListener('click', toggleModal);
-
-            // Cerrar al pulsar la X
-            closeModal.addEventListener('click', () => {
-                modal.style.display = 'none';
-            });
-
-            // Cerrar al pulsar fuera del contenido blanco
-            window.addEventListener('click', (e) => {
-                if (e.target === modal) {
-                    modal.style.display = 'none';
-                }
-            });
-
-            // Animación de shake (CSS original)
-            const style = document.createElement('style');
-            style.innerHTML = `
-                @keyframes shake {
-                    0%, 100% { transform: translateX(0); }
-                    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
-                    20%, 40%, 60%, 80% { transform: translateX(5px); }
-                }
-            `;
-            document.head.appendChild(style);
         });
     </script>
 </body>
