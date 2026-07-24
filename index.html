@@ -3,9 +3,11 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AstroAmigos · Tucán</title>
+    <title>🔭 AstroAmigos Misiones</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800;14..32,900&display=swap" rel="stylesheet" />
     <style>
-        /* Reset y fondo */
         * {
             margin: 0;
             padding: 0;
@@ -16,12 +18,15 @@
             min-height: 100vh;
             background: #080a1a;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
+            padding: 80px 0;
             overflow: hidden;
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
         }
 
-        /* Estrellas (650) */
+        /* Estrellas */
         #stars-container {
             position: fixed;
             top: 0;
@@ -41,43 +46,71 @@
         }
 
         @keyframes twinkle {
-            0% {
-                opacity: 0.2;
-                transform: scale(0.7);
-            }
-            100% {
-                opacity: 1;
-                transform: scale(1.2);
-            }
+            0% { opacity: 0.2; transform: scale(0.7); }
+            100% { opacity: 1; transform: scale(1.2); }
         }
 
-        /* Centro */
+        /* ===== BARRAS AZULES VIBRANTES (vacías) ===== */
+        .bar {
+            position: fixed;
+            left: 0;
+            width: 100%;
+            z-index: 10;
+            background: #0055ff;  /* azul vibrante */
+            box-shadow: 0 4px 20px rgba(0, 80, 255, 0.3);
+        }
+
+        .bar-top {
+            top: 0;
+            height: 56px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .bar-bottom {
+            bottom: 0;
+            height: 56px;
+            border-top: 2px solid rgba(255, 255, 255, 0.15);
+        }
+
+        /* Responsive barras */
+        @media (max-width: 768px) {
+            .bar-top, .bar-bottom { height: 44px; }
+            body { padding: 60px 0; }
+        }
+
+        @media (max-width: 480px) {
+            .bar-top, .bar-bottom { height: 36px; }
+            body { padding: 50px 0; }
+        }
+
+        /* Centro: imagen + texto */
         .center-wrapper {
             position: relative;
             z-index: 1;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
+            justify-content: center;
             width: 100vw;
             height: 100vh;
+            gap: 2rem; /* separación entre círculo y texto */
+            padding: 0 20px;
         }
 
-        /* Contenedor del círculo (con borde luminoso) */
+        /* Círculo con imagen */
         .circle-wrapper {
             position: relative;
-            width: min(65vmin, 500px);
-            height: min(65vmin, 500px);
+            width: min(60vmin, 460px);
+            height: min(60vmin, 460px);
             border-radius: 50%;
-            /* Sombra exterior para resaltar el borde */
             box-shadow: 0 0 40px 12px rgba(0, 180, 255, 0.25);
+            flex-shrink: 0;
         }
 
-        /* Anillo luminoso (pseudo-elemento) */
         .circle-wrapper::before {
             content: '';
             position: absolute;
             inset: -8px;
-            /* Grosor del borde */
             border-radius: 50%;
             background: conic-gradient(from 0deg,
                     #004466 0%,
@@ -87,7 +120,6 @@
                     #004466 65%,
                     #004466 100%);
             animation: spin-light 2.2s linear infinite;
-            /* Máscara para mostrar solo el anillo exterior */
             mask: radial-gradient(circle at center,
                     transparent 62%,
                     black 63%,
@@ -98,21 +130,14 @@
                     black 100%);
             pointer-events: none;
             z-index: 0;
-            /* Resplandor adicional */
             filter: drop-shadow(0 0 18px #00aaff) drop-shadow(0 0 40px #0066ff);
         }
 
-        /* Rotación continua (barrido de izquierda a derecha) */
         @keyframes spin-light {
-            0% {
-                transform: rotate(0deg);
-            }
-            100% {
-                transform: rotate(360deg);
-            }
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
-        /* Círculo interior (contenedor de la imagen) */
         .circle {
             position: relative;
             z-index: 1;
@@ -123,7 +148,6 @@
             background: #0b0d1f;
         }
 
-        /* Imagen con zoom */
         .circle img {
             display: block;
             width: 100%;
@@ -134,7 +158,6 @@
             border-radius: 50%;
         }
 
-        /* Responsive */
         @media (max-width: 480px) {
             .circle-wrapper {
                 width: min(70vmin, 280px);
@@ -151,21 +174,47 @@
                         black 61%,
                         black 100%);
             }
-            .circle img {
-                transform: scale(1.6);
-            }
+            .circle img { transform: scale(1.6); }
         }
 
-        /* Halo decorativo (opcional) */
-        .center-wrapper::before {
-            content: '';
-            position: absolute;
-            width: 80vmin;
-            height: 80vmin;
-            background: radial-gradient(circle, rgba(0, 180, 255, 0.05) 0%, transparent 70%);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: -1;
+        /* ===== TEXTO MODERNO Y CREATIVO ===== */
+        .text-block {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.3rem;
+            margin-top: 0.5rem;
+        }
+
+        .text-block .main-title {
+            font-family: 'Inter', sans-serif;
+            font-weight: 900;
+            font-size: clamp(2.2rem, 8vmin, 4.5rem);
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #f0f9ff 0%, #b0e0ff 50%, #7fc9ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 40px rgba(0, 150, 255, 0.2);
+            line-height: 1.1;
+        }
+
+        .text-block .sub-title {
+            font-family: 'Inter', sans-serif;
+            font-weight: 300;
+            font-size: clamp(1rem, 3vmin, 1.8rem);
+            letter-spacing: 0.35em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.7);
+            text-shadow: 0 0 20px rgba(0, 150, 255, 0.15);
+            margin-top: 0.2rem;
+        }
+
+        /* Ajuste para móvil pequeño */
+        @media (max-width: 380px) {
+            .text-block .main-title { font-size: 1.8rem; }
+            .text-block .sub-title { font-size: 0.8rem; letter-spacing: 0.2em; }
         }
     </style>
 </head>
@@ -173,7 +222,14 @@
 
     <div id="stars-container"></div>
 
+    <!-- Barra superior vacía (azul vibrante) -->
+    <div class="bar bar-top"></div>
+
+    <!-- Barra inferior vacía (azul vibrante) -->
+    <div class="bar bar-bottom"></div>
+
     <div class="center-wrapper">
+        <!-- Círculo con imagen -->
         <div class="circle-wrapper">
             <div class="circle">
                 <img
@@ -182,6 +238,12 @@
                 loading="lazy"
                 />
             </div>
+        </div>
+
+        <!-- Texto debajo -->
+        <div class="text-block">
+            <div class="main-title">Astroamigos Misiones</div>
+            <div class="sub-title">Astronomía Aficionada</div>
         </div>
     </div>
 
