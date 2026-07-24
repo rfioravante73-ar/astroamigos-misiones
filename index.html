@@ -100,13 +100,21 @@
             gap: 0.4rem;
         }
 
-        /* Responsive barras - Ocultar completamente en móvil */
+        /* Utilidades para control de visibilidad en responsive */
+        .mobile-only {
+            display: none !important;
+        }
+
+        /* Responsive barras - Configuración para móvil */
         @media (max-width: 768px) {
-            .bar {
+            .desktop-only {
                 display: none !important;
             }
+            .mobile-only {
+                display: flex !important;
+            }
             body {
-                padding: 20px 0;
+                padding: 60px 0; /* Espacio para mantener las barras visibles sin tapar tanto el centro */
             }
         }
 
@@ -251,19 +259,20 @@
     <!-- Barra superior con efemérides (azul vibrante) -->
     <div class="bar bar-top">
         <div class="top-info">
-            <span>✨ Lluvia de Perseidas (12 Ago)</span>
-            <span>🌕 Eclipse Lunar Parcial (28 Ago)</span>
-            <span>🌑 Eclipse Solar Anular (2 Oct)</span>
+            <span class="desktop-only">✨ Lluvia de Perseidas (12 Ago)</span>
+            <span class="desktop-only">🌕 Eclipse Lunar Parcial (28 Ago)</span>
+            <span class="desktop-only">🌑 Eclipse Solar Anular (2 Oct)</span>
+            <span class="mobile-only">📅 24 de Julio, 2026</span>
         </div>
     </div>
 
     <!-- Barra inferior con datos (azul vibrante) -->
     <div class="bar bar-bottom">
         <div class="bottom-info">
-            <span>📅 24 de Julio, 2026</span>
+            <span class="desktop-only">📅 24 de Julio, 2026</span>
             <span>📍 Posadas, Argentina: 14°C, Nublado</span>
-            <span>☀️ Sol: 07:29 ↑ • 18:11 ↓</span>
-            <span>🌙 Luna: 13:54 ↑ • 03:31 ↓</span>
+            <span class="desktop-only">☀️ Sol: 07:29 ↑ • 18:11 ↓</span>
+            <span class="desktop-only">🌙 Luna: 13:54 ↑ • 03:31 ↓</span>
         </div>
     </div>
 
