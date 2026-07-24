@@ -50,37 +50,64 @@
             100% { opacity: 1; transform: scale(1.2); }
         }
 
-        /* ===== BARRAS AZULES VIBRANTES (vacías) ===== */
+        /* ===== BARRAS AZULES VIBRANTES ===== */
         .bar {
             position: fixed;
             left: 0;
             width: 100%;
             z-index: 10;
-            background: #0055ff;  /* azul vibrante */
+            background: #0055ff;
             box-shadow: 0 4px 20px rgba(0, 80, 255, 0.3);
         }
 
         .bar-top {
             top: 0;
-            height: 56px;
+            min-height: 56px;
             border-bottom: 2px solid rgba(255, 255, 255, 0.15);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0 10px;
         }
 
         .bar-bottom {
             bottom: 0;
-            height: 56px;
+            min-height: 56px;
             border-top: 2px solid rgba(255, 255, 255, 0.15);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0 10px;
         }
 
-        /* Responsive barras */
+        .top-info,
+        .bottom-info {
+            display: flex;
+            gap: 2rem;
+            color: white;
+            font-size: 0.95rem;
+            font-weight: 500;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.4);
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 8px 0;
+        }
+
+        .top-info span,
+        .bottom-info span {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        /* Responsive barras - Ocultar completamente en móvil */
         @media (max-width: 768px) {
-            .bar-top, .bar-bottom { height: 44px; }
-            body { padding: 60px 0; }
-        }
-
-        @media (max-width: 480px) {
-            .bar-top, .bar-bottom { height: 36px; }
-            body { padding: 50px 0; }
+            .bar {
+                display: none !important;
+            }
+            body {
+                padding: 20px 0;
+            }
         }
 
         /* Centro: imagen + texto */
@@ -93,7 +120,7 @@
             justify-content: center;
             width: 100vw;
             height: 100vh;
-            gap: 2rem; /* separación entre círculo y texto */
+            gap: 2rem;
             padding: 0 20px;
         }
 
@@ -211,7 +238,6 @@
             margin-top: 0.2rem;
         }
 
-        /* Ajuste para móvil pequeño */
         @media (max-width: 380px) {
             .text-block .main-title { font-size: 1.8rem; }
             .text-block .sub-title { font-size: 0.8rem; letter-spacing: 0.2em; }
@@ -222,11 +248,24 @@
 
     <div id="stars-container"></div>
 
-    <!-- Barra superior vacía (azul vibrante) -->
-    <div class="bar bar-top"></div>
+    <!-- Barra superior con efemérides (azul vibrante) -->
+    <div class="bar bar-top">
+        <div class="top-info">
+            <span>✨ Lluvia de Perseidas (12 Ago)</span>
+            <span>🌕 Eclipse Lunar Parcial (28 Ago)</span>
+            <span>🌑 Eclipse Solar Anular (2 Oct)</span>
+        </div>
+    </div>
 
-    <!-- Barra inferior vacía (azul vibrante) -->
-    <div class="bar bar-bottom"></div>
+    <!-- Barra inferior con datos (azul vibrante) -->
+    <div class="bar bar-bottom">
+        <div class="bottom-info">
+            <span>📅 24 de Julio, 2026</span>
+            <span>📍 Posadas, Argentina: 14°C, Nublado</span>
+            <span>☀️ Sol: 07:29 ↑ • 18:11 ↓</span>
+            <span>🌙 Luna: 13:54 ↑ • 03:31 ↓</span>
+        </div>
+    </div>
 
     <div class="center-wrapper">
         <!-- Círculo con imagen -->
