@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Equipos Ópticos de Astroamigos Misiones</title>
+    <!-- Misma fuente que la página principal -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800;14..32,900&display=swap" rel="stylesheet" />
+    <style>
+        /* Reset y base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #ffffff;
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            color: #0a1a3a;
+            padding: 40px 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        /* Título */
+        .page-title {
+            font-size: clamp(2.2rem, 6vw, 3.6rem);
+            font-weight: 900;
+            letter-spacing: -0.02em;
+            color: #0a1a3a;
+            text-align: center;
+            margin-bottom: 0.5rem;
+            border-bottom: 4px solid #0055ff;
+            padding-bottom: 0.5rem;
+            display: inline-block;
+        }
+
+        .title-wrapper {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .subhead {
+            text-align: center;
+            font-size: 1.15rem;
+            color: #1a3a7a;
+            font-weight: 400;
+            margin-top: -0.2rem;
+            margin-bottom: 2.8rem;
+            opacity: 0.85;
+            max-width: 750px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Grilla de equipos */
+        .equipment-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 2rem;
+        }
+
+        /* Tarjeta individual */
+        .equipment-card {
+            background: #f8faff;
+            border-radius: 20px;
+            padding: 1.8rem 1.5rem 2rem;
+            box-shadow: 0 4px 16px rgba(0, 40, 100, 0.06);
+            border: 1px solid rgba(0, 85, 255, 0.08);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+        }
+
+        .equipment-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 32px rgba(0, 40, 100, 0.12);
+        }
+
+        .equipment-icon {
+            font-size: 2.4rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .equipment-card h3 {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: #0a1a3a;
+            margin-bottom: 0.5rem;
+            line-height: 1.2;
+        }
+
+        .equipment-desc {
+            font-size: 0.95rem;
+            color: #2a4a7a;
+            line-height: 1.6;
+            margin-bottom: 1.2rem;
+            flex-grow: 1;
+        }
+
+        .equipment-specs {
+            background: rgba(0, 85, 255, 0.04);
+            border-radius: 12px;
+            padding: 0.8rem 1rem;
+            font-size: 0.85rem;
+            color: #1a3a7a;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem 0.8rem;
+            margin-bottom: 1rem;
+            border-left: 3px solid #0055ff;
+        }
+
+        .equipment-specs span {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .equipment-tag {
+            display: inline-block;
+            align-self: flex-start;
+            padding: 3px 12px;
+            border-radius: 30px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            background: #e6f0ff;
+            color: #0055ff;
+            margin-top: 0.2rem;
+        }
+
+        .equipment-tag.recomendado {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .equipment-tag.pro {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .equipment-tag.portatil {
+            background: #f1e6ff;
+            color: #5a2d8a;
+        }
+
+        .btn-outline {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+            color: #0055ff;
+            font-weight: 600;
+            font-size: 0.85rem;
+            padding: 8px 20px;
+            border-radius: 40px;
+            text-decoration: none;
+            transition: background 0.2s, color 0.2s;
+            border: 2px solid #0055ff;
+            cursor: pointer;
+            text-align: center;
+            width: 100%;
+            font-family: 'Inter', sans-serif;
+            margin-top: 0.5rem;
+        }
+
+        .btn-outline:hover {
+            background: #0055ff;
+            color: #ffffff;
+        }
+
+        /* Responsive */
+        @media (max-width: 700px) {
+            .equipment-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1.2rem;
+            }
+            .equipment-card {
+                padding: 1.2rem;
+            }
+            .equipment-card h3 {
+                font-size: 1.1rem;
+            }
+            .subhead {
+                font-size: 1rem;
+                margin-bottom: 2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .equipment-grid {
+                grid-template-columns: 1fr;
+                gap: 1.2rem;
+            }
+            .page-title {
+                font-size: 1.8rem;
+            }
+            .equipment-specs {
+                font-size: 0.8rem;
+                padding: 0.6rem 0.8rem;
+            }
+            .btn-outline {
+                font-size: 0.8rem;
+                padding: 6px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <!-- Título -->
+        <div class="title-wrapper">
+            <h1 class="page-title">Equipos Ópticos de Astroamigos Misiones</h1>
+            <p class="subhead">
+                🔭 Guía completa de telescopios, binoculares y accesorios para la observación astronómica. 
+                Encontrá el equipo ideal para tu nivel y presupuesto.
+            </p>
+        </div>
+
+        <!-- Grilla de equipos -->
+        <div class="equipment-grid">
+
+            <!-- 1. Telescopio Reflector -->
+            <div class="equipment-card">
+                <div class="equipment-icon">🔭</div>
+                <h3>Telescopios Reflectores</h3>
+                <p class="equipment-desc">Ideales para observar nebulosas, galaxias y cúmulos estelares. Excelente relación apertura-precio. Montura Dobson muy estable.</p>
+                <div class="equipment-specs">
+                    <span>📏 Apertura: 150mm - 300mm</span>
+                    <span>⚖️ Peso: 15-30 kg</span>
+                </div>
+                <span class="equipment-tag recomendado">Recomendado para cielo profundo</span>
+                <a href="#" class="btn-outline">Ver modelos</a>
+            </div>
+
+            <!-- 2. Telescopio Refractor -->
+            <div class="equipment-card">
+                <div class="equipment-icon">🔭</div>
+                <h3>Telescopios Refractores</h3>
+                <p class="equipment-desc">Excelente contraste y nitidez. Ideales para observar planetas, la Luna y estrellas dobles. Mantenimiento prácticamente nulo.</p>
+                <div class="equipment-specs">
+                    <span>📏 Apertura: 70mm - 120mm</span>
+                    <span>⚖️ Peso: 5-15 kg</span>
+                </div>
+                <span class="equipment-tag pro">Alto contraste</span>
+                <a href="#" class="btn-outline">Ver modelos</a>
+            </div>
+
+            <!-- 3. Telescopio Catadióptrico -->
+            <div class="equipment-card">
+                <div class="equipment-icon">🌀</div>
+                <h3>Catadióptricos (SC / Maksutov)</h3>
+                <p class="equipment-desc">Compactos y versátiles. Combinan lentes y espejos para un tubo corto y gran distancia focal. Perfectos para astrofotografía.</p>
+                <div class="equipment-specs">
+                    <span>📏 Apertura: 127mm - 200mm</span>
+                    <span>⚖️ Peso: 6-18 kg</span>
+                </div>
+                <span class="equipment-tag">Versátil</span>
+                <a href="#" class="btn-outline">Ver modelos</a>
+            </div>
+
+            <!-- 4. Binoculares Astronómicos -->
+            <div class="equipment-card">
+                <div class="equipment-icon">👀</div>
+                <h3>Binoculares de Gran Apertura</h3>
+                <p class="equipment-desc">Portátiles y con gran campo visual. Ideales para observar cometas, cúmulos abiertos y la Vía Láctea a simple vista.</p>
+                <div class="equipment-specs">
+                    <span>📏 Aumentos: 10x - 25x</span>
+                    <span>⚖️ Peso: 1.5-4 kg</span>
+                </div>
+                <span class="equipment-tag portatil">Portátil</span>
+                <a href="#" class="btn-outline">Ver modelos</a>
+            </div>
+
+            <!-- 5. Oculares -->
+            <div class="equipment-card">
+                <div class="equipment-icon">👁️</div>
+                <h3>Oculares y Barlows</h3>
+                <p class="equipment-desc">El alma del telescopio. Distintas distancias focales (4mm a 40mm) para variar los aumentos. Lentes de alta calidad con tratamiento antirreflejos.</p>
+                <div class="equipment-specs">
+                    <span>📏 Focales: 4mm - 40mm</span>
+                    <span>🔘 Formato: 1.25" / 2"</span>
+                </div>
+                <span class="equipment-tag recomendado">Imprescindible</span>
+                <a href="#" class="btn-outline">Ver colección</a>
+            </div>
+
+            <!-- 6. Filtros Astronómicos -->
+            <div class="equipment-card">
+                <div class="equipment-icon">🌙</div>
+                <h3>Filtros Especializados</h3>
+                <p class="equipment-desc">Filtros lunares (ND), de banda estrecha (Ha, OIII) y de polución lumínica (UHC) para resaltar detalles en planetas y nebulosas.</p>
+                <div class="equipment-specs">
+                    <span>📏 Tipos: Lunar, UHC, Ha</span>
+                    <span>🔘 Rosca: 1.25" / 2"</span>
+                </div>
+                <span class="equipment-tag pro">Para detalle</span>
+                <a href="#" class="btn-outline">Ver filtros</a>
+            </div>
+
+            <!-- 7. Monturas y Trípodes -->
+            <div class="equipment-card">
+                <div class="equipment-icon">⚙️</div>
+                <h3>Monturas y Trípodes</h3>
+                <p class="equipment-desc">Desde monturas altazimutales simples hasta ecuatoriales motorizadas con GoTo. Estabilidad y precisión para largas exposiciones.</p>
+                <div class="equipment-specs">
+                    <span>📏 Tipo: Altaz / Ecuatorial</span>
+                    <span>⚖️ Carga: 5-50 kg</span>
+                </div>
+                <span class="equipment-tag">Estabilidad</span>
+                <a href="#" class="btn-outline">Ver monturas</a>
+            </div>
+
+            <!-- 8. Astrofotografía y Adaptadores -->
+            <div class="equipment-card">
+                <div class="equipment-icon">📷</div>
+                <h3>Cámaras y Adaptadores</h3>
+                <p class="equipment-desc">Cámaras planetarias, CCD/CMOS para astrofotografía, anillos T2, reductores de focal y sistemas de guiado automático.</p>
+                <div class="equipment-specs">
+                    <span>📏 Sensores: 1/3" - APS-C</span>
+                    <span>🔘 Conectores: T2, M42</span>
+                </div>
+                <span class="equipment-tag portatil">Digital</span>
+                <a href="#" class="btn-outline">Ver accesorios</a>
+            </div>
+
+        </div>
+
+        <!-- Nota adicional -->
+        <div style="margin-top: 3.5rem; text-align: center; font-size: 0.9rem; color: #2a4a7a; border-top: 1px solid rgba(0,85,255,0.1); padding-top: 2rem;">
+            <p>📌 ¿No sabés qué equipo elegir? <strong style="color: #0033aa;">Consultá con nuestros asesores</strong> en cada evento o escribinos a <strong style="color: #0033aa;">equipos@astroamigosmisiones.org</strong></p>
+            <p style="margin-top: 0.4rem;">🔭 Ofrecemos sesiones de prueba con distintos equipos durante nuestras noches de observación.</p>
+        </div>
+
+    </div>
+</body>
+</html>
