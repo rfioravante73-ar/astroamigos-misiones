@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800;14..32,900&display=swap" rel="stylesheet" />
     <style>
+        /* ===== RESET Y BASE ===== */
         * {
             margin: 0;
             padding: 0;
@@ -26,7 +27,7 @@
             font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
         }
 
-        /* Estrellas */
+        /* ===== ESTRELLAS ===== */
         #stars-container {
             position: fixed;
             top: 0;
@@ -46,8 +47,14 @@
         }
 
         @keyframes twinkle {
-            0% { opacity: 0.2; transform: scale(0.7); }
-            100% { opacity: 1; transform: scale(1.2); }
+            0% {
+                opacity: 0.2;
+                transform: scale(0.7);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1.2);
+            }
         }
 
         /* ===== BARRAS AZULES VIBRANTES ===== */
@@ -87,7 +94,7 @@
             color: white;
             font-size: 0.95rem;
             font-weight: 500;
-            text-shadow: 0 1px 3px rgba(0,0,0,0.4);
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
             flex-wrap: wrap;
             justify-content: center;
             padding: 8px 0;
@@ -100,25 +107,148 @@
             gap: 0.4rem;
         }
 
-        /* Utilidades para control de visibilidad en responsive */
-        .mobile-only {
-            display: none !important;
+        /* ===== ELEMENTOS DE ESQUINA (fijos) ===== */
+        .corner-info {
+            position: fixed;
+            z-index: 20;
+            background: rgba(8, 12, 30, 0.72);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            border-radius: 14px;
+            padding: 10px 16px;
+            color: #f0f8ff;
+            font-size: 0.85rem;
+            font-weight: 400;
+            line-height: 1.6;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            pointer-events: none;
         }
 
-        /* Responsive barras - Configuración para móvil */
-        @media (max-width: 768px) {
-            .desktop-only {
-                display: none !important;
-            }
-            .mobile-only {
-                display: flex !important;
-            }
-            body {
-                padding: 60px 0; /* Espacio para mantener las barras visibles sin tapar tanto el centro */
-            }
+        .corner-info strong {
+            font-weight: 600;
+            color: #b0e0ff;
         }
 
-        /* Centro: imagen + texto */
+        #top-left {
+            top: 70px;
+            left: 16px;
+            max-width: 220px;
+        }
+
+        #top-right {
+            top: 70px;
+            right: 16px;
+            text-align: right;
+        }
+
+        #bottom-right {
+            bottom: 70px;
+            right: 16px;
+            text-align: right;
+            min-width: 140px;
+        }
+
+        /* Flip para iconos de luna en hemisferio sur (creciente a la izquierda) */
+        .lunar-icon-sur {
+            display: inline-block;
+            transform: scaleX(-1);
+        }
+
+        /* ===== MENÚ DESPLEGABLE ===== */
+        .menu-container {
+            position: fixed;
+            bottom: 70px;
+            left: 16px;
+            z-index: 30;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .menu-toggle {
+            background: #0033aa;
+            border: none;
+            color: #fff;
+            font-size: 1.8rem;
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            box-shadow: 0 4px 16px rgba(0, 80, 255, 0.5);
+            cursor: pointer;
+            transition: background 0.2s, transform 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+            font-weight: 300;
+            user-select: none;
+            position: relative;
+            z-index: 2;
+        }
+
+        .menu-toggle:hover {
+            background: #0044dd;
+            transform: scale(1.04);
+        }
+
+        .menu-toggle:active {
+            transform: scale(0.95);
+        }
+
+        .menu-list {
+            display: none;
+            flex-direction: column;
+            background: rgba(10, 15, 40, 0.92);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-radius: 16px;
+            padding: 12px 0;
+            min-width: 200px;
+            max-width: 260px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(0, 120, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            transform-origin: bottom left;
+            transition: opacity 0.25s ease, transform 0.25s ease;
+            opacity: 0;
+            transform: scale(0.95) translateY(8px);
+            pointer-events: none;
+            position: absolute;
+            bottom: calc(100% + 12px);
+            left: 0;
+            z-index: 1;
+        }
+
+        .menu-list.active {
+            display: flex;
+            opacity: 1;
+            transform: scale(1) translateY(0);
+            pointer-events: auto;
+        }
+
+        .menu-list a {
+            color: #e0f0ff;
+            text-decoration: none;
+            padding: 10px 20px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+            border-left: 3px solid transparent;
+            transition: background 0.15s, border-color 0.15s, color 0.15s;
+            white-space: nowrap;
+        }
+
+        .menu-list a:hover {
+            background: rgba(0, 120, 255, 0.15);
+            border-left-color: #66bbff;
+            color: #fff;
+        }
+
+        .menu-list a:active {
+            background: rgba(0, 80, 255, 0.25);
+        }
+
+        /* ===== CENTRO ===== */
         .center-wrapper {
             position: relative;
             z-index: 1;
@@ -132,7 +262,6 @@
             padding: 0 20px;
         }
 
-        /* Círculo con imagen */
         .circle-wrapper {
             position: relative;
             width: min(60vmin, 460px);
@@ -169,8 +298,12 @@
         }
 
         @keyframes spin-light {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
         .circle {
@@ -193,26 +326,6 @@
             border-radius: 50%;
         }
 
-        @media (max-width: 480px) {
-            .circle-wrapper {
-                width: min(70vmin, 280px);
-                height: min(70vmin, 280px);
-            }
-            .circle-wrapper::before {
-                inset: -6px;
-                mask: radial-gradient(circle at center,
-                        transparent 60%,
-                        black 61%,
-                        black 100%);
-                -webkit-mask: radial-gradient(circle at center,
-                        transparent 60%,
-                        black 61%,
-                        black 100%);
-            }
-            .circle img { transform: scale(1.6); }
-        }
-
-        /* ===== TEXTO MODERNO Y CREATIVO ===== */
         .text-block {
             text-align: center;
             display: flex;
@@ -246,49 +359,176 @@
             margin-top: 0.2rem;
         }
 
-        @media (max-width: 380px) {
-            .text-block .main-title { font-size: 1.8rem; }
-            .text-block .sub-title { font-size: 0.8rem; letter-spacing: 0.2em; }
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            body {
+                padding: 60px 0;
+            }
+            .menu-container {
+                bottom: 66px;
+                left: 12px;
+            }
+            .menu-toggle {
+                width: 46px;
+                height: 46px;
+                font-size: 1.6rem;
+            }
+            .menu-list {
+                min-width: 170px;
+                max-width: 210px;
+            }
+            .menu-list a {
+                font-size: 0.85rem;
+                padding: 8px 16px;
+            }
+            .corner-info {
+                font-size: 0.75rem;
+                padding: 8px 12px;
+            }
+            #top-left {
+                top: 64px;
+                left: 10px;
+                max-width: 170px;
+            }
+            #top-right {
+                top: 64px;
+                right: 10px;
+            }
+            #bottom-right {
+                bottom: 66px;
+                right: 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .circle-wrapper {
+                width: min(70vmin, 280px);
+                height: min(70vmin, 280px);
+            }
+            .circle-wrapper::before {
+                inset: -6px;
+                mask: radial-gradient(circle at center,
+                        transparent 60%,
+                        black 61%,
+                        black 100%);
+                -webkit-mask: radial-gradient(circle at center,
+                        transparent 60%,
+                        black 61%,
+                        black 100%);
+            }
+            .circle img {
+                transform: scale(1.6);
+            }
+            .text-block .main-title {
+                font-size: 1.8rem;
+            }
+            .text-block .sub-title {
+                font-size: 0.8rem;
+                letter-spacing: 0.2em;
+            }
+            .top-info,
+            .bottom-info {
+                font-size: 0.8rem;
+                gap: 1rem;
+            }
+            .menu-container {
+                bottom: 60px;
+                left: 8px;
+            }
+            .menu-toggle {
+                width: 40px;
+                height: 40px;
+                font-size: 1.4rem;
+            }
+            .menu-list {
+                min-width: 150px;
+                max-width: 180px;
+            }
+            .menu-list a {
+                font-size: 0.8rem;
+                padding: 6px 14px;
+            }
+            .corner-info {
+                font-size: 0.7rem;
+                padding: 6px 10px;
+                line-height: 1.5;
+            }
+            #top-left {
+                top: 58px;
+                left: 6px;
+                max-width: 140px;
+            }
+            #top-right {
+                top: 58px;
+                right: 6px;
+            }
+            #bottom-right {
+                bottom: 58px;
+                right: 6px;
+            }
         }
     </style>
 </head>
 <body>
 
+    <!-- Fondo de estrellas -->
     <div id="stars-container"></div>
 
-    <!-- Barra superior con efemérides (azul vibrante) -->
+    <!-- ===== BARRAS ===== -->
     <div class="bar bar-top">
         <div class="top-info">
-            <span class="desktop-only">✨ Lluvia de Perseidas (12 Ago)</span>
-            <span class="desktop-only">🌕 Eclipse Lunar Parcial (28 Ago)</span>
-            <span class="desktop-only">🌑 Eclipse Solar Anular (2 Oct)</span>
-            <span class="mobile-only">📅 24 de Julio, 2026</span>
+            <span>📅 <span id="fecha-actual">cargando…</span></span>
+            <span>🕒 <span id="hora-actual">--:--</span></span>
         </div>
     </div>
-
-    <!-- Barra inferior con datos (azul vibrante) -->
     <div class="bar bar-bottom">
         <div class="bottom-info">
-            <span class="desktop-only">📅 24 de Julio, 2026</span>
-            <span>📍 Posadas, Argentina: 14°C, Nublado</span>
-            <span class="desktop-only">☀️ Sol: 07:29 ↑ • 18:11 ↓</span>
-            <span class="desktop-only">🌙 Luna: 13:54 ↑ • 03:31 ↓</span>
+            <span>📍 Posadas, Misiones, Argentina</span>
         </div>
     </div>
 
+    <!-- ===== ESQUINAS ===== -->
+    <!-- Superior izquierda: Sol y Luna en una línea + Fase Lunar (hemisferio sur) -->
+    <div id="top-left" class="corner-info">
+        <div>🌅 Sol: ↑<span id="sol-salida">07:29</span> ↓<span id="sol-puesta">18:11</span></div>
+        <div>🌙 Luna: ↑<span id="luna-salida">13:54</span> ↓<span id="luna-puesta">03:31</span></div>
+        <div><span id="fase-lunar">calculando…</span></div>
+    </div>
+
+    <!-- Superior derecha: Planeta visible -->
+    <div id="top-right" class="corner-info">
+        <div>🪐 Planeta Visible Hoy: <strong>Venus</strong></div>
+    </div>
+
+    <!-- Inferior derecha: Clima (siempre en español) -->
+    <div id="bottom-right" class="corner-info">
+        <div>🌡️ Clima: <span id="clima-texto">cargando…</span></div>
+    </div>
+
+    <!-- ===== MENÚ ===== -->
+    <div class="menu-container" id="menu-container">
+        <button class="menu-toggle" id="menu-toggle" aria-label="Menú">☰</button>
+        <nav class="menu-list" id="menu-list">
+            <a href="#">Historia</a>
+            <a href="#">Eventos</a>
+            <a href="#">Cursos</a>
+            <a href="#">Equipos Ópticos</a>
+            <a href="#">Software Astronomía</a>
+            <a href="#">Tiendas Internet</a>
+            <a href="#">Redes Sociales</a>
+            <a href="#">Contacto</a>
+        </nav>
+    </div>
+
+    <!-- ===== CENTRO ===== -->
     <div class="center-wrapper">
-        <!-- Círculo con imagen -->
         <div class="circle-wrapper">
             <div class="circle">
-                <img
-                src="https://github.com/app-fioravante/astroamigos-misiones/blob/main/tucan.png?raw=true"
+                <img src="https://github.com/app-fioravante/astroamigos-misiones/blob/main/tucan.png?raw=true"
                 alt="Tucán - AstroAmigos"
-                loading="lazy"
-                />
+                loading="lazy" />
             </div>
         </div>
-
-        <!-- Texto debajo -->
         <div class="text-block">
             <div class="main-title">Astroamigos Misiones</div>
             <div class="sub-title">Astronomía Aficionada</div>
@@ -297,32 +537,24 @@
 
     <script>
         (function() {
+            // ===== ESTRELLAS =====
             const container = document.getElementById('stars-container');
             const STAR_COUNT = 650;
             const MAX_SIZE = 3.2;
             const MIN_SIZE = 0.8;
-
             const fragment = document.createDocumentFragment();
 
             for (let i = 0; i < STAR_COUNT; i++) {
                 const star = document.createElement('div');
                 star.className = 'star';
-
                 const size = Math.random() * (MAX_SIZE - MIN_SIZE) + MIN_SIZE;
                 star.style.width = size + 'px';
                 star.style.height = size + 'px';
-
-                const left = Math.random() * 100;
-                const top = Math.random() * 100;
-                star.style.left = left + '%';
-                star.style.top = top + '%';
-
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
                 const duration = 1.8 + Math.random() * 4.5;
                 star.style.setProperty('--duration', duration + 's');
-
-                const delay = Math.random() * 6;
-                star.style.animationDelay = delay + 's';
-
+                star.style.animationDelay = Math.random() * 6 + 's';
                 const colorRand = Math.random();
                 if (colorRand < 0.08) {
                     star.style.background = '#aaccff';
@@ -334,11 +566,172 @@
                     star.style.background = '#fff';
                     star.style.boxShadow = '0 0 4px 1px rgba(255, 255, 255, 0.5)';
                 }
-
                 fragment.appendChild(star);
             }
-
             container.appendChild(fragment);
+
+            // ===== FECHA Y HORA =====
+            const fechaSpan = document.getElementById('fecha-actual');
+            const horaSpan = document.getElementById('hora-actual');
+
+            function actualizarFechaHora() {
+                const ahora = new Date();
+                const opcionesFecha = {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                };
+                fechaSpan.textContent = ahora.toLocaleDateString('es-ES', opcionesFecha);
+                const horas = String(ahora.getHours()).padStart(2, '0');
+                const minutos = String(ahora.getMinutes()).padStart(2, '0');
+                horaSpan.textContent = horas + ':' + minutos;
+            }
+            actualizarFechaHora();
+            setInterval(actualizarFechaHora, 1000);
+
+            // ===== FASE LUNAR para HEMISFERIO SUR (iconos invertidos) =====
+            const faseSpan = document.getElementById('fase-lunar');
+
+            function calcularFaseLunar(fecha) {
+                // Referencia: Luna Nueva 2000-01-06 18:14 UTC
+                const referencia = new Date(Date.UTC(2000, 0, 6, 18, 14, 0));
+                const diffMs = fecha.getTime() - referencia.getTime();
+                const diffDias = diffMs / (1000 * 60 * 60 * 24);
+                const ciclos = diffDias / 29.53058867;
+                const fase = ciclos - Math.floor(ciclos); // 0.0 a 1.0
+
+                // Para el hemisferio sur, las fases crecientes muestran el lado izquierdo iluminado.
+                // Usamos emojis estándar y los invertimos con CSS (scaleX(-1)) para que el brillo quede a la izquierda.
+                let emoji, nombre, invertir = false;
+                if (fase < 0.0625 || fase >= 0.9375) {
+                    emoji = '🌑';
+                    nombre = 'Luna Nueva';
+                    invertir = false;
+                } else if (fase < 0.1875) {
+                    emoji = '🌒';
+                    nombre = 'Creciente';
+                    invertir = true; // lado iluminado a la izquierda
+                } else if (fase < 0.3125) {
+                    emoji = '🌓';
+                    nombre = 'Cuarto Creciente';
+                    invertir = true;
+                } else if (fase < 0.4375) {
+                    emoji = '🌔';
+                    nombre = 'Gibosa Creciente';
+                    invertir = true;
+                } else if (fase < 0.5625) {
+                    emoji = '🌕';
+                    nombre = 'Luna Llena';
+                    invertir = false;
+                } else if (fase < 0.6875) {
+                    emoji = '🌖';
+                    nombre = 'Gibosa Menguante';
+                    invertir = false; // para menguante, el brillo ya está a la izquierda en el emoji estándar? Revisar: 🌖 tiene brillo a la derecha (norte), pero menguante en sur debería tener brillo a la derecha? En realidad en sur, menguante se ve con brillo a la derecha. Entonces no invertir.
+                } else if (fase < 0.8125) {
+                    emoji = '🌗';
+                    nombre = 'Cuarto Menguante';
+                    invertir = false;
+                } else {
+                    emoji = '🌘';
+                    nombre = 'Menguante';
+                    invertir = false;
+                }
+
+                // Construir el HTML con el icono y el nombre
+                let iconHtml = emoji;
+                if (invertir) {
+                    iconHtml = `<span class="lunar-icon-sur">${emoji}</span>`;
+                }
+                return `${iconHtml} ${nombre}`;
+            }
+
+            function actualizarFaseLunar() {
+                const ahora = new Date();
+                faseSpan.innerHTML = calcularFaseLunar(ahora);
+            }
+            actualizarFaseLunar();
+            setInterval(actualizarFaseLunar, 60000);
+
+            // ===== CLIMA EN ESPAÑOL (traducción manual) =====
+            const climaSpan = document.getElementById('clima-texto');
+
+            function traducirClima(desc) {
+                const mapa = {
+                    'sunny': 'Soleado',
+                    'clear': 'Despejado',
+                    'partly cloudy': 'Parcialmente nublado',
+                    'cloudy': 'Nublado',
+                    'overcast': 'Cubierto',
+                    'rain': 'Lluvia',
+                    'light rain': 'Lluvia ligera',
+                    'heavy rain': 'Lluvia intensa',
+                    'showers': 'Chubascos',
+                    'thunderstorm': 'Tormenta',
+                    'snow': 'Nieve',
+                    'fog': 'Niebla',
+                    'mist': 'Bruma',
+                    'haze': 'Calima'
+                };
+                const lower = desc.toLowerCase();
+                for (let [key, val] of Object.entries(mapa)) {
+                    if (lower.includes(key)) return val;
+                }
+                return desc; // devuelve original si no encuentra
+            }
+
+            async function obtenerClima() {
+                try {
+                    // Usamos lang=es, pero por si acaso traducimos manualmente
+                    const respuesta = await fetch('https://wttr.in/Posadas,Argentina?lang=es&format=j1');
+                    if (!respuesta.ok) throw new Error('Error al obtener el clima');
+                    const datos = await respuesta.json();
+                    const condicion = datos.current_condition[0];
+                    const temp = condicion.temp_C;
+                    let desc = condicion.weatherDesc[0].value; // puede venir en español
+                    // Si la descripción contiene "Sunny" u otros en inglés, la traducimos
+                    desc = traducirClima(desc);
+                    // Emoji según descripción
+                    let emoji = '🌤️';
+                    const descLower = desc.toLowerCase();
+                    if (descLower.includes('lluvia') || descLower.includes('rain')) emoji = '🌧️';
+                    else if (descLower.includes('nieve') || descLower.includes('snow')) emoji = '❄️';
+                    else if (descLower.includes('nublado') || descLower.includes('cloudy') || descLower.includes('cubierto'))
+                        emoji = '☁️';
+                    else if (descLower.includes('soleado') || descLower.includes('despejado')) emoji = '☀️';
+                    else if (descLower.includes('tormenta') || descLower.includes('thunder')) emoji = '⛈️';
+                    climaSpan.textContent = `${emoji} ${temp}°C, ${desc}`;
+                } catch (error) {
+                    climaSpan.textContent = '⚠️ No disponible';
+                    console.warn('Clima no disponible:', error);
+                }
+            }
+
+            obtenerClima();
+            setInterval(obtenerClima, 600000);
+
+            // ===== MENÚ TOGGLE =====
+            const toggleBtn = document.getElementById('menu-toggle');
+            const menuList = document.getElementById('menu-list');
+
+            toggleBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                menuList.classList.toggle('active');
+            });
+
+            document.addEventListener('click', function(e) {
+                const menuContainer = document.getElementById('menu-container');
+                if (!menuContainer.contains(e.target)) {
+                    menuList.classList.remove('active');
+                }
+            });
+
+            const enlaces = menuList.querySelectorAll('a');
+            enlaces.forEach(enlace => {
+                enlace.addEventListener('click', function() {
+                    menuList.classList.remove('active');
+                });
+            });
+
         })();
     </script>
 

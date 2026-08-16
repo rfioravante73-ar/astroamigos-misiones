@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Historia de Astroamigos Misiones</title>
+    <!-- Misma fuente que la página principal -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800;14..32,900&display=swap" rel="stylesheet" />
+    <style>
+        /* Reset y base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #ffffff;
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            color: #0a1a3a; /* azul oscuro */
+            padding: 40px 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            max-width: 1100px;
+            width: 100%;
+        }
+
+        /* Título */
+        .page-title {
+            font-size: clamp(2.2rem, 6vw, 3.6rem);
+            font-weight: 900;
+            letter-spacing: -0.02em;
+            color: #0a1a3a;
+            text-align: center;
+            margin-bottom: 2.5rem;
+            border-bottom: 4px solid #0055ff;
+            padding-bottom: 0.5rem;
+            display: inline-block;
+        }
+
+        .title-wrapper {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        /* Galería de 4 fotos */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.8rem;
+            margin-bottom: 3rem;
+        }
+
+        .gallery-item {
+            background: #f5f8ff;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 6px 24px rgba(0, 40, 100, 0.12);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 32px rgba(0, 40, 100, 0.18);
+        }
+
+        .gallery-item a {
+            display: block;
+            text-decoration: none;
+        }
+
+        .gallery-item img {
+            display: block;
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background: #e6edf9;
+        }
+
+        .gallery-item .caption {
+            padding: 12px 16px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: #0a1a3a;
+            background: #ffffff;
+            border-top: 1px solid rgba(0, 85, 255, 0.08);
+            text-align: center;
+        }
+
+        /* Bloque de texto */
+        .history-text {
+            background: #f8faff;
+            border-radius: 20px;
+            padding: 2.2rem 2.5rem;
+            box-shadow: 0 4px 16px rgba(0, 40, 100, 0.06);
+            border: 1px solid rgba(0, 85, 255, 0.08);
+            line-height: 1.8;
+            font-size: 1.05rem;
+            color: #0a1a3a;
+        }
+
+        .history-text p {
+            margin-bottom: 1.2rem;
+        }
+
+        .history-text p:last-child {
+            margin-bottom: 0;
+        }
+
+        .history-text strong {
+            color: #0033aa;
+            font-weight: 700;
+        }
+
+        /* Responsive */
+        @media (max-width: 700px) {
+            .gallery {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+            .gallery-item img {
+                height: 150px;
+            }
+            .history-text {
+                padding: 1.5rem;
+                font-size: 0.95rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .gallery {
+                grid-template-columns: 1fr 1fr;
+                gap: 0.8rem;
+            }
+            .gallery-item img {
+                height: 120px;
+            }
+            .page-title {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <!-- Título -->
+        <div class="title-wrapper">
+            <h1 class="page-title">Historia de Astroamigos Misiones</h1>
+        </div>
+
+        <!-- Galería de 4 fotos con enlaces -->
+        <div class="gallery">
+            <!-- Foto 1 -->
+            <div class="gallery-item">
+                <a href="https://es.wikipedia.org/wiki/Astronom%C3%ADa_aficionada" target="_blank" rel="noopener noreferrer">
+                    <img src="https://picsum.photos/seed/astro1/400/300" alt="Observación astronómica" loading="lazy" />
+                    <div class="caption">🔭 Observación nocturna</div>
+                </a>
+            </div>
+            <!-- Foto 2 -->
+            <div class="gallery-item">
+                <a href="https://www.argentina.gob.ar/ciencia" target="_blank" rel="noopener noreferrer">
+                    <img src="https://picsum.photos/seed/astro2/400/300" alt="Telescopio y cielo" loading="lazy" />
+                    <div class="caption">🌌 Cielo profundo</div>
+                </a>
+            </div>
+            <!-- Foto 3 -->
+            <div class="gallery-item">
+                <a href="https://www.iau.org/" target="_blank" rel="noopener noreferrer">
+                    <img src="https://picsum.photos/seed/astro3/400/300" alt="Grupo de astrónomos aficionados" loading="lazy" />
+                    <div class="caption">👥 Encuentro de socios</div>
+                </a>
+            </div>
+            <!-- Foto 4 -->
+            <div class="gallery-item">
+                <a href="https://www.space.com/" target="_blank" rel="noopener noreferrer">
+                    <img src="https://picsum.photos/seed/astro4/400/300" alt="Eclipse solar" loading="lazy" />
+                    <div class="caption">🌞 Eclipse y actividades</div>
+                </a>
+            </div>
+        </div>
+
+        <!-- Bloque de texto -->
+        <div class="history-text">
+            <p>
+                <strong>Astroamigos Misiones</strong> nació en el año 2015 como un pequeño grupo de entusiastas de la astronomía en la ciudad de Posadas. Impulsados por la pasión por el cosmos y la necesidad de compartir conocimientos, comenzamos a reunirnos en plazas y miradores para observar el cielo con telescopios caseros y prismáticos.
+            </p>
+            <p>
+                Con el paso de los años, el grupo creció y se consolidó como una asociación civil sin fines de lucro dedicada a la <strong>divulgación astronómica</strong> en toda la provincia de Misiones. Organizamos charlas, talleres, noches de observación pública y participamos en eventos científicos regionales. Nuestro objetivo es acercar la astronomía a todas las personas, fomentando el asombro y el conocimiento del universo.
+            </p>
+            <p>
+                Hoy, <strong>Astroamigos Misiones</strong> cuenta con más de 200 socios activos, un observatorio propio en las afueras de Posadas y un programa educativo que llega a escuelas y comunidades. Seguimos mirando al cielo con la misma curiosidad del primer día, convencidos de que la astronomía es una puerta abierta a la ciencia y a la reflexión sobre nuestro lugar en el cosmos.
+            </p>
+            <p style="margin-top: 0.5rem; font-style: italic; color: #1a3a7a;">
+                🔭 «Mirar hacia arriba nos recuerda lo pequeños que somos, y lo grandes que podemos ser.»
+            </p>
+        </div>
+
+    </div>
+</body>
+</html>
