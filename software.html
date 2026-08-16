@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Software de Astronomía - Astroamigos Misiones</title>
+    <!-- Misma fuente que la página principal -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800;14..32,900&display=swap" rel="stylesheet" />
+    <style>
+        /* Reset y base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #ffffff;
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            color: #0a1a3a;
+            padding: 40px 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        /* Título */
+        .page-title {
+            font-size: clamp(2.2rem, 6vw, 3.6rem);
+            font-weight: 900;
+            letter-spacing: -0.02em;
+            color: #0a1a3a;
+            text-align: center;
+            margin-bottom: 0.5rem;
+            border-bottom: 4px solid #0055ff;
+            padding-bottom: 0.5rem;
+            display: inline-block;
+        }
+
+        .title-wrapper {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .subhead {
+            text-align: center;
+            font-size: 1.15rem;
+            color: #1a3a7a;
+            font-weight: 400;
+            margin-top: -0.2rem;
+            margin-bottom: 2.8rem;
+            opacity: 0.85;
+            max-width: 750px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Grilla de software: 4 columnas fijas en escritorio */
+        .software-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Tarjeta individual */
+        .software-card {
+            background: #f8faff;
+            border-radius: 20px;
+            padding: 1.6rem 1.2rem 1.8rem;
+            box-shadow: 0 4px 16px rgba(0, 40, 100, 0.06);
+            border: 1px solid rgba(0, 85, 255, 0.08);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+        }
+
+        .software-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 32px rgba(0, 40, 100, 0.12);
+        }
+
+        .software-icon {
+            font-size: 2.2rem;
+            margin-bottom: 0.6rem;
+        }
+
+        .software-card h3 {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: #0a1a3a;
+            margin-bottom: 0.4rem;
+            line-height: 1.2;
+        }
+
+        .software-desc {
+            font-size: 0.9rem;
+            color: #2a4a7a;
+            line-height: 1.5;
+            margin-bottom: 1rem;
+            flex-grow: 1;
+        }
+
+        .software-platform {
+            background: rgba(0, 85, 255, 0.04);
+            border-radius: 12px;
+            padding: 0.5rem 0.8rem;
+            font-size: 0.8rem;
+            color: #1a3a7a;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.3rem 0.6rem;
+            margin-bottom: 1rem;
+            border-left: 3px solid #0055ff;
+        }
+
+        .software-platform span {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .btn-visit {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: #0055ff;
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 0.85rem;
+            padding: 8px 16px;
+            border-radius: 40px;
+            text-decoration: none;
+            transition: background 0.2s, transform 0.15s;
+            border: none;
+            cursor: pointer;
+            text-align: center;
+            width: 100%;
+            font-family: 'Inter', sans-serif;
+            gap: 0.4rem;
+        }
+
+        .btn-visit:hover {
+            background: #003cc0;
+            transform: scale(1.02);
+        }
+
+        .btn-visit:active {
+            transform: scale(0.97);
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1024px) {
+            .software-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 1.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .software-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1.2rem;
+            }
+            .software-card {
+                padding: 1.2rem;
+            }
+            .software-card h3 {
+                font-size: 1.05rem;
+            }
+            .subhead {
+                font-size: 1rem;
+                margin-bottom: 2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .software-grid {
+                grid-template-columns: 1fr;
+                gap: 1.2rem;
+            }
+            .page-title {
+                font-size: 1.8rem;
+            }
+            .software-platform {
+                font-size: 0.75rem;
+                padding: 0.4rem 0.6rem;
+            }
+            .btn-visit {
+                font-size: 0.8rem;
+                padding: 8px 14px;
+            }
+        }
+
+        /* Nota final */
+        .footer-note {
+            margin-top: 3rem;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #2a4a7a;
+            border-top: 1px solid rgba(0, 85, 255, 0.1);
+            padding-top: 2rem;
+        }
+
+        .footer-note strong {
+            color: #0033aa;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <!-- Título -->
+        <div class="title-wrapper">
+            <h1 class="page-title">Software de Astronomía</h1>
+            <p class="subhead">
+                💻 Herramientas digitales para planificar observaciones, simular el cielo y procesar imágenes.
+                Todos los enlaces directos a sus sitios oficiales.
+            </p>
+        </div>
+
+        <!-- Grilla de software: 8 módulos (4 arriba + 4 abajo) -->
+        <div class="software-grid">
+            <!-- 1. Stellarium -->
+            <div class="software-card">
+                <div class="software-icon">🌟</div>
+                <h3>Stellarium</h3>
+                <p class="software-desc">Planetario gratuito en 3D. Simulación del cielo, catálogos de estrellas y nebulosas. Ideal para planificar.</p>
+                <div class="software-platform">
+                    <span>🖥️ Win / Mac / Linux</span>
+                    <span>📱 iOS / Android</span>
+                </div>
+                <a href="https://stellarium.org/" target="_blank" rel="noopener noreferrer" class="btn-visit">🔗 Visitar web</a>
+            </div>
+
+            <!-- 2. Cartes du Ciel -->
+            <div class="software-card">
+                <div class="software-icon">📊</div>
+                <h3>Cartes du Ciel</h3>
+                <p class="software-desc">Planisferio digital con control de telescopio. Permite cargar catálogos extensos y cartas detalladas.</p>
+                <div class="software-platform">
+                    <span>🖥️ Win / Mac / Linux</span>
+                </div>
+                <a href="https://www.ap-i.net/skychart/" target="_blank" rel="noopener noreferrer" class="btn-visit">🔗 Visitar web</a>
+            </div>
+
+            <!-- 3. SkySafari -->
+            <div class="software-card">
+                <div class="software-icon">🚀</div>
+                <h3>SkySafari</h3>
+                <p class="software-desc">Millones de objetos, control GoTo y realidad aumentada. Versión móvil y de escritorio.</p>
+                <div class="software-platform">
+                    <span>📱 iOS / Android</span>
+                    <span>🖥️ Mac / Win</span>
+                </div>
+                <a href="https://skysafariastronomy.com/" target="_blank" rel="noopener noreferrer" class="btn-visit">🔗 Visitar web</a>
+            </div>
+
+            <!-- 4. DeepSkyStacker -->
+            <div class="software-card">
+                <div class="software-icon">🖼️</div>
+                <h3>DeepSkyStacker</h3>
+                <p class="software-desc">Apilado de imágenes para astrofotografía. Reduce ruido y mejora la señal en cielo profundo.</p>
+                <div class="software-platform">
+                    <span>🖥️ Windows</span>
+                </div>
+                <a href="http://deepskystacker.free.fr/" target="_blank" rel="noopener noreferrer" class="btn-visit">🔗 Visitar web</a>
+            </div>
+
+            <!-- 5. PHD2 Guiding -->
+            <div class="software-card">
+                <div class="software-icon">🎯</div>
+                <h3>PHD2 Guiding</h3>
+                <p class="software-desc">Guiado automático para astrofotografía. Mantiene estrellas fijas en exposiciones largas.</p>
+                <div class="software-platform">
+                    <span>🖥️ Win / Mac / Linux</span>
+                </div>
+                <a href="https://openphdguiding.org/" target="_blank" rel="noopener noreferrer" class="btn-visit">🔗 Visitar web</a>
+            </div>
+
+            <!-- 6. ASCOM Platform -->
+            <div class="software-card">
+                <div class="software-icon">🔌</div>
+                <h3>ASCOM Platform</h3>
+                <p class="software-desc">Estándar para comunicación entre software y hardware astronómico (telescopios, cámaras, filtros).</p>
+                <div class="software-platform">
+                    <span>🖥️ Windows</span>
+                </div>
+                <a href="https://ascom-standards.org/" target="_blank" rel="noopener noreferrer" class="btn-visit">🔗 Visitar web</a>
+            </div>
+
+            <!-- 7. KStars -->
+            <div class="software-card">
+                <div class="software-icon">🌌</div>
+                <h3>KStars</h3>
+                <p class="software-desc">Planetario de código abierto con control de telescopio y EKOS para astrofotografía automatizada.</p>
+                <div class="software-platform">
+                    <span>🖥️ Linux / Mac / Win</span>
+                    <span>📱 Android</span>
+                </div>
+                <a href="https://kstars.kde.org/" target="_blank" rel="noopener noreferrer" class="btn-visit">🔗 Visitar web</a>
+            </div>
+
+            <!-- 8. Astrometry.net -->
+            <div class="software-card">
+                <div class="software-icon">🔍</div>
+                <h3>Astrometry.net</h3>
+                <p class="software-desc">Resuelve automáticamente la orientación y coordenadas de tus imágenes astronómicas (plate solving).</p>
+                <div class="software-platform">
+                    <span>🌐 Web / API</span>
+                    <span>🖥️ Linux / Mac / Win</span>
+                </div>
+                <a href="https://astrometry.net/" target="_blank" rel="noopener noreferrer" class="btn-visit">🔗 Visitar web</a>
+            </div>
+        </div>
+
+        <!-- Nota final -->
+        <div class="footer-note">
+            <p>📌 Todos los programas son de uso gratuito o con versiones de prueba. Algunos requieren registro para funcionalidades avanzadas.</p>
+            <p style="margin-top: 0.4rem;">📩 ¿Conocés algún software que debería estar aquí? Escribinos a <strong>software@astroamigosmisiones.org</strong></p>
+        </div>
+
+    </div>
+</body>
+</html>
